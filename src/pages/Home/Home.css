@@ -1,0 +1,141 @@
+.home-banner-section {
+    background: url(https://fbn3staging.ca/static/media/home_main_img.dd3c1182d4746b9a7c61.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0;
+    position: relative;
+    z-index: 0;
+}
+
+.home .fbn-intro {
+    max-width: 850px;
+    padding: 120px 0px 160px 50px;
+    position: relative;
+    top: auto;
+    transform: inherit;
+    z-index: 1;
+
+}
+.home .position-back{
+    z-index: -1;
+}
+.home .home-heading {
+    color: var(--black);
+    font-family: Poppins, sans-serif;
+    font-size: 2.5em !important;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 50px;
+    margin-left: 35px;
+    animation: fadeInUp 1s ease forwards
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.home .home-page-list li:before {
+    background-image: url(https://fbn3staging.ca/static/media/leafs.6d1d1960c27388da506c.svg);
+    background-repeat: no-repeat;
+    content: "";
+    height: 20px;
+    left: 0;
+    position: absolute;
+    top: 6px;
+    width: 20px;
+}
+.home .home-page-list{
+    list-style-type: none;
+}
+.home .home-page-list li {
+    color: var(--dark);
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 30px;
+    margin-bottom: 6px;
+    padding-left: 30px;
+    position: relative;
+}
+.work-section{
+    background: #dffff3;
+    overflow: hidden;
+    padding: 90px 0;
+    position: relative;
+    z-index: 0;
+}
+.home .work-part{
+    position: relative;
+    z-index: 1;
+}
+.home .homeHeadline{
+    color: #151852!important;
+    font-size: 2.25em !important;
+    font-weight: 700 !important;
+    line-height: 48px;
+    margin: 0 110px 48px;
+}
+.home .work-two-block {
+    align-items: center;
+}
+.home .title-center{
+    text-align: center;
+}
+.home .homeText{
+    color: #151852;
+    font-family: Poppins, sans-serif;
+    font-size: 1.375em;
+    font-weight: 400;
+    line-height: 34px;
+    padding: 0px 50px 0px 50px;
+    margin-top: 30px;
+
+}
+.home .fbn-about-us{
+    animation: fadeInUp 1s ease forwards;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+ .home.fbn-video{
+    animation: fadeInUp 1s ease forwards
+}
+.homeButtons {
+    background-color: #ec5f43;
+    border-radius: 50px;
+    color: white;
+    font-family: Poppins, sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    line-height: 16px;
+    margin-top: 48px;
+    margin-left: 35px;
+    padding: 21px 27px;
+    text-transform: uppercase;
+}
+.homeButtons:hover{
+    background-color: black;
+    color: white;
+}
+.home .work-home-button{
+    margin-top: 5px;
+    margin-left: 0;
+    padding:13px 20px;
+}
+.row{
+    --bs-gutter-x: 0;
+}
+@media (max-width: 991px) {
+    .home .work-section .homeHeadline{
+        margin: 0px 30px 62px;
+    }
+    .home .fbn-intro{
+        padding: 80px 0 100px;
+    }
+}

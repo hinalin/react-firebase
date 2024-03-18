@@ -1,0 +1,72 @@
+.Signin-template{
+    background: url(https://fbn3staging.ca/static/media/home_main_img.dd3c1182d4746b9a7c61.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 100px;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    position: fixed;
+    left: 0;
+    overflow: hidden;
+    top: 0;
+}
+.Signin-template .Signin-form-outer{
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: #fff;
+    padding: 40px 30px;
+    width: 35%;
+    border-radius: 5px;
+    margin: auto;
+}
+.Signin-template .Signin-form-body{
+    max-width: 380px;
+    width: auto;
+    margin: 0 auto;
+    padding: 0;
+}
+.Signin-template .Signin-form-inner input{
+    border-style: none;
+    border-bottom: 1px solid #ccc;
+    color: #555;
+    display: inline-block;
+    font-size: 1em;
+    height: 30px;
+    width: 100%;
+    margin-top: 15px;
+    outline: none;
+}
+.Signin-template .Signin-form-inner input:focus{
+    border-bottom: 1px solid #337ab7;
+}
+
+.Signin-template .Forgot-Password-link{
+    margin-left: 238px;
+    margin-top: 5px;
+    text-decoration: underline;
+    color: #337ab7;
+    font-size: 14px;
+}
+.Signin-template .Sign-in-btn{
+    width: 150px;
+    background-color: #0067b8;
+    color: white;
+    margin-left: 230px;
+    margin-top: 20px;
+}
+.Signin-template .create-acc-link{
+    text-decoration: underline;
+    color: #337ab7;
+    font-size: 14px; 
+}
+.Signin-template .Signup-form-icon img{
+    height: 30px;
+    width: 30px;
+    border: none;
+}
+.Signin-template .Signup-form-icon button{
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}

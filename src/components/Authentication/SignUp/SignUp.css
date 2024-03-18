@@ -1,0 +1,104 @@
+.Signup-template{
+    background: url(https://fbn3staging.ca/static/media/home_main_img.dd3c1182d4746b9a7c61.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 100px;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    position: fixed;
+    left: 0;
+    overflow: hidden;
+    top: 0;
+}
+.Signup-template .Signup-form-outer{
+    background-color: #fff;
+    padding: 30px 30px;
+    width: 35%;
+    border-radius: 5px;
+    margin: auto;
+}
+.Signup-template .Signup-form-body{
+    max-width: 380px;
+    width: auto;
+    margin: 0 auto;
+    padding: 0;
+}
+.Signup-template .back-to-signin {
+    position: absolute;
+    top: 105px;
+    left: 550px;
+}
+.Signup-template .back-to-signin span{
+    color: gray;
+}
+.Signup-template .back-to-signin span:hover{
+    color: black;
+}
+.Signup-template .back-to-signin img{
+    height: 18px;
+}
+.Signup-template .Signup-form-logo img{
+    margin-top: 8%;
+    height: 50%;
+}
+.Signup-template .Signup-form-inner input{
+    border-style: none;
+    border-bottom: 1px solid #ccc;
+    color: #555;
+    display: inline-block;
+    font-size: 1em;
+    height: 30%;
+    width: 100%;
+    margin-top: 5%;
+    outline: none;
+}
+.Signup-template .Signup-form-inner input:focus{
+    border-bottom: 1px solid #337ab7;
+}
+.Signup-template .Signup-verifictioncode-btns{
+    margin-left: 115px;
+}
+.Signup-template .Signup-verifictioncode-btns button{
+    width: 130px;
+    padding: 8px;
+    border: none;
+    background-color:#0067b8;
+    color: white;
+    border-radius: 5px;
+}
+.Signup-template .Signup-sent-verificationcode-btn{
+    margin-left: 180px;
+}
+.Signup-template .Signup-sent-verificationcode-btn button{
+    background-color: #0067b8;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    margin-top: 15px;
+    width: 200px;
+}
+.Signup-template .Signup-create-password-btn{
+    margin-left: 230px;
+}
+.Signup-template .Signup-create-password-btn button{
+    background-color: #0067b8;
+    padding: 8px;
+    width: 150px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+}
+
+.signUpwithNumber button{
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.signUpwithNumber img {
+    height: 30px;
+    width: 30px;
+    border: none;
+}

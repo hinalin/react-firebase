@@ -1,0 +1,11 @@
+.modal-body p{
+    font-weight: 500px;
+}
+.modal-dialog .modal-content{
+    border: none;
+}
+.Checkbox{
+    font-family: sans-serif;
+    font-weight: 550;
+    color: rgb(80 , 80 , 80);
+}

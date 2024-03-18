@@ -1,0 +1,83 @@
+.Profilepage-template {
+    background: url('https://fbn3staging.ca/static/media/top-bg-bottom-gradient.ef86b739d7eb1f5d2f8a.png');
+    background-color: #ecf8f8;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100%;
+    position: absolute;
+    background-position-x: center;
+}
+.Profilepage-template .header {
+    padding: 0px 180px 0px 150px ;
+}
+.Profilepage-template .Profilepage-card {
+    background-color: #fff !important;
+    border-radius: 10px;
+    box-shadow: 0 .5rem 1rem #00000026!important;
+    margin: 10px auto 50px;
+    /* padding: 50px; */
+    width: 1120px;
+}
+
+.Profilepage-template .profile-part {
+    border-radius: 10px;
+    border: 2px solid rgb(240, 239, 239);
+    width: 520px;
+    margin-left: 15px;
+}
+.Profilepage-template .Profilepage-card .title {
+    border-bottom: 2px solid rgb(240, 239, 239);
+    padding: 15px;
+    color: rgb(21, 24, 82);
+    display: flex;
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.Profilepage-template .Profilepage-card .subtitle {
+    background-color: rgb(242, 250, 250);
+    border-radius: 10px 10px 0px 0px;
+    color: rgb(56, 57, 64);
+    font-size: 1.1em;
+    font-weight: 600;
+    border-bottom: 2px solid rgb(238, 238, 238);;
+}
+.content .text {
+    color: rgb(56, 57, 64);
+    font-size: 1em;
+    font-weight: 600;
+    margin: 1.3em 0px 0.4em;
+    text-decoration: none;
+    max-width: 70%;
+}
+.Profilepage-template select , textarea , input {
+    border: 1px solid rgb(209, 209, 209);
+    border-radius: 5px;
+}
+.Profilepage-template label {
+    color: rgb(56, 57, 64);
+    font-weight: 600;
+    max-width: 80%;
+}
+.Profilepage-template .myemail {
+    background-color: lightgray;
+    columns: gray;
+}
+.Profilepage-template .update-btn {
+    border-top: 1px solid rgb(238, 238, 238);;
+}
+.Profilepage-template .update-btn button {
+    width: 150px;
+    padding: 10px;
+    background-color: rgb(51, 202, 143);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 550;
+}
+.options {
+    height: 300px;
+    overflow-y: auto;
+}
+.Profilepage-template .gray-text{
+    color: gray;
+}
