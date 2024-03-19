@@ -1,25 +1,22 @@
-// import { React, useState } from "react";
+
+
+// import React, { useState } from "react";
 // import "./NavigationBar.css";
 // import { MdKeyboardArrowDown } from "react-icons/md";
-// import { Link , useNavigate } from "react-router-dom";
+// import { Link, useNavigate } from "react-router-dom";
 // import { useFirebase } from "../../context/FirebaseContext";
 
 // const UserDropdown = ({ user }) => {
 //   const [dropdownOpen, setDropdownOpen] = useState(false);
-//   const navigate = useNavigate();
+//   const [arrowRotation, setArrowRotation] = useState(0);
 //   const { logOutUser } = useFirebase();
+//   const navigate = useNavigate();
 
 //   const toggleDropdown = () => {
 //     setDropdownOpen(!dropdownOpen);
+//     setArrowRotation(arrowRotation === 0 ? 180 : 0);
 //   };
 
-//   const renderUserInitials = () => {
-//     if (user && user.email) {
-//       const initials = user.email.slice(0, 2);
-//       return initials.toUpperCase();
-//     }
-//     return "";
-//   };
 //   const handleLogoutUser = async () => {
 //     try {
 //       await logOutUser();
@@ -28,38 +25,51 @@
 //       console.log(err.message);
 //     }
 //   };
+//   const renderUserInitials = () => {
+//     if (user && user.email) {
+//       const initials = user.email.slice(0, 2);
+//       return initials.toUpperCase();
+//     }
+//     return "";
+//   };
 //   return (
 //     <>
 //       <div className="UserDropdown">
-//         <button
-//           type="button"
-//           className="dropbtn d-flex"
-//           onClick={toggleDropdown}
-//         >
-//           <div className="showUserInNavbar d-flex me-3">
-//             {renderUserInitials()}
+//         <Link className="user-drop-down d-flex" onClick={toggleDropdown}>
+//           <div className="user-circle">
+//             <span>{renderUserInitials()}</span>
 //           </div>
-//           <div>
-//             <MdKeyboardArrowDown className="down-arrow" />
+//           <div
+//             className={`arrow ${dropdownOpen ? "open" : ""}`}
+//             onClick={toggleDropdown}
+//           >
+//             <MdKeyboardArrowDown
+//               className="drop-down-arrow"
+//               style={{ transform: `rotate(${arrowRotation}deg)` }}
+//             />
 //           </div>
-//         </button>
-//         {dropdownOpen && (
-//           <ul className="dropdown-list">
-//             <li className="nav-item d-flex justify-content-start">
-//               <Link className="nav-link" to="/Assessment">
-//                 Start Assessment
-//               </Link>
-//             </li>
-//             <li className="nav-item d-flex  justify-content-start">
-//               <Link className="nav-link">Assessment</Link>
-//             </li>
-//             <li className="nav-item d-flex  justify-content-start">
-//               <Link className="nav-link" onClick={handleLogoutUser}>
-//                 Sign out
-//               </Link>
-//             </li>
-//           </ul>
-//         )}
+//           {dropdownOpen && (
+//             <div className="dropdown-content">
+//               <div className="links">
+                
+//                 <li className="nav-item d-flex  justify-content-start">
+//                   <Link className="nav-link">Dowanload Action Plan</Link>
+//                 </li>
+//                 <li className="nav-item d-flex  justify-content-start">
+//                   <Link  className="nav-link">French</Link>
+//                 </li>
+//                 <li className="nav-item d-flex  justify-content-start">
+//                   <Link to='/Profile' className="nav-link">Profile</Link>
+//                 </li>
+//                 <li className="nav-item d-flex  justify-content-start">
+//                   <Link className="nav-link" onClick={handleLogoutUser}>
+//                     Logout
+//                   </Link>
+//                 </li>
+//               </div>
+//             </div>
+//           )}
+//         </Link>
 //       </div>
 //     </>
 //   );
@@ -67,7 +77,8 @@
 
 // export default UserDropdown;
 
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import "./NavigationBar.css";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -78,6 +89,24 @@ const UserDropdown = ({ user }) => {
   const [arrowRotation, setArrowRotation] = useState(0);
   const { logOutUser } = useFirebase();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownOpen &&
+        event.target.closest(".UserDropdown") === null
+      ) {
+        setDropdownOpen(false);
+        setArrowRotation(0);
+      }
+    };
+
+    window.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, [dropdownOpen]);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -92,6 +121,7 @@ const UserDropdown = ({ user }) => {
       console.log(err.message);
     }
   };
+
   const renderUserInitials = () => {
     if (user && user.email) {
       const initials = user.email.slice(0, 2);
@@ -99,6 +129,7 @@ const UserDropdown = ({ user }) => {
     }
     return "";
   };
+
   return (
     <>
       <div className="UserDropdown">
@@ -118,17 +149,18 @@ const UserDropdown = ({ user }) => {
           {dropdownOpen && (
             <div className="dropdown-content">
               <div className="links">
-                
-                <li className="nav-item d-flex  justify-content-start">
-                  <Link className="nav-link">Dowanload Action Plan</Link>
+                <li className="nav-item d-flex justify-content-start">
+                  <Link className="nav-link">Download Action Plan</Link>
                 </li>
-                <li className="nav-item d-flex  justify-content-start">
-                  <Link  className="nav-link">French</Link>
+                <li className="nav-item d-flex justify-content-start">
+                  <Link className="nav-link">French</Link>
                 </li>
-                <li className="nav-item d-flex  justify-content-start">
-                  <Link to='/Profile' className="nav-link">Profile</Link>
+                <li className="nav-item d-flex justify-content-start">
+                  <Link to="/Profile" className="nav-link">
+                    Profile
+                  </Link>
                 </li>
-                <li className="nav-item d-flex  justify-content-start">
+                <li className="nav-item d-flex justify-content-start">
                   <Link className="nav-link" onClick={handleLogoutUser}>
                     Logout
                   </Link>

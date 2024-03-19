@@ -3,9 +3,14 @@ import "./Profile.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import { useFirebase } from "../../context/FirebaseContext";
 import Footer from "../../components/Footer/Footer";
+import { doc, setDoc, getFirestore , getDoc} from "firebase/firestore";
+
 
 const Profile = () => {
+  
+
   const { user } = useFirebase();
+  const db = getFirestore();
 
   const userId = user ? user.uid : null;
   const [profileData, setProfileData] = useState({
@@ -17,30 +22,35 @@ const Profile = () => {
     doctorEmail: "",
   });
 
-  // Destructure values from profileData
-  const { gender, age, languages, location, phoneNumber, doctorEmail } =
+  const { gender, age, languages, location, phoneNumber, doctorEmail  } =
     profileData;
 
-  const handleUpdate = () => {
-    // Store profile data in localStorage
-    Object.keys(profileData).forEach((key) => {
-      localStorage.setItem(`${userId}_${key}`, profileData[key]);
-    });
-    alert("Data updated successfully!");
+  const handleUpdate = async () => {
+    try {
+      await setDoc(doc(db, "profiles", userId), profileData);
+      alert("Data updated successfully!");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
 
   useEffect(() => {
-    // Retrieve stored profile data from localStorage
-    const storedProfileData = {};
-    Object.keys(profileData).forEach((key) => {
-      const storedValue = localStorage.getItem(`${userId}_${key}`);
-      if (storedValue) storedProfileData[key] = storedValue;
-    });
-    // Update profileData state with stored data
-    setProfileData((prevState) => ({ ...prevState, ...storedProfileData }));
+    const fetchProfileData = async () => {
+      try {
+        const docSnap = await getDoc(doc(db, "profiles", userId));
+        if (docSnap.exists()) {
+          setProfileData(docSnap.data());
+        }
+      } catch (error) {
+        console.error("Error fetching document: ", error);
+      }
+    };
+
+    if (userId) {
+      fetchProfileData();
+    }
   }, [userId]);
 
-  // Handler function to update profile data
   const handleChange = (key, value) => {
     setProfileData((prevState) => ({
       ...prevState,
@@ -66,7 +76,7 @@ const Profile = () => {
                 </div>
               </div>
               <div className="row" style={{ padding: "20px" }}>
-                <div className="col-6 left-part profile-part mt-3">
+                <div className="col-12 left-part profile-part mt-3">
                   <div className="title subtitle">
                     <h4>Personal-info</h4>
                   </div>
@@ -255,11 +265,11 @@ const Profile = () => {
                   </div>
                 </div>
 
-                <div className="col-6 right-part profile-part mt-3">
+                {/* <div className="col-6 right-part profile-part mt-3">
                   <div className="title subtitle">
                     <h4>Notification Scheduler</h4>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="col-12">

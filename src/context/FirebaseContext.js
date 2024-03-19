@@ -10,9 +10,9 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import { auth , db } from "../config/Firebase";
-import { set , ref} from 'firebase/database';
-
+import { auth, db, fs } from "../config/Firebase";
+import { set, ref } from "firebase/database";
+import { collection, doc, getDoc, setDoc, updateDoc , addDoc} from "firebase/firestore";
 
 const firebaseContext = createContext();
 export const useFirebase = () => useContext(firebaseContext);
@@ -22,34 +22,42 @@ export const FirebaseContextProvider = ({ children }) => {
 
   useEffect(() => {
     authChange();
-  } , [])
+  }, []);
 
-//   const signUpUser = async (email, password, confirmPassword) => {
-//     try {
-//       await createUserWithEmailAndPassword(auth, email, password);
-//     } catch (error) {
-//       throw error;
-//     }
-//     console.log(user , "user");
-//   };
+  //   const signUpUser = async (email, password, confirmPassword) => {
+  //     try {
+  //       await createUserWithEmailAndPassword(auth, email, password);
+  //     } catch (error) {
+  //       throw error;
+  //     }
+  //     console.log(user , "user");
+  //   };
 
-const signUpUser = async (email, password, confirmPassword) => {
+  const signUpUser = async (email, password, confirmPassword) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(userCredential , 'userCredential');
-      
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(userCredential, "userCredential");
+
       const newUser = userCredential.user;
-      
+
       await set(ref(db, `users/${newUser.uid}`), {
         email: newUser.email,
       });
-      
+
+      await addDoc(collection(fs, "users"), {
+        userId: newUser.uid,
+        email: newUser.email,
+      });
+
       return newUser;
     } catch (error) {
       throw error;
     }
   };
-  
 
   const signInUser = async (email, password) => {
     try {
@@ -90,17 +98,16 @@ const signUpUser = async (email, password, confirmPassword) => {
 
   const authChange = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if ( currentUser) {
+      if (currentUser) {
         setUser(currentUser);
         console.log(currentUser);
-      }
-      else {
+      } else {
         setUser(null);
       }
-    })
-      return () => {
-          unsubscribe();
-        };   
+    });
+    return () => {
+      unsubscribe();
+    };
   };
 
   return (

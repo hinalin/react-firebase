@@ -22,8 +22,7 @@
 .Profilepage-template .profile-part {
     border-radius: 10px;
     border: 2px solid rgb(240, 239, 239);
-    width: 520px;
-    margin-left: 15px;
+
 }
 .Profilepage-template .Profilepage-card .title {
     border-bottom: 2px solid rgb(240, 239, 239);

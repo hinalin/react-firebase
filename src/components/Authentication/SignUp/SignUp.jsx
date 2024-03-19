@@ -22,7 +22,7 @@ const SignUp = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
     if (!email || !password) {
-      setError("Please enter both email and password."); // Set error message if email or password is empty
+      setError("Please enter both email and password.");
       setTimeout(() => {
         setError("");
       }, 2000);

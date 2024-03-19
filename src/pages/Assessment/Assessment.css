@@ -7,6 +7,10 @@
     position: absolute;
     background-position-x: center;
 }
+.header{
+    position: relative;
+    z-index: 10;
+}
 
 .StartAssessment-template .StartAssessmentCard{
     background-color: #fff !important;
