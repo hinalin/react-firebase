@@ -36,3 +36,16 @@
   //     [key]: value,
   //   }));
   // };
+
+
+    // const unansweredQuestions = filteredQuestions.filter(
+    //     question => !answers.hasOwnProperty(question.id)
+    //   );
+    
+    //   if (unansweredQuestions.length > 0) {
+    //     // Show an alert if there are unanswered questions
+    //     alert("Please answer all questions before proceeding.");
+    //   } else {
+    //     // Proceed to display child questions
+    //     setShowChildQuestions(true);
+    //   }

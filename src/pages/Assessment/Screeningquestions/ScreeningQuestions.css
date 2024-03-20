@@ -1,0 +1,89 @@
+/* .screeningQuestion-template {
+    z-index: 0;
+}
+.screeningQuestion-template .yes-no-btn {
+    background-color:rgb(240, 239, 239);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: bold;
+    height: 46px;
+    letter-spacing: 0.9px;
+    text-transform: uppercase;
+    border-radius: 25px;
+    color: black;
+    width: 99px;
+} */
+.unanswered-card{
+    background-color: #fafafa;
+    border: 2px solid #eee;
+    border-radius: 15px !important;
+    font-size: 18px;
+    font-family: Poppins;
+    letter-spacing: -.18px;
+    padding: 1rem 1.25rem;
+    width:100%;
+    margin: 10px;
+}
+.buttons button{
+    background-color: #eaeaea;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: bold;
+    height: 46px;
+    letter-spacing: 0.9px;
+    border: none;
+    border-radius: 25px;
+    color: black;
+    width: 99px;
+    margin :5px
+}
+.focused-card{
+    background-color: #fff;
+    box-shadow: 0 2px 7px #0000001a;
+    font-size: 20px;
+    letter-spacing: -.2px;
+    transition: box-shadow .2s;
+}
+.answered-card{
+    background-color: #eee;
+    border: none;
+    color: #151852;
+    font-size: 18px;
+    letter-spacing: -.18px;
+}
+.answer{
+    color: #9697aa;
+}
+.ticked-img{
+    color: white;
+}
+.ticked-img-div{
+    background-color: #33ca8f;
+    width:30px;
+    height:30px ;
+    border:none;
+    border-radius: 15px;
+    padding:3px 5px;
+    position: relative;
+    right:10px;
+    margin-left: auto; 
+}
+.question{
+    display: flex; 
+    align-items: center;
+}
+.buttons .green {
+    background-color:#33ca8f;
+    color:#ffffff;
+}
+
+.unanswered-card .unanswered {
+    border: 2px solid red; /* Highlight unanswered card in red */
+  }
+  
+  .unanswered-message {
+    color: red;
+    font-size: 16px;
+    margin-bottom: 5px;
+
+  }

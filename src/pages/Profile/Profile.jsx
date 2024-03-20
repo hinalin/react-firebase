@@ -20,6 +20,7 @@ const Profile = () => {
     location: "",
     phoneNumber: "",
     doctorEmail: "",
+    email : user.email,
   });
 
   const { gender, age, languages, location, phoneNumber, doctorEmail  } =

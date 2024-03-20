@@ -6,6 +6,7 @@ import { useFirebase } from "../../context/FirebaseContext";
 
 const AssessmentProgress = () => {
   const { user } = useFirebase();
+  
   return (
     <>
       <div style={{ minHeight: "469px" }}>
@@ -28,7 +29,7 @@ const AssessmentProgress = () => {
             <p className="mb-0 StartAssessment-progress-heading">
               Assessment Progress
             </p>
-            <p className="mb-0 StartAssessment-progress-percent">0%</p>
+            <p className="mb-0 StartAssessment-progress-percent">10%</p>
           </div>
 
           <div className="StartAssessement-progressbar mt-2 mb-4">
@@ -83,6 +84,7 @@ const AssessmentProgress = () => {
                 />
               </div>
             </div>
+            
 
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div className="StartAssessment-title">

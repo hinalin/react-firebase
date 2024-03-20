@@ -1,14 +1,15 @@
-import React from "react";
+import { React , useState }  from "react";
 import "./Assessment.css";
 import 'react-circular-progressbar/dist/styles.css';
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import { useFirebase } from "../../context/FirebaseContext";
 import Footer from "../../components/Footer/Footer";
 import AssessmentProgress from "./AssessmentProgress";
-import ScreeningQuestions from "./Screening/ScreeningQuestions";
+import ScreeningQuestions from "./Screeningquestions/ScreeningQuestions";
 
 const Assessment = () => {
   const { user } = useFirebase();
+
   return (
     <>
       <div className="StartAssessment-template">
@@ -22,6 +23,7 @@ const Assessment = () => {
             </div>
             <div className="col-8">
               <ScreeningQuestions/>
+              {/* <InDepthQuestions/> */}
             </div>
           </div>
         </div>

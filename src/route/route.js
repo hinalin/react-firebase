@@ -1,4 +1,4 @@
-import { React , useState } from "react";
+import { React, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import TermsOfServices from "../components/Tnc/TermsOfServices/TermsOfServices";
@@ -12,7 +12,7 @@ import SignUpwithNumber from "../components/Authentication/SignUp/SignUpwithNumb
 import ForgotPassword from "../components/Authentication/ForgotPassword/ForgotPassword";
 import Profile from "../pages/Profile/Profile";
 import AssessmentProgress from "../pages/Assessment/AssessmentProgress";
-import ScreeningQuestions from "../pages/Assessment/Screening/ScreeningQuestions";
+import ScreeningQuestions from "../pages/Assessment/Screeningquestions/ScreeningQuestions";
 import InDepthQuestions from "../pages/Assessment/Indepth/InDepthQuestions";
 import HelthHistoryQuestions from "../pages/Assessment/Helthhistory/HelthHistoryQuestions";
 import LifeFunctionsQuestions from "../pages/Assessment/Lifefunction/LifeFunctionsQuestions";
@@ -47,7 +47,7 @@ const Main = () => {
             ></Route>
             <Route
               path="/AssessmentProgress"
-              element={<AssessmentProgress/>}
+              element={<AssessmentProgress />}
             ></Route>
             <Route
               path="/ScreeningQuestions"
@@ -55,10 +55,10 @@ const Main = () => {
             ></Route>
 
             {/* <ChildQuestionsProvider> */}
-              <Route
-                path="InDepthQuestions"
-                element={<InDepthQuestions />}
-              ></Route>
+            <Route
+              path="/InDepthQuestions"
+              element={<InDepthQuestions />}
+            ></Route>
             {/* </ChildQuestionsProvider> */}
 
             <Route
