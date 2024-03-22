@@ -588,6 +588,39 @@
         "id":120,
         "in_depth_question":"How often has your serious emotional reaction or struggle to cope interfered with your family, work, school or social life?",
         "parentId":13
+    },
+    {
+        "id":121,
+        "health_history_question":"Have you been diagnosed with any mental health problems? (If yes, select all that apply)"
+    },
+    {
+        "id":122,
+        "health_history_question":"Have you taken any form of mental health medication in the past? (If yes, select all that apply)"
+    },
+    {
+        "id":123,
+        "health_history_question":"Have you received any type of therapy and/or counselling in the past? (If yes, select all that apply)"
+    },
+    {
+        "id":124,
+        "health_history_question":"Have you had any physical problems before?(If yes, select all that apply)"
+    },
+    {
+        "id":125,
+        "life_functions_question":"Have you ever been on any of the following disability leaves?"
+    },
+    {
+        "id":126,
+        "life_functions_question":"In the past 2 months, how many days have your problems caused you to miss work?"
+    },
+    {
+        "id":127,
+        "life_functions_question":"In the past 2 months, what percentage has your productivity decreased at work or school?"
+    },
+    {
+        "id":128,
+        "life_functions_question":"In the past 2 months, what percentage have your problems impaired your physical health?"
     }
+
 
 ]

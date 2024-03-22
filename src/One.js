@@ -49,3 +49,50 @@
     //     // Proceed to display child questions
     //     setShowChildQuestions(true);
     //   }
+
+
+
+           {/* {filteredQuestions.map((question, index) => (
+            <div
+              key={question.id}
+              className={`unanswered-card ${
+                focusedQuestion === index ? "focused-card" : ""
+              }`}
+              onClick={() => handleQuestionClick(index)}
+            >
+              <div className="question">
+                <p>{question.scn_question}</p>
+                {answers[question.id] && (
+                  <div className="ticked-img-div">
+                    <AiOutlineCheck className="ticked-img" />
+                  </div>
+                )}
+              </div>
+              {focusedQuestion === index && (
+                <div className="buttons">
+                  <button
+                    className={`yes_btn ${
+                      answers[question.id] === "YES" ? "green" : ""
+                    }`}
+                    onClick={() => handleYesClick(question.id)}
+                  >
+                    YES
+                  </button>
+                  <button
+                    className={`no_btn ${
+                      answers[question.id] === "NO" ? "green" : ""
+                    }`}
+                    onClick={() => handleNoClick(question.id)}
+                  >
+                    NO
+                  </button>
+                </div>
+              )}
+
+              {focusedQuestion !== index && answers[question.id] && (
+                <div className="answer">
+                  <span>{answers[question.id]}</span>
+                </div>
+              )}
+            </div>
+          ))} */}

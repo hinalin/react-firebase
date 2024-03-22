@@ -28,7 +28,7 @@ const Profile = () => {
 
   const handleUpdate = async () => {
     try {
-      await setDoc(doc(db, "profiles", userId), profileData);
+      await setDoc(doc(db, "users", userId), profileData);
       alert("Data updated successfully!");
     } catch (error) {
       console.error("Error updating document: ", error);
@@ -38,7 +38,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const docSnap = await getDoc(doc(db, "profiles", userId));
+        const docSnap = await getDoc(doc(db, 'users', userId));
         if (docSnap.exists()) {
           setProfileData(docSnap.data());
         }

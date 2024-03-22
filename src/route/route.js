@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import TermsOfServices from "../components/Tnc/TermsOfServices/TermsOfServices";
@@ -54,12 +54,10 @@ const Main = () => {
               element={<ScreeningQuestions />}
             ></Route>
 
-            {/* <ChildQuestionsProvider> */}
             <Route
               path="/InDepthQuestions"
               element={<InDepthQuestions />}
             ></Route>
-            {/* </ChildQuestionsProvider> */}
 
             <Route
               path="/HelthHistoryQuestions"

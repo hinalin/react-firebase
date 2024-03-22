@@ -4,7 +4,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useFirebase } from "../../context/FirebaseContext";
 
-const AssessmentProgress = () => {
+const AssessmentProgress = ({stepCount}) => {
   const { user } = useFirebase();
   
   return (
@@ -69,6 +69,7 @@ const AssessmentProgress = () => {
               <div className="StartAssessment-title">
                 <i className="fas fa-comments  me-3"></i>
                 <span>In-Depth Questions</span>
+                <p>{'step : ' + stepCount}</p>
               </div>
               <div className="d-flex align-items-center">
                 <span className="percent">0%</span>

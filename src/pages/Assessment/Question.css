@@ -1,18 +1,3 @@
-/* .screeningQuestion-template {
-    z-index: 0;
-}
-.screeningQuestion-template .yes-no-btn {
-    background-color:rgb(240, 239, 239);
-    font-size: 18px;
-    font-style: normal;
-    font-weight: bold;
-    height: 46px;
-    letter-spacing: 0.9px;
-    text-transform: uppercase;
-    border-radius: 25px;
-    color: black;
-    width: 99px;
-} */
 .unanswered-card{
     background-color: #fafafa;
     border: 2px solid #eee;
@@ -87,3 +72,13 @@
     margin-bottom: 5px;
 
   }
+
+  .InDepthQuestions-template .buttons button{
+    width:160px
+}
+.InDepthQuestions-template .focused-card .answer{
+    display: none;
+}
+.InDepthQuestions-template .focused-card .ticked-img-div{
+    display: none;
+}
