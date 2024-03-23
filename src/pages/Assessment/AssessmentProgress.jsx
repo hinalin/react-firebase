@@ -4,20 +4,20 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useFirebase } from "../../context/FirebaseContext";
 
-const AssessmentProgress = ({stepCount}) => {
+const AssessmentProgress = ({ stepCount }) => {
   const { user } = useFirebase();
-  
+
   return (
     <>
-      <div style={{ minHeight: "469px" }}>
-        <div
-          className="sticky"
-          style={{
+      <div style={{
             transform: "translateZ(0px)",
             top: "90px",
             width: "450px",
-            position: "fixed",
-          }}
+            position: "sticky",
+          }}>
+        <div
+          className="sticky"
+          
         >
           <div>
             <h2 className="StartAssessmentTitle mb-4 mt-5">
@@ -25,35 +25,16 @@ const AssessmentProgress = ({stepCount}) => {
             </h2>
           </div>
 
-          <div className="d-flex justify-content-between">
-            <p className="mb-0 StartAssessment-progress-heading">
-              Assessment Progress
-            </p>
-            <p className="mb-0 StartAssessment-progress-percent">10%</p>
-          </div>
-
-          <div className="StartAssessement-progressbar mt-2 mb-4">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              style={{ width: "100px", height: "10px" }}
-              aria-valuenow="100"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            ></div>
-          </div>
-
           <div className="mt-5">
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div className="StartAssessment-title">
-                <i className="fas fa-laptop activeIcon me-3"></i>
+                <i className="fas fa-laptop me-3"></i>
                 <span>Screening Questions</span>
               </div>
               <div className="d-flex align-items-center">
                 <span className="percent">100%</span>
                 <CircularProgressbar
-                className="screening-question-circle progressBar"
-                  value={10}
+                  value={100}
                   strokeWidth={10}
                   styles={{
                     root: { width: "30px", height: "20px" },
@@ -67,14 +48,13 @@ const AssessmentProgress = ({stepCount}) => {
 
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div className="StartAssessment-title">
-                <i className="fas fa-comments  me-3"></i>
+                <i className={`fas fa-comments me-3`}></i>
                 <span>In-Depth Questions</span>
-                <p>{'step : ' + stepCount}</p>
               </div>
               <div className="d-flex align-items-center">
-                <span className="percent">0%</span>
+                <span className="percent">54%</span>
                 <CircularProgressbar
-                  value={10}
+                  value={54}
                   strokeWidth={10}
                   styles={{
                     root: { width: "30px", height: "20px" },
@@ -85,7 +65,14 @@ const AssessmentProgress = ({stepCount}) => {
                 />
               </div>
             </div>
-            
+
+            {[...Array(stepCount).keys()].map((stepIndex) => (
+              <div key={stepIndex} className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+                <div className="StartAssessment-title ms-3">
+                  <span>Step { stepIndex + 1 }</span>
+                </div>
+              </div>
+            ))}
 
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div className="StartAssessment-title">
@@ -95,7 +82,7 @@ const AssessmentProgress = ({stepCount}) => {
               <div className="d-flex align-items-center">
                 <span className="percent">0%</span>
                 <CircularProgressbar
-                  value={10}
+                  value={0}
                   strokeWidth={10}
                   styles={{
                     root: { width: "30px", height: "20px" },
@@ -115,7 +102,7 @@ const AssessmentProgress = ({stepCount}) => {
               <div className="d-flex align-items-center">
                 <span className="percent">0%</span>
                 <CircularProgressbar
-                  value={10}
+                  value={0}
                   strokeWidth={10}
                   styles={{
                     root: { width: "30px", height: "20px" },

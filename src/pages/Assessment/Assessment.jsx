@@ -9,6 +9,8 @@ import ScreeningQuestions from "./Screeningquestions/ScreeningQuestions";
 
 const Assessment = () => {
   const { user } = useFirebase();
+  const [stepCount, setStepCount] = useState(0);
+
 
   return (
     <>
@@ -18,11 +20,11 @@ const Assessment = () => {
         </div>
         <div className="StartAssessmentCard">
           <div className="row">
-            <div className="col-4">
-              <AssessmentProgress/>
+            <div className="col-4"  >
+              <AssessmentProgress stepCount={stepCount}/>
             </div>
             <div className="col-8">
-              <ScreeningQuestions/>
+              <ScreeningQuestions setStepCount={setStepCount}/>
               {/* <InDepthQuestions/> */}
             </div>
           </div>

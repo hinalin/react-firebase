@@ -84,7 +84,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useFirebase } from "../../context/FirebaseContext";
 
-const UserDropdown = ({ user }) => {
+const UserDropdown = ({ user , name }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [arrowRotation, setArrowRotation] = useState(0);
   const { logOutUser } = useFirebase();
@@ -130,6 +130,16 @@ const UserDropdown = ({ user }) => {
     return "";
   };
 
+  // const renderUserInitials = () => {
+  //   if (user && user.name) {
+  //     // If the user logged in or signed up with a name
+  //     return name.slice(0, 2).toUpperCase();
+  //   } else if (user && user.email) {
+  //     // If the user logged in or signed up with email
+  //     return user.email.slice(0, 2).toUpperCase();
+  //   }
+  //   return "";
+  // };
   return (
     <>
       <div className="UserDropdown">

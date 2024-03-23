@@ -3,12 +3,9 @@ import "./Profile.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import { useFirebase } from "../../context/FirebaseContext";
 import Footer from "../../components/Footer/Footer";
-import { doc, setDoc, getFirestore , getDoc} from "firebase/firestore";
-
+import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore";
 
 const Profile = () => {
-  
-
   const { user } = useFirebase();
   const db = getFirestore();
 
@@ -20,10 +17,10 @@ const Profile = () => {
     location: "",
     phoneNumber: "",
     doctorEmail: "",
-    email : user.email,
+    email: user.email,
   });
 
-  const { gender, age, languages, location, phoneNumber, doctorEmail  } =
+  const { gender, age, languages, location, phoneNumber, doctorEmail } =
     profileData;
 
   const handleUpdate = async () => {
@@ -38,7 +35,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const docSnap = await getDoc(doc(db, 'users', userId));
+        const docSnap = await getDoc(doc(db, "users", userId));
         if (docSnap.exists()) {
           setProfileData(docSnap.data());
         }
@@ -248,29 +245,27 @@ const Profile = () => {
                             }
                           />
 
-                          <div className="col-12 mt-4">
-                            <label htmlFor="Email">Email</label>
-                          </div>
-                          <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            className="mt-2 p-2 myemail"
-                            value={user.email}
-                            readOnly
-                            disabled
-                          />
+                          {/* {!phoneNumber && ( // Hide label and email field if phoneNumber is present */}
+                          {/* <div> */}
+                            <div className="col-12 mt-4">
+                              <label htmlFor="Email">Email</label>
+                            </div>
+                              <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                className="mt-2 p-2 myemail"
+                                value={user.email}
+                                readOnly
+                                disabled
+                              />
+                            {/* </div> */}
+                          {/* )} */}
                         </div>
                       </form>
                     </div>
                   </div>
                 </div>
-
-                {/* <div className="col-6 right-part profile-part mt-3">
-                  <div className="title subtitle">
-                    <h4>Notification Scheduler</h4>
-                  </div>
-                </div> */}
               </div>
 
               <div className="col-12">

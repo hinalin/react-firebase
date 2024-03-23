@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./NavigationBar.css";
 import UserDropdown from "./UserDropdown";
 
-const NavbarAuthentication = ({ user, handleOpenSignInUpModal }) => {
+const NavbarAuthentication = ({ user, handleOpenSignInUpModal , name }) => {
   return (
     <>
       {user ? (
@@ -19,7 +19,7 @@ const NavbarAuthentication = ({ user, handleOpenSignInUpModal }) => {
           <li className="nav-item d-flex  justify-content-start">
             <Link className="nav-link">Resources</Link>
           </li>
-          <UserDropdown user={user} />
+          <UserDropdown user={user} name={name} />
         </>
       ) : (
         <>

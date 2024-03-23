@@ -230,12 +230,12 @@ import "../Question.css";
 import jsonData from "../../../data/QuestionsData.json";
 import { useNavigate } from "react-router-dom";
 
-const ScreeningQuestions = () => {
+
+const ScreeningQuestions = ({setStepCount}) => {
   const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [showChildQuestions, setShowChildQuestions] = useState(false);
   const [answers, setAnswers] = useState({});
-
   const navigate = useNavigate();
 
   const handleQuestionClick = (index) => {
@@ -257,18 +257,20 @@ const ScreeningQuestions = () => {
     const unansweredQuestions = filteredQuestions.filter(
         question => !answers.hasOwnProperty(question.id)
       );
-    
       if (unansweredQuestions.length > 0) {
-        // Focus on the first unanswered question and set showChildQuestions to false
         setFocusedQuestion(unansweredQuestions[0].id);
         setShowChildQuestions(false);
       } else {
-        // Proceed to display child questions
+        // Update the step count when proceeding to display child questions
         setShowChildQuestions(true);
-        navigate('/InDepthQuestions' , { state: { childQuestions: childQuestionsByStep }});
+        setStepCount(Object.keys(childQuestionsByStep).length); // Update the step count
+        navigate("/InDepthQuestions", {
+          state: { childQuestions: childQuestionsByStep },
+        });
       }
   };
 
+ 
   const isParentQuestionSelected = (parentId) => {
     return selectedQuestions.includes(parentId);
   };
@@ -291,7 +293,7 @@ const ScreeningQuestions = () => {
   const childQuestionsByStep = groupChildQuestionsByParentId();
   const filteredQuestions = jsonData.filter(
     (question) => question.parentId === null && question.scn_question
-  ); // Filter out questions with parentId null and scn_question not null
+  );
 
   return (
     <>
@@ -302,9 +304,7 @@ const ScreeningQuestions = () => {
               key={question.id}
               className={`unanswered-card ${
                 focusedQuestion === index ? "focused-card" : ""
-              }${
-                !answers[question.id] && ! showChildQuestions ? "unanswered" : ""
-              }`}
+              } `}
               onClick={() => handleQuestionClick(index)}
             >
                {focusedQuestion === question.id && !answers[question.id] && !showChildQuestions && (
