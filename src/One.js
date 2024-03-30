@@ -313,3 +313,477 @@ const InDepthQuestions = () => {
 export default InDepthQuestions;
 
 
+{/* {showChildQuestions &&
+          Object.keys(childQuestionsByStep).map((parentId, index) => (
+            <div key={index}>
+                <h2>Step {index + 1}</h2>
+                {answers[parentId] === "YES" &&
+                  childQuestionsByStep[parentId].map((childQuestion) => (
+                    <div key={childQuestion.id} className="child-question">
+                      <p>{childQuestion.in_depth_question}</p>
+                    </div>
+                  ))}
+            </div>
+          ))} */}
+
+
+
+
+
+          import React, { useState , useEffect } from "react";
+import { AiOutlineCheck } from "react-icons/ai";
+import "../Question.css";
+import jsonData from "../../../data/QuestionsData.json";
+import { useFetcher, useNavigate } from "react-router-dom";
+// import { fs , db } from "../../../config/Firebase";
+import { setDoc, doc, getDoc , getFirestore } from "firebase/firestore";
+import { useFirebase } from "../../../context/FirebaseContext";
+
+const ScreeningQuestions = ({ setStepCount }) => {
+  const [focusedQuestion, setFocusedQuestion] = useState(null);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [showChildQuestions, setShowChildQuestions] = useState(false);
+  const [answers, setAnswers] = useState({});
+  const navigate = useNavigate();
+  const db = getFirestore()
+  const { user } = useFirebase();
+  const userId = user ? user.uid : null;
+  
+  const [ screeningData , setScreeningData] = useState({
+    
+  });
+
+  useEffect(() => {
+    const fetchScreeningData = async () => {
+      try {
+        const docSnap = await getDoc(doc(db, "users", userId));
+        if (docSnap.exists()) {
+          setProfileData(docSnap.data());
+        }
+      } catch (error) {
+        console.error("Error fetching document: ", error);
+      }
+    };
+
+    if (userId) {
+      fetchScreeningData();
+    }
+  }, [userId]);
+  
+  const handleQuestionClick = (index) => {
+    setFocusedQuestion(index === focusedQuestion ? null : index);
+  };
+
+  const handleYesClick = async(questionId, parentId) => {
+    setAnswers({ ...answers, [questionId]: "YES" });
+    setSelectedQuestions([...selectedQuestions, questionId]);
+    setFocusedQuestion(null);
+    await storeAnswerToFirestore(questionId, "YES");
+    console.log(typeof(questionId) , 'question');
+  };
+
+  const handleNoClick = async (questionId) => {
+    setAnswers({ ...answers, [questionId]: "NO" });
+    setFocusedQuestion(null);
+    await storeAnswerToFirestore(questionId, "NO");
+  };
+
+  const storeAnswerToFirestore = async (questionId, answer) => {
+    // try {
+    //     const answerDocRef = doc(fs, "users", questionId.toString()); // Convert number to string
+    //     await setDoc(answerDocRef, {
+    //         answer: answer,
+    //     });
+    //     console.log("Answer stored in Firestore successfully!");
+    // } catch (error) {
+    //     console.error("Error storing answer in Firestore: ", error);
+    // }
+  //   const answerDocRef = doc(fs, "users", user.uid, "answers" , questionId.toString());
+  //   await setDoc(answerDocRef, {
+  //     answer: answer,
+  //     userId: user.uid, // Include user's UID in the document
+  //   });
+  //   console.log("Answer stored in Firestore successfully!");
+  // } catch (error) {
+  //   console.error("Error storing answer in Firestore: ", error);
+  // }
+  try {
+    const answerDocRef = doc(db , 'users' , userId , "answers" , questionId.toString())
+    await setDoc(answerDocRef , {
+      answer : answer,
+      userId: userId,
+    });
+    alert("Answer stored in Firestore successfully!");
+  } catch (error) {
+    console.error("Error storing answer in Firestore: ", error);
+  }
+};
+
+
+  const handleNextButtonClick = () => {
+    const unansweredQuestions = filteredQuestions.filter(
+      (question) => !answers.hasOwnProperty(question.id)
+    );
+    if (unansweredQuestions.length > 0) {
+      setFocusedQuestion(unansweredQuestions[0].id);
+      setShowChildQuestions(false);
+    } else {
+      // Update the step count when proceeding to display child questions
+      setShowChildQuestions(true);
+      setStepCount(Object.keys(childQuestionsByStep).length); // Update the step count
+      navigate("/InDepthQuestions", {
+        state: { childQuestions: childQuestionsByStep },
+      });
+    }
+  };
+
+  const isParentQuestionSelected = (parentId) => {
+    return selectedQuestions.includes(parentId);
+  };
+
+  const groupChildQuestionsByParentId = () => {
+    const groupedQuestions = {};
+
+    jsonData.forEach((question) => {
+      if (question.parentId && isParentQuestionSelected(question.parentId)) {
+        if (!groupedQuestions[question.parentId]) {
+          groupedQuestions[question.parentId] = [];
+        }
+        groupedQuestions[question.parentId].push(question);
+      }
+    });
+
+    return groupedQuestions;
+  };
+
+  const childQuestionsByStep = groupChildQuestionsByParentId();
+  const filteredQuestions = jsonData.filter(
+    (question) => question.parentId === null && question.scn_question
+  );
+  return (
+    <>
+      <div className="container">
+        <div className="screeningQuestion-template">
+          {filteredQuestions.map((question, index) => (
+            <div
+              key={question.id}
+              className={`unanswered-card ${
+                focusedQuestion === index ? "focused-card" : ""
+              } `}
+              onClick={() => handleQuestionClick(index)}
+            >
+              {focusedQuestion === question.id &&
+                !answers[question.id] &&
+                !showChildQuestions && (
+                  <div className="unanswered-message">
+                    Please answer this question.
+                  </div>
+                )}
+              <div className="question">
+                <p>{question.scn_question}</p>
+                {answers[question.id] && (
+                  <div className="ticked-img-div">
+                    <AiOutlineCheck className="ticked-img" />
+                  </div>
+                )}
+              </div>
+              {focusedQuestion === index && (
+                <div className="buttons">
+                  <button
+                    className={`yes_btn ${
+                      answers[question.id] === "YES" ? "green" : ""
+                    }`}
+                    onClick={() => handleYesClick(question.id)}
+                  >
+                    YES
+                  </button>
+                  <button
+                    className={`no_btn ${
+                      answers[question.id] === "NO" ? "green" : ""
+                    }`}
+                    onClick={() => handleNoClick(question.id)}
+                  >
+                    NO
+                  </button>
+                </div>
+              )}
+
+              {focusedQuestion !== index && answers[question.id] && (
+                <div className="answer">
+                  <span>{answers[question.id]}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="buttons d-flex">
+          <button className="btn" onClick={handleNextButtonClick}>
+            Next
+          </button>
+          <p
+            className="mt-3 ms-3"
+            style={{ fontWeight: "500", fontSize: "17px" }}
+          >
+            You can change your answers by clicking on the question
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ScreeningQuestions;
+
+// import React, { useState } from "react";
+// import { AiOutlineCheck } from "react-icons/ai";
+// import "../Question.css";
+// import jsonData from "../../../data/QuestionsData.json";
+// import { useFetcher, useNavigate } from "react-router-dom";
+// import { fs } from "../../../config/Firebase";
+// import { setDoc, doc, getDoc } from "firebase/firestore";
+// import { useFirebase } from "../../../context/FirebaseContext";
+
+// const ScreeningQuestions = ({ setStepCount }) => {
+//   const [focusedQuestion, setFocusedQuestion] = useState(null);
+//   const [selectedQuestions, setSelectedQuestions] = useState([]);
+//   const [showChildQuestions, setShowChildQuestions] = useState(false);
+//   const [answers, setAnswers] = useState({});
+//   const navigate = useNavigate();
+//   const { user } = useFirebase();
+
+//   const handleQuestionClick = (index) => {
+//     setFocusedQuestion(index === focusedQuestion ? null : index);
+//   };
+
+//   const handleYesClick = (questionId, parentId) => {
+//     setAnswers({ ...answers, [questionId]: "YES" });
+//     setSelectedQuestions([...selectedQuestions, questionId]);
+//     setFocusedQuestion(null);
+//     // Store the answer in Firestore
+//     storeAnswer(user.uid, questionId, "YES");
+//   };
+
+//   const handleNoClick = (questionId) => {
+//     setAnswers({ ...answers, [questionId]: "NO" });
+//     setFocusedQuestion(null);
+//     // Store the answer in Firestore
+//     storeAnswer(user.uid, questionId, "NO");
+//   };
+
+//   const handleNextButtonClick = () => {
+//     const unansweredQuestions = filteredQuestions.filter(
+//       (question) => !answers.hasOwnProperty(question.id)
+//     );
+//     if (unansweredQuestions.length > 0) {
+//       setFocusedQuestion(unansweredQuestions[0].id);
+//       setShowChildQuestions(false);
+//     } else {
+//       // Update the step count when proceeding to display child questions
+//       setShowChildQuestions(true);
+//       setStepCount(Object.keys(childQuestionsByStep).length); // Update the step count
+//       navigate("/InDepthQuestions", {
+//         state: { childQuestions: childQuestionsByStep },
+//       });
+//     }
+//   };
+
+//   // Function to store answer in Firestore
+//   const storeAnswer = async (userId, questionId, answer) => {
+//     try {
+//       // Construct the document reference for the user
+//       const userRef = doc(fs, "users", userId);
+//       // Construct the subcollection reference for the user's screening questions
+//       const screeningQuestionsRef = doc(userRef, "screeningQuestions", questionId);
+  
+//       // Set the document with the answer
+//       await setDoc(screeningQuestionsRef, { answer });
+//     } catch (error) {
+//       console.error("Error storing answer:", error);
+//     }
+//   };
+
+//   const isParentQuestionSelected = (parentId) => {
+//     return selectedQuestions.includes(parentId);
+//   };
+
+//   const groupChildQuestionsByParentId = () => {
+//     const groupedQuestions = {};
+
+//     jsonData.forEach((question) => {
+//       if (question.parentId && isParentQuestionSelected(question.parentId)) {
+//         if (!groupedQuestions[question.parentId]) {
+//           groupedQuestions[question.parentId] = [];
+//         }
+//         groupedQuestions[question.parentId].push(question);
+//       }
+//     });
+
+//     return groupedQuestions;
+//   };
+
+//   const childQuestionsByStep = groupChildQuestionsByParentId();
+//   const filteredQuestions = jsonData.filter(
+//     (question) => question.parentId === null && question.scn_question
+//   );
+
+//   return (
+//     <>
+//       <div className="container">
+//         <div className="screeningQuestion-template">
+//           {filteredQuestions.map((question, index) => (
+//             <div
+//               key={question.id}
+//               className={`unanswered-card ${
+//                 focusedQuestion === index ? "focused-card" : ""
+//               } `}
+//               onClick={() => handleQuestionClick(index)}
+//             >
+//               {focusedQuestion === question.id &&
+//                 !answers[question.id] &&
+//                 !showChildQuestions && (
+//                   <div className="unanswered-message">
+//                     Please answer this question.
+//                   </div>
+//                 )}
+//               <div className="question">
+//                 <p>{question.scn_question}</p>
+//                 {answers[question.id] && (
+//                   <div className="ticked-img-div">
+//                     <AiOutlineCheck className="ticked-img" />
+//                   </div>
+//                 )}
+//               </div>
+//               {focusedQuestion === index && (
+//                 <div className="buttons">
+//                   <button
+//                     className={`yes_btn ${
+//                       answers[question.id] === "YES" ? "green" : ""
+//                     }`}
+//                     onClick={() => handleYesClick(question.id)}
+//                   >
+//                     YES
+//                   </button>
+//                   <button
+//                     className={`no_btn ${
+//                       answers[question.id] === "NO" ? "green" : ""
+//                     }`}
+//                     onClick={() => handleNoClick(question.id)}
+//                   >
+//                     NO
+//                   </button>
+//                 </div>
+//               )}
+
+//               {focusedQuestion !== index && answers[question.id] && (
+//                 <div className="answer">
+//                   <span>{answers[question.id]}</span>
+//                 </div>
+//               )}
+//             </div>
+//           ))}
+//         </div>
+//         <div className="buttons d-flex">
+//           <button className="btn" onClick={handleNextButtonClick}>
+//             Next
+//           </button>
+//           <p
+//             className="mt-3 ms-3"
+//             style={{ fontWeight: "500", fontSize: "17px" }}
+//           >
+//             You can change your answers by clicking on the question
+//           </p>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default ScreeningQuestions;
+
+
+
+// const [focusedQuestion, setFocusedQuestion] = useState(null);
+  // const [selectedQuestions, setSelectedQuestions] = useState([]);
+  // const [showChildQuestions, setShowChildQuestions] = useState(false);
+  // const [answers, setAnswers] = useState({});
+  // const navigate = useNavigate();
+  // const { user } = useFirebase();
+  // const userId = user ? user.uid : null;
+
+  // const handleQuestionClick = (index) => {
+  //   setFocusedQuestion(index === focusedQuestion ? null : index);
+  // };
+
+  // const handleYesClick = async (questionId, parentId) => {
+  //   setAnswers({ ...answers, [questionId]: "YES" });
+  //   setSelectedQuestions([...selectedQuestions, questionId]);
+  //   setFocusedQuestion(null);
+  //   await storeAnswerToFirestore(questionId, "YES");
+  //   console.log(typeof questionId, "question");
+  // };
+
+  // const handleNoClick = async (questionId) => {
+  //   setAnswers({ ...answers, [questionId]: "NO" });
+  //   setFocusedQuestion(null);
+  //   await storeAnswerToFirestore(questionId, "NO");
+  // };
+
+  // const storeAnswerToFirestore = async (questionId, answer) => {
+  //   try {
+  //     const answerDocRef = doc(
+  //       fs,
+  //       "users",
+  //       user.uid,
+  //       "answers",
+  //       questionId.toString()
+  //     );
+  //     await setDoc(answerDocRef, {
+  //       answer: answer,
+  //       userId: user.uid, // Include user's UID in the document
+  //     });
+  //     console.log("Answer stored in Firestore successfully!");
+  //   } catch (error) {
+  //     console.error("Error storing answer in Firestore: ", error);
+  //   }
+  // };
+
+  // const handleNextButtonClick = () => {
+  //   const unansweredQuestions = filteredQuestions.filter(
+  //     (question) => !answers.hasOwnProperty(question.id)
+  //   );
+  //   if (unansweredQuestions.length > 0) {
+  //     setFocusedQuestion(unansweredQuestions[0].id);
+  //     setShowChildQuestions(false);
+  //   } else {
+  //     // Update the step count when proceeding to display child questions
+  //     setShowChildQuestions(true);
+  //     setStepCount(Object.keys(childQuestionsByStep).length); // Update the step count
+  //     navigate("/InDepthQuestions", {
+  //       state: { childQuestions: childQuestionsByStep },
+  //     });
+  //   }
+  // };
+
+  // const isParentQuestionSelected = (parentId) => {
+  //   return selectedQuestions.includes(parentId);
+  // };
+
+  // const groupChildQuestionsByParentId = () => {
+  //   const groupedQuestions = {};
+
+  //   jsonData.forEach((question) => {
+  //     if (question.parentId && isParentQuestionSelected(question.parentId)) {
+  //       if (!groupedQuestions[question.parentId]) {
+  //         groupedQuestions[question.parentId] = [];
+  //       }
+  //       groupedQuestions[question.parentId].push(question);
+  //     }
+  //   });
+
+  //   return groupedQuestions;
+  // };
+
+  // const childQuestionsByStep = groupChildQuestionsByParentId();
+  // const filteredQuestions = jsonData.filter(
+  //   (question) => question.parentId === null && question.scn_question
+  // );

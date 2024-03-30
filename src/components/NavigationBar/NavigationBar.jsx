@@ -1,55 +1,3 @@
-// import { React } from "react";
-// import "./NavigationBar.css";
-// import { Link } from "react-router-dom";
-
-// function NavigationBar({ handleOpenSignInUpModal }) {
-  
-//   return (
-//     <>
-//       <div className="nav navbar navbar-template">
-//         <ul className="logo-part">
-//           <li className="nav-item d-flex align-item-center header-logo mt-3">
-//             <Link to="/">
-//               <img
-//                 src="	https://fbn3staging.ca/static/media/FeelingBetterNowLogo.06eefb0dfb8031f27df7843dd37e1e1b.svg"
-//                 alt="Feeling Better Now"
-//                 className="align-item-center img-fluid img-responsive logo f-logo"
-//               />
-//             </Link>
-//           </li>
-//         </ul>
-//         <ul className="d-flex link-part">
-//           <li
-//             className="nav-item d-flex align-items-center justify-content-end"
-//             tabIndex="0"
-//           >
-//             <div className="nav-link" onClick={handleOpenSignInUpModal}>Start Assessment</div>
-//           </li>
-//           <li
-//             className="nav-item d-flex align-items-center justify-content-end"
-//             tabIndex="0"
-//           >
-//             <div className="nav-link">French</div>
-//           </li>
-//           {/* <li classNameName="nav-item d-flex align-items-center justify-content-end" data-toggle="modal" data-target="#assessmentHistoryModal" role="button">Assessments</li>
-//                 <li classNameName="nav-item d-flex align-items-center justify-content-end"><a classNameName="nav-link" href="/Education">Resources</a></li> */}
-//           <li className="nav-item d-flex align-items-center justify-content-center">
-//             <button
-//               className="btn homeNavBtn"
-//               onClick={handleOpenSignInUpModal}
-//             >
-//               Sign In/Up
-//             </button>
-//           </li>
-//         </ul>
-//       </div>
-      
-//     </>
-//   );
-// }
-
-// export default NavigationBar;
-
 import React from "react";
 import { Link } from "react-router-dom";
 import './NavigationBar.css'
@@ -72,9 +20,6 @@ function NavigationBar({user , handleOpenSignInUpModal,closeSidebar,toggleSideba
                     </li>
                 </ul>
                 <ul className="link-part ms-auto">
-                    {/* <li className="nav-item d-flex align-items-center justify-content-end"><Link className="nav-link" onClick={handleOpenSignInUpModal} >Start Assessment</Link></li> */}
-                    {/* <li className="nav-item d-flex align-items-center justify-content-end"><Link className="nav-link">French</Link></li> */}
-                    {/* <li className="nav-item d-flex align-items-center justify-content-center"><button className="btn homeNavBtn" onClick={handleOpenSignInUpModal}>Sign In/Up</button></li> */}
                     <NavbarAuthentication user={user} handleOpenSignInUpModal={handleOpenSignInUpModal}  />
                 </ul>
                 {!isSidebarOpen && (

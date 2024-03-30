@@ -591,23 +591,28 @@
     },
     {
         "id":121,
-        "health_history_question":"Have you been diagnosed with any mental health problems? (If yes, select all that apply)"
+        "health_history_question":"Have you been diagnosed with any mental health problems? (If yes, select all that apply)",
+        "dropdown" : ["Alcohol or Substance Abuse Problems","Adjustment Disorder","Anger Problems","Attention Deficit Hyperactivity Disorder (ADHD)","Bipolar Disorder","Eating Disorders","Generalized Anxiety Disorder","Depression (Major Depressive Disorder)","Obsessive Compulsive Disorder (OCD)" ,"Panic Disorder","Post-Traumatic Stress Disorder (PTSD)" , "Sleep Disorder (Insomnia)" , "Social Anxiety" , "Complex PTSD" ,"Autism Spectrum Disorder (ASD)"]
     },
     {
         "id":122,
-        "health_history_question":"Have you taken any form of mental health medication in the past? (If yes, select all that apply)"
+        "health_history_question":"Have you taken any form of mental health medication in the past? (If yes, select all that apply)",
+        "dropdown" : ["Abilify (aripiprazole)" , "Antabuse (disulfram)" , "Alertec (modafinil)" , "Anafranil (clomipramine)" , "Aricept (donepezil)" , "Atarax (hydroxyzine)" , "Ativan (lorazepam)" , "Aventyl (nortriptyline)" , "Buspar (buspirone)" , "Carbolith (lithium carbonate)" , "Celexa (citalopram)" , "Cibalith-S (lithium citrate)" , "Cipralex (escitalopram)" , "Clozaril (clozapine)" , "Cogentin (benztropine)" , "Cymbalta  (duloxetine)" , "Dalmane (flurazepam)" , "Depakene (valproic acid)" , "Desyrel (trazodone)" , "Dexedrine (dextroamphetamine)" , "Dexedrine Spansules (dextroamphetamine)" , "Dextrostat (dextroamphetamine)" , "Dilantin (phenytoin)" , "Duralith (lithium carbonate)" , "Effexor, Effexor XR (venlafaxine)" , "Elavil (amitriptyline)" , "Epival (divalproex sodium)" , "Exelon (rivastigmine)" , "Fluanxol, Fluanxol inj. (flupenthixol)" , "Geodon (ziprasidone)" , "Imovane (zopiclone)" , "Inderal, Inderal LA (propranolol)" , "Kemadrin (procyclidine)" , "Klonopin (clonazepam)" , "Lamictal (lamotrigine)" , "Lectopam (bromazepam)" , "Lithane (lithium carbonate)" , "Lithmax (lithium, long-acting)" , "Luvox (fluvoxamine)" , "Mirapex (pramipexole)" , "Modecate (fluphenazine)" , "Moditen Ethanate (fluphenazine)" , "Nardil (phenelzine )" , "Neurontin (gabapentin)" , "Norpramin (desipramine)" , "Orap (pimozide)" , "Parlodel (bromocriptine)" , "Parnate (tranylcypromine)" , "Paxil (paroxetine)" ,"Prozac (fluoxetine)" , "Remeron (mirtazapine)" , "Restoril (temazepam)" , "Revia (naltrexone)" , "Risperdal (risperidone)" , "Ritalin (methyphenidate)" , "Rivotril (clonazepam)" , "Serax (oxazepam)" , "Seroquel (quetiapine)" , "Sinequan (doxepin)" , "Sonata (zalepon)" , "Starnoc (zalepon)" , "Strattera (atomoxetine)" , "Surmontil (trimipramine)" , "Symmetrel (amantadine)" , "Tegretol (carbamazepine)" , "Topamax (topiramate)" , "Trilafon (perphenazine)" , "Tryptan (tryptophan)" , "Valium (diazepam)" , "Versed (nidazolam)" , "Wellbutrin (bupropion)" , "Xanax, Xanax XR (alprazolam)" , "Zoloft (sertraline)" , "Zyban (buproprion" , "Zyprexa (olanzapine)" , "Adderall XR (Amphetamine)" , "Vyvanse (Amphetamine)" , "Concerta (Biphentin)" , "Latuda (lurasidone)" , "Invega Trinza (paliperidone palmitate)" , "Saphris (asenapine)" , "Vraylar® (cariprazine)" , "Pristiq (desvenlafaxine)" , "Fetzima (levomilnacipran)" , "Viibryd (vilazodone)" , "Trintellix (vortioxetine)"]
     },
     {
         "id":123,
-        "health_history_question":"Have you received any type of therapy and/or counselling in the past? (If yes, select all that apply)"
+        "health_history_question":"Have you received any type of therapy and/or counselling in the past? (If yes, select all that apply)",
+        "dropdown" : ["Biofeedback" , "Cognitive Behaviour Therapy (CBT)" , "Internet Based Cognitive Behavioral Therapy (iCBT)" , "Eye Movement Desensitization and Reprocessing (EMDR)" , "Group Therapy" , "Marriage and Family Therapy" , "Mindfulness-Based Cognitive Therapy (MBCT)" , "Problem-Solving Therapy" , "Psychodynamic Therapy" , "Workbook-based or Online Therapy" , "Meditation-Based Therapy" , "EAP (Employee Assistance Program) Counselling" , "Brief Interventions" , "Dialectical Behaviour Therapy (DBT)" , "Interpersonal Therapy" , "Motivational Interviewing" , "Psycho-education" , "Self-Help Groups" , "Twelve-Step Facilitation" , "Acceptance and commitment therapy (ACT) " , "Electroconvulsive Therapy (ECT) " , "rTMS" , "Ketamine Infusion" , "Intranasal Esketamine" , "Vagal Nerve Stimulation (VNS)"]
     },
     {
         "id":124,
-        "health_history_question":"Have you had any physical problems before?(If yes, select all that apply)"
+        "health_history_question":"Have you had any physical problems before?(If yes, select all that apply)",
+        "dropdown" : ["Allergies" , "Chronic Pain" , "Head Injury" , "Major Infection" , "Major Injury (e.g. car crash)" , "Major Surgery" , "Obesity" , "Sexual Dysfunction" , "Smoking" , "Diabetes" , "Heart Disease" , "High Blood Pressure" , "Stroke" , "COPD" , "Asthma" , "Cancer" ,"Migraine" , "Sleep Apnea" , "Arthritis"]
     },
     {
         "id":125,
-        "life_functions_question":"Have you ever been on any of the following disability leaves?"
+        "life_functions_question":"Have you ever been on any of the following disability leaves?",
+        "dropdown" : ["None" , "Sick Leave" , "Short Term Disability" , "Long Term Disability"]
     },
     {
         "id":126,

@@ -245,22 +245,18 @@ const Profile = () => {
                             }
                           />
 
-                          {/* {!phoneNumber && ( // Hide label and email field if phoneNumber is present */}
-                          {/* <div> */}
-                            <div className="col-12 mt-4">
-                              <label htmlFor="Email">Email</label>
-                            </div>
-                              <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                className="mt-2 p-2 myemail"
-                                value={user.email}
-                                readOnly
-                                disabled
-                              />
-                            {/* </div> */}
-                          {/* )} */}
+                          <div className="col-12 mt-4">
+                            <label htmlFor="Email">Email</label>
+                          </div>
+                          <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            className="mt-2 p-2 myemail"
+                            value={user.email}
+                            readOnly
+                            disabled
+                          />
                         </div>
                       </form>
                     </div>

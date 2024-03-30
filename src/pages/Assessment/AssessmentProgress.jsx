@@ -3,10 +3,13 @@ import "./Assessment.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useFirebase } from "../../context/FirebaseContext";
+import jsonData from '../../data/QuestionsData.json'
 
-const AssessmentProgress = ({ stepCount }) => {
+const AssessmentProgress = ({stepCount  , answers}) => {
   const { user } = useFirebase();
-
+  // const answeredQuestionsCount = Object.keys(answers).length;
+  // const totalQuestionsCount = jsonData.filter(question => question.parentId === null && question.scn_question).length;
+  // const progress = (answeredQuestionsCount / totalQuestionsCount) * 100;
   return (
     <>
       <div style={{
@@ -27,12 +30,12 @@ const AssessmentProgress = ({ stepCount }) => {
 
           <div className="mt-5">
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-              <div className="StartAssessment-title">
+              <div className='StartAssessment-title'>
                 <i className="fas fa-laptop me-3"></i>
                 <span>Screening Questions</span>
               </div>
               <div className="d-flex align-items-center">
-                <span className="percent">100%</span>
+                <span className="percent"></span>
                 <CircularProgressbar
                   value={100}
                   strokeWidth={10}
