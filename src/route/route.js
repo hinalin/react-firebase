@@ -53,7 +53,7 @@
 // export default Main;
 
 
-import { React } from "react";
+import { React , useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import TermsOfServices from "../components/Tnc/TermsOfServices/TermsOfServices";
@@ -95,33 +95,33 @@ const Main = () => {
             <Route
               path="/Assessment"
               element={
-                <ProtectedRoute>
-                  <Assessment />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                  <Assessment/>
+                // </ProtectedRoute>
               }
             ></Route>
-            <Route
+            {/* <Route
               path="/AssessmentProgress"
-              element={<AssessmentProgress />}
+              element={<AssessmentProgress/>}
             ></Route>
             <Route
               path="/ScreeningQuestions"
-              element={<ScreeningQuestions />}
+              element={<ScreeningQuestions/>}
             ></Route>
 
             <Route
               path="/InDepthQuestions"
-              element={<InDepthQuestions />}
+              element={<InDepthQuestions/>}
             ></Route>
 
             <Route
               path="/HelthHistoryQuestions"
-              element={<HelthHistoryQuestions />}
+              element={<HelthHistoryQuestions/>}
             ></Route>
             <Route
               path="/LifeFunctionsQuestions"
-              element={<LifeFunctionsQuestions />}
-            ></Route>
+              element={<LifeFunctionsQuestions/>}
+            ></Route> */}
           </Routes>
         </FirebaseContextProvider>
       </Router>
