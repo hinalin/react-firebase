@@ -271,8 +271,8 @@
 .UserDropdown .user-drop-down .user-circle{
     border-radius: 50%;
     background-color :#33ca8f;
-    padding: 10px 14px 10px 14px;
     font-size: 20px;
+    padding: 10px;
     font-weight: bold;
     color: #fff;
     width:50px;
