@@ -1,207 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { AiOutlineCheck } from "react-icons/ai";
-// import "../Question.css";
-// import jsonData from "../../../data/QuestionsData.json";
-// import Select from "react-select";
-// import { useFirebase } from "../../../context/FirebaseContext";
-// import { fs } from "../../../config/Firebase";
-// import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-
-// const HelthHistoryQuestions = ({
-//   setActiveQuestion,
-//   setHealthHistoryProgress,
-//   setCurrentPage,
-//   setActiveStep,
-//   childQuestions,
-// }) => {
-//   const [focusedQuestion, setFocusedQuestion] = useState(null);
-//   const [selectedQuestions, setSelectedQuestions] = useState([]);
-//   const [answers, setAnswers] = useState({});
-//   const [selectedOptions, setSelectedOptions] = useState({});
-//   const [newOption, setNewOption] = useState("");
-//   const [submitClicked, setSubmitClicked] = useState({});
-
-//   const { user } = useFirebase();
-//   const userId = user ? user.uid : null;
-
-//   const handleQuestionClick = (index) => {
-//     setFocusedQuestion(index);
-//   };
-
-//   const handleYesClick = async (questionId) => {
-//     setAnswers({ ...answers, [questionId]: "YES" });
-//     setSelectedQuestions([...selectedQuestions, questionId]);
-//   };
-
-//   const handleNoClick = async (questionId) => {
-//     setAnswers({ ...answers, [questionId]: "None" });
-//     setSelectedOptions({ ...selectedOptions, [questionId]: null }); // Reset selected options for the question
-//     setFocusedQuestion(null); // Reset focusedQuestion to close the card
-//     updateProgress();
-//   };
-
-//   const handleChange = (selected, questionId) => {
-//     setSelectedOptions({ ...selectedOptions, [questionId]: selected }); // Update selected options for the question
-//   };
-
-//   const handleAddOption = (questionId) => {
-//     if (newOption.trim() !== "") {
-//       const updatedOptions = [
-//         ...(selectedOptions[questionId] || []),
-//         { value: newOption, label: newOption },
-//       ];
-//       setSelectedOptions({ ...selectedOptions, [questionId]: updatedOptions });
-//       setNewOption(""); // Clear input field after adding option
-//     }
-//   };
-
-//   const handlePreviousPage = () => {
-//     setActiveQuestion("indepth"); // Navigate to the InDepthQuestions page
-//     setCurrentPage(Object.keys(childQuestions).length - 1); // Set the currentPage to the last step of the InDepthQuestions
-//     setActiveStep(Object.keys(childQuestions).length);
-//   };
-
-//   const handleNextButtonClick = () => {
-//     setActiveQuestion("life-function");
-//   };
-//   const HealthHistoryQuestions = jsonData.filter(
-//     (question) => question.health_history_question
-//   );
-
-//   const handleQuestionSubmit = async (questionId) => {
-//     setSubmitClicked({ ...submitClicked, [questionId]: true });
-//     setFocusedQuestion(null);
-//     updateProgress();
-//   };
-
-//   const updateProgress = () => {
-//     const numQuestions = HealthHistoryQuestions.length;
-//     const numAnsweredQuestions = Object.keys(answers).length;
-//     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
-//     setHealthHistoryProgress(newProgress);
-//   };
-//   console.log(answers, "answers");
-
-//   return (
-//     <>
-//       <div className="container">
-//         <div className="Helthhostory-template">
-//           {HealthHistoryQuestions.map((question, index) => (
-//             <div
-//               key={question.id}
-//               className={`unanswered-card ${
-//                 focusedQuestion === index ? "focused-card" : ""
-//               }`}
-//               onClick={() => handleQuestionClick(index)}
-//             >
-//               <div className="question">
-//                 <p>{question.health_history_question}</p>
-
-//                 {(answers[question.id] === "None" ||
-//                   submitClicked[question.id]) && (
-//                   <div className="ticked-img-div me-2">
-//                     <AiOutlineCheck className="ticked-img" />
-//                   </div>
-//                 )}
-//               </div>
-//               {focusedQuestion === index && (
-//                 <div className="buttons">
-//                   <button
-//                     className={`yes_btn ${
-//                       answers[question.id] === "YES" ? "green" : ""
-//                     }`}
-//                     onClick={() => handleYesClick(question.id)}
-//                   >
-//                     YES
-//                   </button>
-//                   <button
-//                     type="button"
-//                     className={`no_btn ${
-//                       answers[question.id] === "None" ? "green" : ""
-//                     }`}
-//                     onClick={() => handleNoClick(question.id)}
-//                   >
-//                     NO
-//                   </button>
-//                 </div>
-//               )}
-
-//               {focusedQuestion !== index && (
-//                 <div className="answer">
-//                   {selectedOptions[question.id] &&
-//                     submitClicked[question.id] && (
-//                       <div className="answer">
-//                         {selectedOptions[question.id].map((option, index) => (
-//                           <span key={index}>
-//                             {index > 0 && " , "}
-//                             {option.label}
-//                           </span>
-//                         ))}
-//                       </div>
-//                     )}
-//                   {answers[question.id] === "None" && <div>None</div>}
-//                 </div>
-//               )}
-
-//               {focusedQuestion === index && answers[question.id] === "YES" && (
-//                 <div>
-//                   <Select
-//                     options={[
-//                       ...(question.dropdown || []).map((item, index) => ({
-//                         value: item,
-//                         label: item,
-//                       })),
-//                       ...(selectedOptions[question.id] || []),
-//                     ]}
-//                     value={selectedOptions[question.id]}
-//                     onChange={(selected) => handleChange(selected, question.id)}
-//                     className="mt-3 dropdown"
-//                     isMulti
-//                   />
-//                   <div className="input-dropdown d-flex">
-//                     <input
-//                       type="text"
-//                       placeholder="Other (Please type)"
-//                       className="p-3 mt-3 w-100 dropdown-input"
-//                       value={newOption}
-//                       onChange={(e) => setNewOption(e.target.value)}
-//                     />
-//                     <button
-//                       className="btn mt-3 ms-2 add-btn"
-//                       onClick={() => handleAddOption(question.id)}
-//                     >
-//                       Add
-//                     </button>
-//                   </div>
-
-//                   <div className="submit-button">
-//                     <button
-//                       className="btn submit-btn mt-3 text-light"
-//                       onClick={() => handleQuestionSubmit(question.id)}
-//                     >
-//                       Submit
-//                     </button>
-//                   </div>
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//       <div className="buttons">
-//         <button className="btn" onClick={handlePreviousPage}>
-//           Previous
-//         </button>
-//         <button className="btn" onClick={handleNextButtonClick}>
-//           Next
-//         </button>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default HelthHistoryQuestions;
-
 import React, { useState, useEffect } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
 import "../Question.css";
@@ -217,6 +13,8 @@ const HealthHistoryQuestions = ({
   setCurrentPage,
   setActiveStep,
   childQuestions,
+  nextClicked,
+  setNextClicked,
 }) => {
   const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -289,6 +87,8 @@ const HealthHistoryQuestions = ({
     await saveToFirestore(questionId, "None");
     updateProgress();
     setFocusedQuestion(null);
+    setNextClicked(false);
+
     const nextUnansweredIndex = HealthHistoryQuestions.findIndex(
       (question, index) => !answers[question.id] && index > focusedQuestion
     );
@@ -321,7 +121,15 @@ const HealthHistoryQuestions = ({
   };
 
   const handleNextButtonClick = () => {
-    setActiveQuestion("life-function");
+    setNextClicked(true); // Set nextClicked to true when next button is clicked
+    const firstUnansweredIndex = HealthHistoryQuestions.findIndex(
+      (question) => !answers[question.id]
+    );
+    if (firstUnansweredIndex !== -1) {
+      setFocusedQuestion(firstUnansweredIndex);
+    } else {
+      setActiveQuestion("life-function");
+    }
   };
 
   const HealthHistoryQuestions = jsonData.filter(
@@ -332,6 +140,7 @@ const HealthHistoryQuestions = ({
     setSubmitClicked({ ...submitClicked, [questionId]: true });
     setFocusedQuestion(null);
     updateProgress();
+    setNextClicked(false);
     await saveToFirestore(questionId, answers[questionId]);
     const nextUnansweredIndex = HealthHistoryQuestions.findIndex(
       (question, index) => !answers[question.id] && index > focusedQuestion
@@ -341,6 +150,7 @@ const HealthHistoryQuestions = ({
       setFocusedQuestion(nextUnansweredIndex);
       console.log(focusedQuestion, "focusedQuestion now");
     }
+    setNextClicked(false);
   };
 
   const saveToFirestore = async (questionId, answer) => {
@@ -375,9 +185,9 @@ const HealthHistoryQuestions = ({
 
   const updateProgress = () => {
     const numQuestions = HealthHistoryQuestions.length;
-    const numAnsweredQuestions = Object.keys(answers).length + 1;
+    const numAnsweredQuestions = Object.keys(answers).length;
     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
-    setHealthHistoryProgress(Math.min(newProgress , 100));
+    setHealthHistoryProgress(newProgress);
   };
 
   return (
@@ -392,7 +202,12 @@ const HealthHistoryQuestions = ({
                 key={question.id}
                 className={`unanswered-card ${
                   focusedQuestion === index ? "focused-card" : ""
-                }`}
+                } ${
+                  nextClicked === true && focusedQuestion === index
+                    ? "border-red"
+                    : ""
+                }
+                `}
                 onClick={() => handleQuestionClick(index)}
               >
                 <div className="question">
@@ -428,23 +243,6 @@ const HealthHistoryQuestions = ({
                     </button>
                   </div>
                 )}
-
-                {/* {focusedQuestion !== index && (
-                  <div className="answer">
-                    {selectedOptions[question.id] &&
-                      submitClicked[question.id] && (
-                        <div className="answer">
-                          {selectedOptions[question.id].map((option, index) => (
-                            <span key={index}>
-                              {index > 0 && " , "}
-                              {option.label}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    {answers[question.id] === "None" && <div>None</div>}
-                  </div>
-                )} */}
 
                 {focusedQuestion !== index && (
                   <div className="answer">
@@ -524,195 +322,3 @@ const HealthHistoryQuestions = ({
 };
 
 export default HealthHistoryQuestions;
-
-// import React, { useState, useEffect } from "react";
-// import { AiOutlineCheck } from "react-icons/ai";
-// import "../Question.css";
-// import jsonData from "../../../data/QuestionsData.json";
-// import Select from "react-select";
-
-// const HelthHistoryQuestions = ({
-//   setActiveQuestion,
-//   setHealthHistoryProgress,
-//   childQuestions,
-//   setCurrentPage,
-//   setActiveStep,
-// }) => {
-//   const [focusedQuestion, setFocusedQuestion] = useState(null);
-//   const [selectedQuestions, setSelectedQuestions] = useState([]);
-//   const [answers, setAnswers] = useState({});
-//   const [selectedOptions, setSelectedOptions] = useState({});
-//   const [newOption, setNewOption] = useState("");
-//   const [submitClicked, setSubmitClicked] = useState({});
-
-//   const handleQuestionClick = (index) => {
-//     setFocusedQuestion(index === focusedQuestion ? index : index);
-//   };
-
-//   const handleYesClick = (questionId) => {
-//     setAnswers({ ...answers, [questionId]: "YES" });
-//     setSelectedQuestions([...selectedQuestions, questionId]);
-//   };
-
-//   const handleNoClick = (questionId) => {
-//     setAnswers({ ...answers, [questionId]: "NO" });
-//     setSelectedOptions({ ...selectedOptions, [questionId]: null }); // Reset selected options for the question
-//     setFocusedQuestion(null); // Reset focusedQuestion to close the card
-//     updateProgress();
-//   };
-
-//   const handleChange = (selected, questionId) => {
-//     setSelectedOptions({ ...selectedOptions, [questionId]: selected }); // Update selected options for the question
-//   };
-
-//   const handleAddOption = (questionId) => {
-//     if (newOption.trim() !== "") {
-//       const updatedOptions = [
-//         ...(selectedOptions[questionId] || []),
-//         { value: newOption, label: newOption },
-//       ];
-//       setSelectedOptions({ ...selectedOptions, [questionId]: updatedOptions });
-//       setNewOption(""); // Clear input field after adding option
-//     }
-//   };
-//   const handlePreviousPage = () => {
-//         setActiveQuestion("indepth"); // Navigate to the InDepthQuestions page
-//         setCurrentPage(Object.keys(childQuestions).length - 1); // Set the currentPage to the last step of the InDepthQuestions
-//         setActiveStep(Object.keys(childQuestions).length);
-//       };
-//   const handleNextButtonClick = () => {
-//     setActiveQuestion("life-function");
-//   };
-//   const HealthHistoryQuestions = jsonData.filter(
-//     (question) => question.health_history_question
-//   );
-//   const handleQuestionSubmit = (questionId) => {
-//     setSubmitClicked({ ...submitClicked, [questionId]: true });
-//     setFocusedQuestion(null);
-//     updateProgress();
-//   };
-
-//   const updateProgress = () => {
-//     const numQuestions = HealthHistoryQuestions.length;
-//     const numAnsweredQuestions = Object.keys(answers).length;
-//     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
-//     setHealthHistoryProgress(newProgress);
-//   };
-//   return (
-//     <>
-//       <div className="container">
-//         <div className="Helthhostory-template">
-//           {HealthHistoryQuestions.map((question, index) => (
-//             <div
-//               key={question.id}
-//               className={`unanswered-card ${
-//                 focusedQuestion === index ? "focused-card" : ""
-//               }`}
-//               onClick={() => handleQuestionClick(index)}
-//             >
-//               <div className="question">
-//                 <p>{question.health_history_question}</p>
-//                 {(answers[question.id] === "NO" ||
-//                   submitClicked[question.id]) && (
-//                   <div className="ticked-img-div me-2">
-//                     <AiOutlineCheck className="ticked-img" />
-//                   </div>
-//                 )}
-//               </div>
-//               {focusedQuestion === index && (
-//                 <div className="buttons">
-//                   <button
-//                     className={`yes_btn ${
-//                       answers[question.id] === "YES" ? "green" : ""
-//                     }`}
-//                     onClick={() => handleYesClick(question.id)}
-//                   >
-//                     YES
-//                   </button>
-//                   <button
-//                     type="button"
-//                     className={`no_btn ${
-//                       answers[question.id] === "NO" ? "green" : ""
-//                     }`}
-//                     onClick={() => handleNoClick(question.id)}
-//                   >
-//                     NO
-//                   </button>
-//                 </div>
-//               )}
-
-//               {focusedQuestion !== index && (
-//                 <div className="answer">
-//                   {selectedOptions[question.id] &&
-//                     submitClicked[question.id] && (
-//                       <div className="answer">
-//                         {selectedOptions[question.id].map((option, index) => (
-//                           <span key={index}>
-//                             {index > 0 && " , "}
-//                             {option.label}
-//                           </span>
-//                         ))}
-//                       </div>
-//                     )}
-//                   {answers[question.id] === "NO" && <div>None</div>}
-//                 </div>
-//               )}
-
-//               {focusedQuestion === index && answers[question.id] === "YES" && (
-//                 <div>
-//                   <Select
-//                     options={[
-//                       ...(question.dropdown || []).map((item, index) => ({
-//                         value: item,
-//                         label: item,
-//                       })),
-//                       ...(selectedOptions[question.id] || []),
-//                     ]}
-//                     value={selectedOptions[question.id]}
-//                     onChange={(selected) => handleChange(selected, question.id)}
-//                     className="mt-3 dropdown"
-//                     isMulti
-//                   />
-//                   <div className="input-dropdown d-flex">
-//                     <input
-//                       type="text"
-//                       placeholder="Other (Please type)"
-//                       className="p-3 mt-3 w-100 dropdown-input"
-//                       value={newOption}
-//                       onChange={(e) => setNewOption(e.target.value)}
-//                     />
-//                     <button
-//                       className="btn mt-3 ms-2 add-btn"
-//                       onClick={() => handleAddOption(question.id)}
-//                     >
-//                       Add
-//                     </button>
-//                   </div>
-
-//                   <div className="submit-button">
-//                     <button
-//                       className="btn submit-btn mt-3 text-light"
-//                       onClick={() => handleQuestionSubmit(question.id)}
-//                     >
-//                       Submit
-//                     </button>
-//                   </div>
-//                 </div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//       <div className="buttons">
-//         <button className="btn" onClick={handlePreviousPage}>
-//           Previous
-//         </button>
-//         <button className="btn" onClick={handleNextButtonClick}>
-//           Next
-//         </button>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default HelthHistoryQuestions;

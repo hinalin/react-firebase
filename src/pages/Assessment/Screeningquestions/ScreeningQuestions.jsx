@@ -11,13 +11,15 @@ const ScreeningQuestions = ({
   setProgress,
   setActiveQuestion,
   setChildQuestions,
+  nextClicked,
+  setNextClicked,
 }) => {
   const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [showChildQuestions, setShowChildQuestions] = useState(false);
   const [answers, setAnswers] = useState({});
   const [filteredQuestions, setFilteredQuestions] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const { user } = useFirebase();
   const containerRef = useRef(null);
   const userId = user ? user.uid : null;
@@ -90,8 +92,7 @@ const ScreeningQuestions = ({
       console.log("Answer stored in Firestore successfully!");
     } catch (error) {
       console.error("Error storing answer in Firestore: ", error);
-    }
-    finally {
+    } finally {
       setLoading(false); // Set loading state to false once answer is stored
     }
   };
@@ -113,7 +114,6 @@ const ScreeningQuestions = ({
     }
   };
 
- 
   const handleQuestionClick = (index) => {
     setFocusedQuestion(index === focusedQuestion ? null : index);
   };
@@ -123,12 +123,14 @@ const ScreeningQuestions = ({
     setSelectedQuestions([...selectedQuestions, questionId]);
     setFocusedQuestion(null);
     await storeAnswerToFirestore(questionId, "YES", true);
+    setNextClicked(false);
   };
 
   const handleNoClick = async (questionId) => {
     setAnswers({ ...answers, [questionId]: "NO" });
     setFocusedQuestion(null);
     await storeAnswerToFirestore(questionId, "NO", false);
+    setNextClicked(false);
   };
 
   const handleNextButtonClick = () => {
@@ -148,6 +150,14 @@ const ScreeningQuestions = ({
       );
       setFocusedQuestion(index);
       setShowChildQuestions(false);
+      setNextClicked(true);
+      const focusedElement = containerRef.current.children[index];
+      if (focusedElement) {
+        focusedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
     } else if (allNo) {
       setActiveQuestion("health-history");
     } else {
@@ -155,6 +165,7 @@ const ScreeningQuestions = ({
       setStepCount(Object.keys(childQuestionsByStep).length);
       setChildQuestions(childQuestionsByStep);
       setActiveQuestion("indepth");
+      setNextClicked(false);
     }
   };
 
@@ -179,69 +190,67 @@ const ScreeningQuestions = ({
   const childQuestionsByStep = groupChildQuestionsByParentId();
 
   console.log(childQuestionsByStep, "childQuestionsByStep");
-  
+
   return (
     <>
       <div className="container">
-      {loading ? ( // Render loader when loading state is true
+        {loading ? ( // Render loader when loading state is true
           <div>Loading...</div>
         ) : (
-        <div className="screeningQuestion-template" ref={containerRef}>
-          {filteredQuestions.map((question, index) => (
-            <div
-              key={question.id}
-              className={`unanswered-card ${
-                focusedQuestion === index ? "focused-card" : ""
-              }`}
-              onClick={() => handleQuestionClick(index)}
-            >
-              {/* {focusedQuestion === index && !answers[question.id] && (
-                                <div className="unanswered-message">Please answer this question.</div>
-                            )} */}
-              <div className="question">
-                <p>{question.scn_question}</p>
-                {answers[question.id] && (
-                  <div className="ticked-img-div">
-                    <AiOutlineCheck className="ticked-img" />
+          <div className="screeningQuestion-template" ref={containerRef}>
+            {filteredQuestions.map((question, index) => (
+              <div
+                key={question.id}
+                className={`unanswered-card ${
+                  focusedQuestion === index ? "focused-card" : ""
+                } ${
+                  nextClicked && focusedQuestion === index ? "border-red" : ""
+                }`}
+                onClick={() => handleQuestionClick(index)}
+              >
+                <div className="question">
+                  <p>{question.scn_question}</p>
+                  {answers[question.id] && (
+                    <div className="ticked-img-div">
+                      <AiOutlineCheck className="ticked-img" />
+                    </div>
+                  )}
+                </div>
+                {focusedQuestion === index && (
+                  <div className="buttons">
+                    <button
+                      className={`yes_btn ${
+                        answers[question.id] === "YES" ? "green" : ""
+                      }`}
+                      onClick={() => handleYesClick(question.id)}
+                    >
+                      YES
+                    </button>
+                    <button
+                      className={`no_btn ${
+                        answers[question.id] === "NO" ? "green" : ""
+                      }`}
+                      onClick={() => handleNoClick(question.id)}
+                    >
+                      NO
+                    </button>
+                  </div>
+                )}
+
+                {focusedQuestion !== index && answers[question.id] && (
+                  <div className="answer">
+                    <span>{answers[question.id]}</span>
                   </div>
                 )}
               </div>
-              {focusedQuestion === index && (
-                <div className="buttons">
-                  <button
-                    className={`yes_btn ${
-                      answers[question.id] === "YES" ? "green" : ""
-                    }`}
-                    onClick={() => handleYesClick(question.id)}
-                  >
-                    YES
-                  </button>
-                  <button
-                    className={`no_btn ${
-                      answers[question.id] === "NO" ? "green" : ""
-                    }`}
-                    onClick={() => handleNoClick(question.id)}
-                  >
-                    NO
-                  </button>
-                </div>
-              )}
-
-              {focusedQuestion !== index && answers[question.id] && (
-                <div className="answer">
-                  <span>{answers[question.id]}</span>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
         )}
         <div className="buttons">
           <button className="btn" onClick={handleNextButtonClick}>
             Next
           </button>
         </div>
-        
       </div>
     </>
   );
