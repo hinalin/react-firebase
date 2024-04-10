@@ -20,7 +20,9 @@ function NavigationBar({
   answers,
   selectedQuestions,
   setSelectedQuestions,
-  fetchStartTime
+  fetchStartTime,
+  selectedDisorders,
+  setSelectedDisorders
 }) {
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
   const openSidebarDrawer = () => {
@@ -48,6 +50,8 @@ function NavigationBar({
           selectedQuestions={selectedQuestions}
           setSelectedQuestions={setSelectedQuestions}
           fetchStartTime={fetchStartTime}
+          selectedDisorders={selectedDisorders}
+          setSelectedDisorders={setSelectedDisorders}
         />
       )}
       <div className="nav navbar homeNav">
@@ -86,6 +90,8 @@ function NavigationBar({
             selectedQuestions={selectedQuestions}
             setSelectedQuestions={setSelectedQuestions}
             fetchStartTime={fetchStartTime}
+            selectedDisorders={selectedDisorders}
+            setSelectedDisorders={setSelectedDisorders}
           />
         </ul>
         {!isSidebarOpen && (

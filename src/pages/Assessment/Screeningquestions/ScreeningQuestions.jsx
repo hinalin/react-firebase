@@ -20,6 +20,8 @@ const ScreeningQuestions = ({
   setAnswers,
   selectedQuestions,
   setSelectedQuestions,
+  selectedDisorders,
+  setSelectedDisorders
 }) => {
   const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [showChildQuestions, setShowChildQuestions] = useState(false);
@@ -158,6 +160,7 @@ const ScreeningQuestions = ({
     await storeAnswerToFirestore(questionId, "YES", true);
     setNextClicked(false);
   };
+
   const handleNoClick = async (questionId) => {
     setAnswers({ ...answers, [questionId]: "NO" });
     setFocusedQuestion(null);

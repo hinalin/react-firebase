@@ -7,7 +7,7 @@ import "./Summary.css";
 import Drawer from "../../components/drawer/Drawer";
 import { useFirebase } from "../../context/FirebaseContext";
 
-function Summary({ isSidebarOpen, setSidebarOpen }) {
+function Summary({ isSidebarOpen, setSidebarOpen  }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { user } = useFirebase();
@@ -36,6 +36,7 @@ function Summary({ isSidebarOpen, setSidebarOpen }) {
           </div>
           <ResultPart />
           <div className="risk-accordion-part">
+
             <div className="accordion summary-accordion" id="accordionRisk1">
               <div className="accordion-item">
                 <h2 className="accordion-header" id="panelsRisk1-headingOne">
@@ -46,9 +47,7 @@ function Summary({ isSidebarOpen, setSidebarOpen }) {
                     data-bs-target="#panelsRisk1-collapseOne"
                     aria-expanded="true"
                     aria-controls="panelsRisk1-collapseOne"
-                  >
-                    <span>Depression</span>
-                    
+                  > 
                     <div className="d-flex">
                       <div className="dot"></div>
                       <p>Low Risk</p>
@@ -74,6 +73,7 @@ function Summary({ isSidebarOpen, setSidebarOpen }) {
                 </div>
               </div>
             </div>
+
           </div>
           <TopicsPart />
         </div>

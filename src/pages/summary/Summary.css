@@ -1,157 +1,157 @@
 @font-face {
-    font-family: CircularStdBook;
-    src: url('../../assets/fonts/CircularStd-Book.otf');
+  font-family: CircularStdBook;
+  src: url("../../assets/fonts/CircularStd-Book.otf");
 }
 
 .summary-section {
-    background: url(https://fbn3staging.ca/static/media/top-bg-bottom-gradient2.971d73a734b2004c5218.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding: 0;
+  background: url(https://fbn3staging.ca/static/media/top-bg-bottom-gradient2.971d73a734b2004c5218.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0;
 }
 
 .summary-section .summary-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 .5rem 1rem #00000026;
-    margin: 10px auto 50px;
-    width: 95%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0.5rem 1rem #00000026;
+  margin: 10px auto 50px;
+  width: 95%;
 }
 
 .summary-section .summary-heading {
-    background-color: rgb(247, 247, 247);
-    border-bottom: 1px solid rgb(238, 238, 238);
-    margin: 0px;
-    padding: 1em 2em;
-    display: flex;
-    gap: 30px;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    align-items: center;
+  background-color: rgb(247, 247, 247);
+  border-bottom: 1px solid rgb(238, 238, 238);
+  margin: 0px;
+  padding: 1em 2em;
+  display: flex;
+  gap: 30px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
 }
 
 .summary-section .summary-heading h4 {
-    color: rgb(21, 24, 82);
-    font-size: 1.5em;
-    font-weight: 600;
-    margin: 0px;
+  color: rgb(21, 24, 82);
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 0px;
 }
 
 .summary-section .results-part {
-    padding: 10px 30px;
+  padding: 10px 30px;
 }
 
 .summary-section .summary-subheading h4 {
-    color: rgb(21, 24, 82);
-    font-size: 1.5em;
-    font-weight: 600;
-    margin-top: 30px;
+  color: rgb(21, 24, 82);
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 30px;
 }
 
 .summary-section .results-sub-heading h4 {
-    color: rgb(21, 24, 82);
-    font-size: 1.3em;
-    font-weight: 300;
-    margin-top: 20px
+  color: rgb(21, 24, 82);
+  font-size: 1.3em;
+  font-weight: 300;
+  margin-top: 20px;
 }
 
 .summary-section .results-data p {
-    margin-top: 10px;
-    color: #50597c;
-    font-family: CircularStdBook;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.5;
-    z-index: 1;
+  margin-top: 10px;
+  color: #50597c;
+  font-family: CircularStdBook;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  z-index: 1;
 }
 
 .summary-section .results-data ul {
-    padding-left: 1rem;
+  padding-left: 1rem;
 }
 
 .summary-section .risk-accordion-part {
-    padding: 0px 30px 50px 30px;
-    border-bottom: 2px solid rgb(238, 238, 238);
+  padding: 0px 30px 50px 30px;
+  border-bottom: 2px solid rgb(238, 238, 238);
 }
 
 .summary-section .summary-accordion {
-    overflow: hidden !important;
-    max-height: 1844px !important;
-    transition: all 0.5s ease 0s !important;
-    margin: 20px 0px;
+  overflow: hidden !important;
+  max-height: 1844px !important;
+  transition: all 0.5s ease 0s !important;
+  margin: 20px 0px;
 }
 
 .summary-section .summary-accordion-header {
-    border: 2px solid rgb(223, 239, 239) !important;
-    border-radius: 0.3em !important;
-    background-color: rgb(242, 250, 250) !important;
-    width: 100% !important;
-    padding: 26px 20px !important;
-    display: grid;
-    grid-template-columns: 30em 1fr 1.8em;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    cursor: pointer;
-    outline: 0px !important;
-    /* margin: 10px 0px; */
+  border: 2px solid rgb(223, 239, 239) !important;
+  border-radius: 0.3em !important;
+  background-color: rgb(242, 250, 250) !important;
+  width: 100% !important;
+  padding: 26px 20px !important;
+  display: grid;
+  grid-template-columns: 30em 1fr 1.8em;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  cursor: pointer;
+  outline: 0px !important;
+  /* margin: 10px 0px; */
 }
 
 .summary-section .summary-accordion-header span {
-    font-size: 1.4em;
-    font-family: CircularStdBook, Arial, Helvetica, sans-serif;
-    margin: 0px;
-    color: rgb(56, 57, 64);
-    display: block;
-    font-weight: 500 !important;
+  font-size: 1.4em;
+  font-family: CircularStdBook, Arial, Helvetica, sans-serif;
+  margin: 0px;
+  color: rgb(56, 57, 64);
+  display: block;
+  font-weight: 500 !important;
 }
 
 .summary-section .summary-accordion-header .dot {
-    width: 0.8em;
-    height: 0.8em;
-    background-color: rgb(59, 198, 83);
-    border-radius: 100%;
-    margin-left: auto;
-    margin-top: 5px;
+  width: 0.8em;
+  height: 0.8em;
+  background-color: rgb(59, 198, 83);
+  border-radius: 100%;
+  margin-left: auto;
+  margin-top: 5px;
 }
 
 .summary-section .summary-accordion-header p {
-    font-size: 1.2em;
-    margin: 0px 30px 0px 10px;
-    color: rgb(80, 80, 80);
+  font-size: 1.2em;
+  margin: 0px 30px 0px 10px;
+  color: rgb(80, 80, 80);
 }
 
 .accordion-button:not(.collapsed)::after {
-    background-image: url(https://fbn3staging.ca/static/media/circle-angle-top.8cff9063bc9988ef423d452c8cc64675.svg);
-    transform: rotate(0deg);
+  background-image: url(https://fbn3staging.ca/static/media/circle-angle-top.8cff9063bc9988ef423d452c8cc64675.svg);
+  transform: rotate(0deg);
 }
 
 .accordion-button::after {
-    flex-shrink: 0;
-    width: 1.25rem !important;
-    height: 1.25rem !important;
-    margin-left: auto;
-    content: "";
-    background-image: url(https://fbn3staging.ca/static/media/circle-angle-top.8cff9063bc9988ef423d452c8cc64675.svg);
-    background-repeat: no-repeat;
-    background-size: 1.25rem;
-    transform: rotate(180deg);
-    transition: transform .3s ease-in-out;
+  flex-shrink: 0;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  margin-left: auto;
+  content: "";
+  background-image: url(https://fbn3staging.ca/static/media/circle-angle-top.8cff9063bc9988ef423d452c8cc64675.svg);
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
 }
 
 .summary-section .topics-part {
-    padding: 10px 30px;
+  padding: 10px 30px;
 }
 
 .summary-section .accordion-content {
-    background-color: rgb(247, 247, 247);
-    border-radius: 15px;
-    margin: 10px;
-    padding: 20px 20px;
-    text-align: justify;
-    color: rgb(73, 72, 72);
+  background-color: rgb(247, 247, 247);
+  border-radius: 15px;
+  margin: 10px;
+  padding: 20px 20px;
+  text-align: justify;
+  color: rgb(73, 72, 72);
 }
 
 /* .summary-section .accordion-content ol {
@@ -170,23 +170,23 @@
     font-weight: bold;
 } */
 .summary-section .accordion-content ol {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 .summary-section .accordion-content ul {
-    list-style: disc;
-    font-size: 18px;
+  list-style: disc;
+  font-size: 18px;
 }
 
 .summary-section .accordion-content h4 {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    line-height: 1.2;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .summary-section .accordion-content p {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 /* .summary-section .stress-reduction-part .accordion-content{
@@ -195,61 +195,61 @@
     z-index: 10;
 } */
 .summary-section .accordion-content ul p {
-    margin: 0;
+  margin: 0;
 }
 
 .summary-section .therapy-box {
-    background-color: rgb(247, 247, 247);
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 4px;
-    width: 48.3%;
-    width: 96%;
-    margin: 10px 10px;
-    cursor: pointer;
+  background-color: rgb(247, 247, 247);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  width: 48.3%;
+  width: 96%;
+  margin: 10px 10px;
+  cursor: pointer;
 }
 
-.therapy-box .therapy-heading h4 {
-    margin: 0px 0px 0.5em;
-    color: rgb(80, 80, 80);
-    font-size: 20px;
-    font-weight: 600;
-    text-decoration: underline;
+.topics-part .therapy-box .therapy-heading h4 {
+  margin: 0px 0px 0.5em;
+  color: rgb(80, 80, 80);
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: underline;
 }
 
-.therapy-box .therapy-heading p{
-    font-size: 18px;
-    color: rgb(80, 80, 80);
+.topics-part .therapy-box .therapy-heading p {
+  font-size: 18px;
+  color: rgb(80, 80, 80);
 }
 .topics-part .accordion-body {
-    height: 800px;
-    overflow-y: scroll;
+  height: 800px;
+  overflow-y: scroll;
 }
 .topics-part .accordion-body::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-.modal-content {
+.topics-part .modal-content {
     height: 50vh;
     border-radius: 15px;
 }
-.modal-body {
+.topics-part .modal-body {
     max-height: 100%;
     overflow-y: auto;
 }
 
-.modal-dialog {
+.topics-part .modal-dialog {
     max-width: 70vw;
 }
 
-.right-ellipse-send-action-plan {
-    bottom: 0;
-    left: 30px !important;
-    opacity: .3;
-    position: absolute;
+.topics-part .right-ellipse-send-action-plan {
+  bottom: 0;
+  left: 30px !important;
+  opacity: 0.3;
+  position: absolute;
 }
 
-.modal-back-img {
+.topics-part .modal-back-img {
     width: 25%;
     height: 60%;
     opacity: 0.3;
@@ -257,16 +257,16 @@
     bottom: 0;
 }
 
-.modal-header {
+.topics-part .modal-header {
     border: none;
 }
 
-.modal-footer {
+.topics-part .modal-footer {
     border: none;
     display: flex;
     justify-content: space-between;
 }
-.modal-footer .close-btn{
+.topics-part .modal-footer .close-btn{
     background: #fff;
     border: 1px solid #dddfe3;
     box-sizing: border-box;
@@ -274,31 +274,31 @@
     margin-right: auto;
     z-index: 3;
 }
-.paginate-buttons .arrow-btn{
-    width:30px;
-    height:30px;
-    border-radius: 15px;
-    background-color:  #33ca8f ;
-    color: white;
-    margin: 5px;
-    padding: 0px 7px;
-    cursor: pointer;
+.paginate-buttons .arrow-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: #33ca8f;
+  color: white;
+  margin: 5px;
+  padding: 0px 7px;
+  cursor: pointer;
 }
 
-.paginate-buttons{
-    display: flex;
+.paginate-buttons {
+  display: flex;
 }
 
-.topics-part .modal-title{
-    color: #151852;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 1.15;
+.topics-part .modal-title {
+  color: #151852;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.15;
 }
-.topics-part .modal-body p{
-    color: #50597c;
-    font-weight: 400;
-    font-family: Poppins, sans-serif;
-    font-size: 18px;
+.topics-part .modal-body p {
+  color: #50597c;
+  font-weight: 400;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
 }

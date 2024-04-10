@@ -13,9 +13,7 @@ function AssessmentSidebar({
   assessmentStatus,
   filteredQuestions,
   answers,
-  selectedQuestions,
-  fetchStartTime
-
+  setRemainingTime,
 }) {
   const { user } = useFirebase();
   const [startTime, setStartTime] = useState(null); // State to store the start time
@@ -82,7 +80,22 @@ function AssessmentSidebar({
   useEffect(() => {
     fetchStartTime();
   }, [userId]);
-  
+
+  const fetchStartTime = async () => {
+    try {
+      if (!startTime) {
+        startTime = new Date().toISOString();
+        localStorage.setItem(`startTime_${userId}`, startTime);
+      }
+      startTime = new Date(startTime);
+      const elapsedTime = (new Date() - startTime) / 1000;
+      const newRemainingTime = Math.max(12 * 60 * 60 - elapsedTime, 0);
+      setRemainingTime(newRemainingTime);
+    } catch (error) {
+      console.error("Error fetching start time:", error);
+    }
+  };
+
   const allNo = filteredQuestions.every(
     (question) => answers[question.id] === "NO"
   );
@@ -188,11 +201,7 @@ function AssessmentSidebar({
                     ) : allNo && assessmentStatus === "completed" ? (
                       "You are not at risk for any disorders"
                     ) : (
-                      <>
-                        {selectedQuestions.map((question) => (
-                          <p key={question.id}>{question.disorder}</p>
-                        ))}
-                      </>
+                      <></>
                     )}
                   </div>
                 </div>

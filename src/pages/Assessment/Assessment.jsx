@@ -13,7 +13,21 @@ import { collection, doc, getDocs } from "firebase/firestore";
 import { fs } from "../../config/Firebase";
 import jsonData from "../../data/QuestionsData.json";
 
-function Assessment({filteredQuestions , setFilteredQuestions , remainingTime , setRemainingTime , assessmentStatus , setAssessmentStatus , answers , setAnswers , assessmentIdRef , selectedQuestions ,setSelectedQuestions }) {
+function Assessment({
+  filteredQuestions,
+  setFilteredQuestions,
+  remainingTime,
+  setRemainingTime,
+  assessmentStatus,
+  setAssessmentStatus,
+  answers,
+  setAnswers,
+  assessmentIdRef,
+  selectedQuestions,
+  setSelectedQuestions,
+  setSelectedDisorders,
+  selectedDisorders,
+}) {
   const [activeQuestion, setActiveQuestion] = useState("screening");
   const [stepCount, setStepCount] = useState(0);
   const [childQuestions, setChildQuestions] = useState(null);
@@ -99,22 +113,7 @@ function Assessment({filteredQuestions , setFilteredQuestions , remainingTime , 
   }, [screeningQuestions]);
   console.log(screeningQuestions.length, "lengthhhhhhhhh");
 
-  let startTime = localStorage.getItem(`startTime_${userId}`);
-
-  const fetchStartTime = async () => {
-    try {
-      if (!startTime) {
-        startTime = new Date().toISOString();
-        localStorage.setItem(`startTime_${userId}`, startTime);
-      }
-      startTime = new Date(startTime);
-      const elapsedTime = (new Date() - startTime) / 1000;
-      const newRemainingTime = Math.max(12 * 60 * 60 - elapsedTime, 0);
-      setRemainingTime(newRemainingTime);
-    } catch (error) {
-      console.error("Error fetching start time:", error);
-    }
-  };
+  
   return (
     <>
       <div className="StartAssessment-template">
@@ -132,7 +131,8 @@ function Assessment({filteredQuestions , setFilteredQuestions , remainingTime , 
             setAnswers={setAnswers}
             selectedQuestions={selectedQuestions}
             setSelectedQuestions={setSelectedQuestions}
-            fetchStartTime={fetchStartTime}
+            selectedDisorders={selectedDisorders}
+            setSelectedDisorders={setSelectedDisorders}
           />
         </div>
         <div className="StartAssessmentCard">
@@ -150,8 +150,6 @@ function Assessment({filteredQuestions , setFilteredQuestions , remainingTime , 
                 remainingTime={remainingTime}
                 setRemainingTime={setRemainingTime}
                 answers={answers}
-                fetchStartTime={fetchStartTime}
-                
               />
             </div>
             <div className="col-lg-8 col-md-12 col-sm-12">
@@ -172,6 +170,8 @@ function Assessment({filteredQuestions , setFilteredQuestions , remainingTime , 
                     setAnswers={setAnswers}
                     selectedQuestions={selectedQuestions}
                     setSelectedQuestions={setSelectedQuestions}
+                    selectedDisorders={selectedDisorders}
+                    setSelectedDisorders={setSelectedDisorders}
                   />
                 )}
                 {activeQuestion === "indepth" && (

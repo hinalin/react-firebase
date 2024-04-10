@@ -21,7 +21,9 @@ const NavbarAuthentication = ({
   answers,
   selectedQuestions,
   setSelectedQuestions,
-  fetchStartTime
+  fetchStartTime,
+  selectedDisorders,
+  setSelectedDisorders
 }) => {
   return (
     <>
@@ -40,6 +42,9 @@ const NavbarAuthentication = ({
           selectedQuestions={selectedQuestions}
           setSelectedQuestions={setSelectedQuestions}
           fetchStartTime={fetchStartTime}
+
+          selectedDisorders={selectedDisorders}
+          setSelectedDisorders={setSelectedDisorders}
         />
       )}
       {user ? (

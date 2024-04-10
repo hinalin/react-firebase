@@ -19,8 +19,6 @@ const AssessmentProgress = ({
   remainingTime,
   setRemainingTime,
   answers,
-  fetchStartTime,
-  startTime,
 }) => {
   const { user } = useFirebase();
   const userId = user ? user.uid : null;
@@ -43,6 +41,22 @@ const AssessmentProgress = ({
       lifeFunctionProgressValue) /
       4
   );
+  let startTime = localStorage.getItem(`startTime_${userId}`);
+
+  const fetchStartTime = async () => {
+    try {
+      if (!startTime) {
+        startTime = new Date().toISOString();
+        localStorage.setItem(`startTime_${userId}`, startTime);
+      }
+      startTime = new Date(startTime);
+      const elapsedTime = (new Date() - startTime) / 1000;
+      const newRemainingTime = Math.max(12 * 60 * 60 - elapsedTime, 0);
+      setRemainingTime(newRemainingTime);
+    } catch (error) {
+      console.error("Error fetching start time:", error);
+    }
+  };
   useEffect(() => {
     fetchStartTime();
   }, [userId]);
@@ -122,6 +136,7 @@ const AssessmentProgress = ({
   useEffect(() => {
     storeProgressToFirestore();
   }, [userId, startTime]);
+
   return (
     <>
       <TimeupModal
