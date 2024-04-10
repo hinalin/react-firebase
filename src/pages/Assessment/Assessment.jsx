@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Assessment.css";
 import "react-circular-progressbar/dist/styles.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
@@ -13,34 +13,50 @@ import { collection, doc, getDocs } from "firebase/firestore";
 import { fs } from "../../config/Firebase";
 import jsonData from "../../data/QuestionsData.json";
 
-function Assessment() {
+function Assessment({filteredQuestions , setFilteredQuestions , remainingTime , setRemainingTime , assessmentStatus , setAssessmentStatus , answers , setAnswers , assessmentIdRef , selectedQuestions ,setSelectedQuestions }) {
   const [activeQuestion, setActiveQuestion] = useState("screening");
   const [stepCount, setStepCount] = useState(0);
   const [childQuestions, setChildQuestions] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [healthHistoryProgress, setHealthHistoryProgress] = useState(0);
   const [indepthProgress, setIndepthProgress] = useState(0);
+  const [healthHistoryProgress, setHealthHistoryProgress] = useState(0);
   const [lifeFunctionProgress, setLifeFunctionProgress] = useState(0);
   const [screeningQuestions, setScreeningQuestions] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
   const [answeredQuestions, setAnsweredQuestions] = useState({});
   const [nextClicked, setNextClicked] = useState(false);
-
+  // const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  // const [remainingTime, setRemainingTime] = useState(0);
+
+  // const [assessmentStatus, setAssessmentStatus] = useState("");
+  // const [answers, setAnswers] = useState({});
 
   const { user } = useFirebase();
   const userId = user ? user.uid : null;
-
+  // const assessmentIdRef = useRef(null);
   function filterArrayByParentId(parentId) {
     return jsonData.filter((item) => item.parentId === Number(parentId));
   }
+
+  const getAssessmentCounter = () => {
+    const storedAssessmentCounter = localStorage.getItem("assessmentCounter");
+    return storedAssessmentCounter ? parseInt(storedAssessmentCounter) : 1;
+  };
+
+  const assessmentCounter = getAssessmentCounter();
 
   const loadUserAnswersFromFirestore = async () => {
     try {
       if (userId) {
         const userDocRef = doc(fs, "users", userId);
-        const userAnswersRef = collection(userDocRef, "answers-screenings");
-        const userAnswersSnapshot = await getDocs(userAnswersRef);
+        const assessmentDocRef = doc(
+          userDocRef,
+          "assessment",
+          assessmentIdRef.current
+        );
+        const answersRef = collection(assessmentDocRef, "answers_screenings");
+        const userAnswersSnapshot = await getDocs(answersRef);
         const loadedAnswers = [];
         const answer = {};
         userAnswersSnapshot.forEach((doc) => {
@@ -81,68 +97,64 @@ function Assessment() {
       setActiveQuestion("indepth");
     }
   }, [screeningQuestions]);
+  console.log(screeningQuestions.length, "lengthhhhhhhhh");
 
-  // useEffect(() => {
-  //   const areAllInDepthQuestionsAnswered = Object.keys(answeredQuestions).every(
-  //     (questionId) => answeredQuestions[questionId]
-  //   );
+  let startTime = localStorage.getItem(`startTime_${userId}`);
 
-  //   if (areAllInDepthQuestionsAnswered) {
-  //     setActiveQuestion("health-history");
-  //   }
-  // }, [answeredQuestions]);
-
-  // useEffect(() => {
-  //   const areAllInDepthQuestionsAnswered = Object.values(answeredQuestions).every(answered => answered);
-
-  //   if (areAllInDepthQuestionsAnswered && activeQuestion === "indepth") {
-  //     setActiveQuestion("health-history");
-  //   }
-  // }, [answeredQuestions, activeQuestion]);
-
-  // useEffect(() => {
-  //   const areAllScreeningQuestionsAnswered = Object.keys(screeningQuestions).every(
-  //     questionId => screeningQuestions[questionId] === "YES"
-  //   );
-
-  //   if (areAllScreeningQuestionsAnswered && activeQuestion === "screening") {
-  //     setActiveQuestion("indepth");
-  //   }
-  // }, [screeningQuestions, activeQuestion]);
-
-  // useEffect(() => {
-  //   const areAllInDepthQuestionsAnswered = Object.values(answeredQuestions).every(
-  //     answered => answered
-  //   );
-
-  //   if (areAllInDepthQuestionsAnswered && activeQuestion === "indepth") {
-  //     setActiveQuestion("health-history");
-  //   }
-  // }, [answeredQuestions, activeQuestion]);
-
+  const fetchStartTime = async () => {
+    try {
+      if (!startTime) {
+        startTime = new Date().toISOString();
+        localStorage.setItem(`startTime_${userId}`, startTime);
+      }
+      startTime = new Date(startTime);
+      const elapsedTime = (new Date() - startTime) / 1000;
+      const newRemainingTime = Math.max(12 * 60 * 60 - elapsedTime, 0);
+      setRemainingTime(newRemainingTime);
+    } catch (error) {
+      console.error("Error fetching start time:", error);
+    }
+  };
   return (
     <>
       <div className="StartAssessment-template">
         <div className="header me-5 ms-2">
-          <NavigationBar user={user} />
+          <NavigationBar
+            user={user}
+            assessmentIdRef={assessmentIdRef}
+            remainingTime={remainingTime}
+            setRemainingTime={setRemainingTime}
+            assessmentStatus={assessmentStatus}
+            setAssessmentStatus={setAssessmentStatus}
+            filteredQuestions={filteredQuestions}
+            setFilteredQuestions={setFilteredQuestions}
+            answers={answers}
+            setAnswers={setAnswers}
+            selectedQuestions={selectedQuestions}
+            setSelectedQuestions={setSelectedQuestions}
+            fetchStartTime={fetchStartTime}
+          />
         </div>
         <div className="StartAssessmentCard">
           <div className="row">
-            <div className="col-4">
+            <div className="col-lg-4 col-md-12 col-sm-12">
               <AssessmentProgress
                 stepCount={stepCount}
                 activeQuestion={activeQuestion}
                 progress={progress}
-                healthHistoryProgress={healthHistoryProgress}
                 indepthProgress={indepthProgress}
-                activeStep={activeStep}
-                setIndepthProgress={setIndepthProgress}
-                setProgress={setProgress}
-                setHealthHistoryProgress={setHealthHistoryProgress}
+                healthHistoryProgress={healthHistoryProgress}
                 lifeFunctionProgress={lifeFunctionProgress}
+                activeStep={activeStep}
+                assessmentIdRef={assessmentIdRef}
+                remainingTime={remainingTime}
+                setRemainingTime={setRemainingTime}
+                answers={answers}
+                fetchStartTime={fetchStartTime}
+                
               />
             </div>
-            <div className="col-8">
+            <div className="col-lg-8 col-md-12 col-sm-12">
               <div className="questions-part">
                 {activeQuestion === "screening" && (
                   <ScreeningQuestion
@@ -153,6 +165,13 @@ function Assessment() {
                     setScreeningQuestions={setScreeningQuestions}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
+                    assessmentIdRef={assessmentIdRef}
+                    filteredQuestions={filteredQuestions}
+                    setFilteredQuestions={setFilteredQuestions}
+                    answers={answers}
+                    setAnswers={setAnswers}
+                    selectedQuestions={selectedQuestions}
+                    setSelectedQuestions={setSelectedQuestions}
                   />
                 )}
                 {activeQuestion === "indepth" && (
@@ -168,6 +187,7 @@ function Assessment() {
                     setAnsweredQuestions={setAnsweredQuestions}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
+                    assessmentCounter={assessmentCounter}
                   />
                 )}
                 {activeQuestion === "health-history" && (
@@ -180,6 +200,7 @@ function Assessment() {
                     childQuestions={childQuestions}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
+                    assessmentCounter={assessmentCounter}
                   />
                 )}
                 {activeQuestion === "life-function" && (
@@ -188,6 +209,9 @@ function Assessment() {
                     setLifeFunctionProgress={setLifeFunctionProgress}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
+                    assessmentCounter={assessmentCounter}
+                    assessmentStatus={assessmentStatus}
+                    setAssessmentStatus={setAssessmentStatus}
                   />
                 )}
               </div>

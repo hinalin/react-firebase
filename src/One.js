@@ -787,3 +787,84 @@ export default ScreeningQuestions;
   // const filteredQuestions = jsonData.filter(
   //   (question) => question.parentId === null && question.scn_question
   // );
+
+
+
+//   {
+//     "id": 1,
+//     "scn_question": "In the last month, for at least 2 weeks, were you depressed or down, or felt sad, empty of hopeless OR much less interested in most things for most of the day, nearly everyday?",
+//     "parentId": null,
+//     "in_header_que" : "In the next few questions we want to know if you have experienced certain symptoms for a period of at least two weeks in the last month:"
+// },
+// {
+//     "id": 2,
+//     "scn_question": "Have you ever had a period of time when you were feeling “up” or “high” or “hyper” and so active or full of energy or full of yourself that you got into trouble, or that other people thought you were not your usual self for four or more consecutive days? (Do not consider times when you were intoxicated by drugs or alcohol).",
+//     "parentId": null,
+//     "in_header_que" : "For at least a six month period in the past how often did you:"
+// },
+// {
+//     "id": 3,
+//     "scn_question": "In the past year have you used one or more of the following substances in order to get high or change your mood? Alcohol, marijuana, oxycodone, cocaine, heroin, and other drugs.",
+//     "parentId": null,
+//     "in_header_que" : "In the last six months how often have you:"
+// },
+// {
+//     "id": 4,
+//     "scn_question": "Have you on more than one occasion had sudden occurrences or attacks when you felt anxious or scared, even in situations that wouldn’t bother most people?",
+//     "parentId": null,
+//     "in_header_que" : "In the last year how often:"
+// },
+// {
+//     "id": 5,
+//     "scn_question": "In the last month have you felt painfully anxious or afraid in social situations like having a conversation or meeting new people, or felt uncomfortable eating or drinking in front of strangers?",
+//     "parentId": null,
+//     "in_header_que" : "In the last month how often have you:"
+// },
+// {
+//     "id": 6,
+//     "scn_question": "Have you ever witnessed, been threatened with or experienced a physical or sexual assault, or witnessed or experienced a life-threatening event such as a major disaster or fire, combat, or a serious accident?",
+//     "parentId": null,
+//     "in_header_que" : "In the last three months how often:"
+// },
+// {
+//     "id": 7,
+//     "scn_question": "Over the past six months have you been excessively anxious or worried about several routine things almost every day?",
+//     "parentId": null,
+//     "in_header_que" : "In the last three months how often have you:"
+// },
+// {
+//     "id": 8,
+//     "scn_question": "In the last three months have you had a significant problem with food, namely eating too little, being very concerned about your weight, or having significant difficulty with overeating?",
+//     "parentId": null,
+//     "in_header_que" : "You mentioned experiencing sustained feelings of excitement or anger that others thought you were not your normal self. During that time, how often did you feel:"
+// },
+// {
+//     "id": 9,
+//     "scn_question": "For at least a six-month period have you continuously had significant problems with impulsivity, concentration, organization, or fidgeting to the extent that it has negatively affected you at work, at school, or at home?",
+//     "parentId": null,
+//     "in_header_que" : "An anxiety (or panic) attack is when you suddenly feel very frightened and have sudden physical symptoms that peak within a few minutes. During an attack, did you experience:"
+// },
+// {
+//     "id": 10,
+//     "scn_question": "In the last month have you frequently lost control of your temper, got into arguments, yelled at, and/or shouted at others?",
+//     "parentId": null,
+//     "in_header_que" : "You indicated that you have experienced a traumatic event related to a life-threatening situation or physical or sexual assault. We're going to want to know a bit more about your thoughts and behaviour over the past month. If you are experiencing, triggered or distressed when filling out this section, please remember to take a break, relax and seek support if you need it. Have you:"
+// },
+// {
+//     "id": 11,
+//     "scn_question": "In the last three months have you persistently had significant problems with the quality and/or quantity of your sleep such that it has negatively impacted your life?",
+//     "parentId": null,
+//     "in_header_que" : "In the last month how often have you been painfully nervous or anxious in the following social situations?"
+// },
+// {
+//     "id": 12,
+//     "scn_question": "In the past month have you been bothered by recurrent unwanted and distressing thoughts, impulses, or images OR bothered by the need to want to do unwanted repetitive actions like excessive washing or checking?",
+//     "parentId": null,
+//     "in_header_que" : "In the past month have you been bothered by recurrent unwanted and distressing thought, impulses or images OR bothered by the need to want to do unwanted repetitive actions like excessive washing or checking? For example:"
+// },
+// {
+//     "id": 13,
+//     "scn_question": "Within the last three months have you had a major stressful life event that is still causing you major emotional distress?",
+//     "parentId": null,
+//     "in_header_que" : "In the last year, how often have you:"
+// },

@@ -15,6 +15,7 @@ const HealthHistoryQuestions = ({
   childQuestions,
   nextClicked,
   setNextClicked,
+  assessmentCounter
 }) => {
   const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -40,9 +41,16 @@ const HealthHistoryQuestions = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // const userDocRef = doc(fs, "users", userId);
+        // const userAnswersRef = collection(userDocRef, "answers-health-history");
         const userDocRef = doc(fs, "users", userId);
-        const userAnswersRef = collection(userDocRef, "answers-health-history");
-        const querySnapshot = await getDocs(userAnswersRef);
+        const assessmentDocRef = doc(
+          userDocRef,
+          "assessment",
+          assessmentCounter.toString()
+        );
+        const answersRef = collection(assessmentDocRef, "answers_health-history");
+        const querySnapshot = await getDocs(answersRef);
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           setAnswers((prevAnswers) => ({
@@ -81,11 +89,11 @@ const HealthHistoryQuestions = ({
   };
 
   const handleNoClick = async (questionId) => {
+    // updateProgress();
     setAnswers({ ...answers, [questionId]: "None" });
     setSelectedOptions({ ...selectedOptions, [questionId]: null }); // Reset selected options for the question
     setSubmitClicked({ ...submitClicked, [questionId]: true });
     await saveToFirestore(questionId, "None");
-    updateProgress();
     setFocusedQuestion(null);
     setNextClicked(false);
 
@@ -95,7 +103,7 @@ const HealthHistoryQuestions = ({
     console.log(nextUnansweredIndex, "nextUnansweredIndex");
     if (nextUnansweredIndex !== 0) {
       setFocusedQuestion(nextUnansweredIndex);
-      console.log(focusedQuestion, "focusedQuestion now");
+      console.log(focusedQuestion, "focusedQuestionnow");
     }
   };
 
@@ -131,6 +139,17 @@ const HealthHistoryQuestions = ({
       setActiveQuestion("life-function");
     }
   };
+  // const handleNextButtonClick = async () => {
+  //   if (userId) {
+  //     const userDocRef = doc(fs, "users", userId);
+  //     await setDoc(
+  //       userDocRef,
+  //       { healthHistoryFormCompleted: true },
+  //       { merge: true }
+  //     );
+  //   }
+  //   setActiveQuestion("life-function");
+  // };
 
   const HealthHistoryQuestions = jsonData.filter(
     (question) => question.health_history_question
@@ -139,7 +158,6 @@ const HealthHistoryQuestions = ({
   const handleQuestionSubmit = async (questionId) => {
     setSubmitClicked({ ...submitClicked, [questionId]: true });
     setFocusedQuestion(null);
-    updateProgress();
     setNextClicked(false);
     await saveToFirestore(questionId, answers[questionId]);
     const nextUnansweredIndex = HealthHistoryQuestions.findIndex(
@@ -156,8 +174,14 @@ const HealthHistoryQuestions = ({
   const saveToFirestore = async (questionId, answer) => {
     try {
       const userDocRef = doc(fs, "users", userId);
-      const userAnswersRef = collection(userDocRef, "answers-health-history");
-      const docRef = doc(userAnswersRef, questionId.toString());
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentCounter.toString()
+      );
+      const answersRef = collection(assessmentDocRef, "answers_health-history");
+      const answerDocRef = doc(answersRef, questionId.toString());
+
 
       // Define data object to be written to Firestore
       let data = {
@@ -176,23 +200,23 @@ const HealthHistoryQuestions = ({
         data.selectedOptions = null;
       }
 
-      await setDoc(docRef, data);
+      await setDoc(answerDocRef, data);
       console.log("Document successfully written!");
     } catch (error) {
       console.error("Error writing document: ", error);
     }
   };
 
-  const updateProgress = () => {
+  useEffect(() => {
     const numQuestions = HealthHistoryQuestions.length;
     const numAnsweredQuestions = Object.keys(answers).length;
     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
     setHealthHistoryProgress(newProgress);
-  };
+  } , [answers , selectedOptions])
 
   return (
     <>
-      <div className="container">
+      <div className="container-fluid">
         {loading ? (
           <div>Loading...</div>
         ) : (

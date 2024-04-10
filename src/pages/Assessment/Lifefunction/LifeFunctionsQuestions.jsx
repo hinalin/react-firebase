@@ -7,18 +7,23 @@ import { Slider } from "@mui/material";
 import { useFirebase } from "../../../context/FirebaseContext";
 import { fs } from "../../../config/Firebase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const LifeFunctionsQuestions = ({
   setActiveQuestion,
   setLifeFunctionProgress,
   nextClicked,
   setNextClicked,
+  assessmentCounter,
+  setAssessmentStatus
+  
 }) => {
   const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [answers, setAnswers] = useState({});
 
   const { user } = useFirebase();
   const userId = user ? user.uid : null;
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Find the index of the first unanswered question
@@ -32,14 +37,12 @@ const LifeFunctionsQuestions = ({
     }
   }, []);
 
-
-  const updateProgress = () => {
+  useEffect(() => {
     const numQuestions = lifeFunctionQuestions.length;
     const numAnsweredQuestions = Object.keys(answers).length;
     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
     setLifeFunctionProgress(newProgress);
-  };
-  console.log(answers, "answers");
+  }, [answers]);
 
   useEffect(() => {
     if (userId) {
@@ -50,8 +53,13 @@ const LifeFunctionsQuestions = ({
   const fetchUserAnswersFromFirestore = async (userId) => {
     try {
       const userDocRef = doc(fs, "users", userId);
-      const userAnswersRef = collection(userDocRef, "answers-life-functions");
-      const userAnswersSnapshot = await getDocs(userAnswersRef);
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentCounter.toString()
+      );
+      const answersRef = collection(assessmentDocRef, "answers-life-functions");
+      const userAnswersSnapshot = await getDocs(answersRef);
       const loadedAnswers = {};
       userAnswersSnapshot.forEach((doc) => {
         loadedAnswers[doc.id] = doc.data().answer;
@@ -88,8 +96,15 @@ const LifeFunctionsQuestions = ({
       // Perform any necessary actions here
       console.log("All questions answered. Proceed to finish.");
       setNextClicked(false);
+      setAssessmentStatus('Completed')
     }
+    navigate('/Summary')
   };
+
+  // const handleFinishButtonClick = async () => {
+  //   const userDocRef = doc(fs, "users", userId);
+  //   await setDoc(userDocRef, { formCompleted: true }, { merge: true });
+  // };
 
   const lifeFunctionQuestions = jsonData.filter(
     (question) => question.life_functions_question
@@ -98,7 +113,6 @@ const LifeFunctionsQuestions = ({
   const handleQuestionSubmit = async (questionId, value) => {
     setAnswers({ ...answers, [questionId]: value });
     await storeAnswerToFirestore(questionId, value);
-    updateProgress();
     setFocusedQuestion(null);
     const nextUnansweredIndex = lifeFunctionQuestions.findIndex(
       (question, index) => !answers[question.id] && index > focusedQuestion
@@ -122,8 +136,13 @@ const LifeFunctionsQuestions = ({
   const storeAnswerToFirestore = async (questionId, value) => {
     try {
       const userDocRef = doc(fs, "users", userId);
-      const userAnswersRef = collection(userDocRef, "answers-life-functions");
-      const answerDocRef = doc(userAnswersRef, questionId.toString());
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentCounter.toString()
+      );
+      const answersRef = collection(assessmentDocRef, "answers-life-functions");
+      const answerDocRef = doc(answersRef, questionId.toString());
       await setDoc(answerDocRef, {
         questionId: questionId,
         answer: value,
@@ -137,7 +156,7 @@ const LifeFunctionsQuestions = ({
 
   return (
     <>
-      <div className="container">
+      <div className="container-fluid">
         <div className="Lifefunction-template">
           {lifeFunctionQuestions.map((question, index) => (
             <div
@@ -146,11 +165,15 @@ const LifeFunctionsQuestions = ({
               //   focusedQuestion === index ? "focused-card" : ""
               // }
               // ${
-              //   nextClicked === true && focusedQuestion === index 
+              //   nextClicked === true && focusedQuestion === index
               //     ? "border-red"
               //     : ""
               // }`}
-              className={`unanswered-card ${focusedQuestion === index ? "focused-card" : "" } ${focusedQuestion === index && nextClicked === true ? "border-red" : ""}`}
+              className={`unanswered-card ${
+                focusedQuestion === index ? "focused-card" : ""
+              }  ${
+                nextClicked && focusedQuestion === index ? "border-red" : ""
+              }`}
               onClick={() => handleQuestionClick(index)}
             >
               <div className="question">

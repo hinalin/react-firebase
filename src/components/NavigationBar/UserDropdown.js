@@ -59,7 +59,7 @@ const UserDropdown = ({ user }) => {
       <div className="UserDropdown">
         <Link className="user-drop-down d-flex" onClick={toggleDropdown}>
           <div className="user-circle p-2">
-            <span className="m-auto">{renderUserInitials()}</span>
+            <span className="m-auto p-2">{renderUserInitials()}</span>
           </div>
           <div
             className={`arrow ${dropdownOpen ? "open" : ""}`}

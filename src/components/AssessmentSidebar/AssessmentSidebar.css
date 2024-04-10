@@ -1,0 +1,59 @@
+.assessment-sidebar{
+    width: 50vw;
+}
+.assessment-sidebar .assessment-sidebar-heading{
+    background-color: #33ca8f;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.assessment-sidebar .assessment-sidebar-heading img{
+    width: 2%;
+}
+
+.assessment-sidebar .assessment-sidebar-heading h4{
+    font-size: 1.20em;
+    color: rgb(255, 255, 255);
+    /* font-family: CircularStdBook; */
+    margin: 0px;
+}
+.assessment-sidebar .date-status{
+    padding: 10px 20px;
+    background: rgb(50, 182, 130);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1em;
+}
+.assessment-sidebar .date-status .status{
+    margin-right: 20vw;
+}
+
+.assessment-accordions .assessment-accordion-header{
+    width: 100vw;
+    display: flex;
+    justify-content:space-between;
+    padding-right: 5vw;
+}
+.assessment-accordions .accordion-button:focus {
+    z-index: 3;
+    border-color: none;
+    outline: 0;
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+    color: black !important;;
+    background-color: transparent !important;
+}
+.assessment-accordions .assessment-data{
+    display: flex;
+    justify-content: space-between;
+}
+.assessment-sidebar .accordion-collapse{
+    padding-right: 5vw;
+    background-color:rgb(227, 251, 244);
+    height: 50px;
+}

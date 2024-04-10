@@ -1,3 +1,7 @@
+@font-face {
+    font-family: CircularStdBook;
+    src: url('../../assets/fonts/CircularStd-Book.otf');
+}
 .unanswered-card{
     background-color: #fafafa;
     border: 2px solid #eee;

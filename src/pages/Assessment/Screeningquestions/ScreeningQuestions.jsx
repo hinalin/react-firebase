@@ -13,16 +13,47 @@ const ScreeningQuestions = ({
   setChildQuestions,
   nextClicked,
   setNextClicked,
+  assessmentIdRef,
+  setFilteredQuestions,
+  filteredQuestions,
+  answers,
+  setAnswers,
+  selectedQuestions,
+  setSelectedQuestions,
 }) => {
   const [focusedQuestion, setFocusedQuestion] = useState(null);
-  const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [showChildQuestions, setShowChildQuestions] = useState(false);
-  const [answers, setAnswers] = useState({});
-  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [assessmentCounter, setAssessmentCounter] = useState(1);
+
   const [loading, setLoading] = useState(true);
   const { user } = useFirebase();
   const containerRef = useRef(null);
   const userId = user ? user.uid : null;
+  useEffect(() => {
+        // Retrieve the assessment counter value from local storage
+        const storedAssessmentCounter = localStorage.getItem("assessmentCounter");
+    
+        // If the stored value exists, use it, otherwise use the default value of 1
+        const initialCounter = storedAssessmentCounter
+          ? parseInt(storedAssessmentCounter, 10)
+          : 1;
+    
+        setAssessmentCounter(initialCounter);
+    
+        // Function to generate a new assessment ID
+        const generateAssessmentId = () => {
+          // Set the assessment ID
+          assessmentIdRef.current = initialCounter.toString();
+        };
+    
+        // Initialize assessment ID when component mounts
+        generateAssessmentId();
+      }, []);
+    
+      useEffect(() => {
+        // Store the current assessment counter value in local storage
+        localStorage.setItem("assessmentCounter", assessmentCounter.toString());
+      }, [assessmentCounter]);
 
   useEffect(() => {
     // Find the index of the first unanswered question
@@ -43,13 +74,6 @@ const ScreeningQuestions = ({
     }
   }, [answers, filteredQuestions]);
 
-  // useEffect(() => {
-  //   // Filter out questions with parentId null and scn_question not null
-  //   const filtered = jsonData.filter(
-  //     (question) => question.parentId === null && question.scn_question
-  //   );
-  //   setFilteredQuestions(filtered);
-  // }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -78,11 +102,15 @@ const ScreeningQuestions = ({
     setProgress(newProgress);
   }, [answers]);
 
+  
+  
   const storeAnswerToFirestore = async (questionId, answer, buttonState) => {
     try {
       const userDocRef = doc(fs, "users", userId);
-      const userAnswersRef = collection(userDocRef, "answers-screenings");
-      const answerDocRef = doc(userAnswersRef, questionId.toString());
+      // Assuming you have an 'assessment' document under the user document
+      const assessmentDocRef = doc(userDocRef, "assessment", assessmentIdRef.current);
+      const answersRef = collection(assessmentDocRef, "answers_screenings");
+      const answerDocRef = doc(answersRef, questionId.toString());
       await setDoc(answerDocRef, {
         questionId: questionId,
         answer: answer,
@@ -90,19 +118,20 @@ const ScreeningQuestions = ({
         type: "screening",
       });
       console.log("Answer stored in Firestore successfully!");
+      console.log(assessmentIdRef.current , 'currentIddddddddddddd');
     } catch (error) {
       console.error("Error storing answer in Firestore: ", error);
-    } finally {
-      setLoading(false); // Set loading state to false once answer is stored
     }
   };
+  
 
   const loadUserAnswersFromFirestore = async () => {
     try {
       if (userId) {
         const userDocRef = doc(fs, "users", userId);
-        const userAnswersRef = collection(userDocRef, "answers-screenings");
-        const userAnswersSnapshot = await getDocs(userAnswersRef);
+        const assessmentDocRef = doc(userDocRef, "assessment", assessmentIdRef.current);
+        const answersRef = collection(assessmentDocRef, "answers_screenings");
+        const userAnswersSnapshot = await getDocs(answersRef);
         const loadedAnswers = {};
         userAnswersSnapshot.forEach((doc) => {
           loadedAnswers[doc.id] = doc.data().answer;
@@ -114,18 +143,21 @@ const ScreeningQuestions = ({
     }
   };
 
+
   const handleQuestionClick = (index) => {
     setFocusedQuestion(index === focusedQuestion ? null : index);
   };
 
-  const handleYesClick = async (questionId, parentId) => {
+
+
+  const handleYesClick = async (questionId, parentId , disorder) => {
     setAnswers({ ...answers, [questionId]: "YES" });
-    setSelectedQuestions([...selectedQuestions, questionId]);
+    // setSelectedQuestions([...selectedQuestions, questionId]);
+    setSelectedQuestions([...selectedQuestions, { id: questionId, disorder }]);
     setFocusedQuestion(null);
     await storeAnswerToFirestore(questionId, "YES", true);
     setNextClicked(false);
   };
-
   const handleNoClick = async (questionId) => {
     setAnswers({ ...answers, [questionId]: "NO" });
     setFocusedQuestion(null);
@@ -189,7 +221,7 @@ const ScreeningQuestions = ({
 
   const childQuestionsByStep = groupChildQuestionsByParentId();
 
-  console.log(childQuestionsByStep, "childQuestionsByStep");
+  console.log(childQuestionsByStep, "childQuestionsByStepppppppppppppppppp");
 
   return (
     <>
@@ -255,5 +287,8 @@ const ScreeningQuestions = ({
     </>
   );
 };
-
 export default ScreeningQuestions;
+
+
+
+

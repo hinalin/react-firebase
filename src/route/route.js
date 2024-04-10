@@ -52,8 +52,7 @@
 
 // export default Main;
 
-
-import { React , useState } from "react";
+import { React, useState , useRef } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import TermsOfServices from "../components/Tnc/TermsOfServices/TermsOfServices";
@@ -66,19 +65,38 @@ import Assessment from "../pages/Assessment/Assessment";
 import SignUpwithNumber from "../components/Authentication/SignUp/SignUpwithNumber";
 import ForgotPassword from "../components/Authentication/ForgotPassword/ForgotPassword";
 import Profile from "../pages/Profile/Profile";
-import AssessmentProgress from "../pages/Assessment/AssessmentProgress";
-import ScreeningQuestions from "../pages/Assessment/Screeningquestions/ScreeningQuestions";
-import InDepthQuestions from "../pages/Assessment/Indepth/InDepthQuestions";
-import HelthHistoryQuestions from "../pages/Assessment/Helthhistory/HelthHistoryQuestions";
-import LifeFunctionsQuestions from "../pages/Assessment/Lifefunction/LifeFunctionsQuestions";
+import Summary from "../pages/summary/Summary";
 
 const Main = () => {
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [remainingTime, setRemainingTime] = useState(0);
+  const [assessmentStatus, setAssessmentStatus] = useState("");
+  const [answers, setAnswers] = useState({});
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
+
+  const assessmentIdRef = useRef(null);
+
   return (
     <>
       <Router>
         <FirebaseContextProvider>
           <Routes>
-            <Route path="/" element={<Home />}></Route>
+            <Route
+              path="/"
+              element={
+                <Home
+                  remainingTime={remainingTime}
+                  setRemainingTime={setRemainingTime}
+                  assessmentStatus={assessmentStatus}
+                  setAssessmentStatus={setAssessmentStatus}
+                  filteredQuestions={filteredQuestions}
+                  setFilteredQuestions={setFilteredQuestions}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                  assessmentIdRef={assessmentIdRef}
+                />
+              }
+            ></Route>
             <Route
               path="/TermsOfServices"
               element={<TermsOfServices />}
@@ -96,32 +114,23 @@ const Main = () => {
               path="/Assessment"
               element={
                 // <ProtectedRoute>
-                  <Assessment/>
+                <Assessment
+                  filteredQuestions={filteredQuestions}
+                  setFilteredQuestions={setFilteredQuestions}
+                  remainingTime={remainingTime}
+                  setRemainingTime={setRemainingTime}
+                  assessmentStatus={assessmentStatus}
+                  setAssessmentStatus={setAssessmentStatus}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                  assessmentIdRef={assessmentIdRef}
+                  selectedQuestions={selectedQuestions}
+                  setSelectedQuestions={setSelectedQuestions}
+                />
                 // </ProtectedRoute>
               }
             ></Route>
-            {/* <Route
-              path="/AssessmentProgress"
-              element={<AssessmentProgress/>}
-            ></Route>
-            <Route
-              path="/ScreeningQuestions"
-              element={<ScreeningQuestions/>}
-            ></Route>
-
-            <Route
-              path="/InDepthQuestions"
-              element={<InDepthQuestions/>}
-            ></Route>
-
-            <Route
-              path="/HelthHistoryQuestions"
-              element={<HelthHistoryQuestions/>}
-            ></Route>
-            <Route
-              path="/LifeFunctionsQuestions"
-              element={<LifeFunctionsQuestions/>}
-            ></Route> */}
+            <Route path='/Summary' element={<Summary/>}></Route>
           </Routes>
         </FirebaseContextProvider>
       </Router>
@@ -130,5 +139,3 @@ const Main = () => {
 };
 
 export default Main;
-
-

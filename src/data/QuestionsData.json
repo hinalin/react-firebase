@@ -1,643 +1,796 @@
 [
-    {
-        "id": 1,
-        "scn_question": "In the last month, for at least 2 weeks, were you depressed or down, or felt sad, empty of hopeless OR much less interested in most things for most of the day, nearly everyday?",
-        "parentId": null,
-        "in_header_que" : "In the next few questions we want to know if you have experienced certain symptoms for a period of at least two weeks in the last month:"
-    },
-    {
-        "id": 2,
-        "scn_question": "Have you ever had a period of time when you were feeling “up” or “high” or “hyper” and so active or full of energy or full of yourself that you got into trouble, or that other people thought you were not your usual self for four or more consecutive days? (Do not consider times when you were intoxicated by drugs or alcohol).",
-        "parentId": null,
-        "in_header_que" : "For at least a six month period in the past how often did you:"
-    },
-    {
-        "id": 3,
-        "scn_question": "In the past year have you used one or more of the following substances in order to get high or change your mood? Alcohol, marijuana, oxycodone, cocaine, heroin, and other drugs.",
-        "parentId": null,
-        "in_header_que" : "In the last six months how often have you:"
-    },
-    {
-        "id": 4,
-        "scn_question": "Have you on more than one occasion had sudden occurrences or attacks when you felt anxious or scared, even in situations that wouldn’t bother most people?",
-        "parentId": null,
-        "in_header_que" : "In the last year how often:"
-    },
-    {
-        "id": 5,
-        "scn_question": "In the last month have you felt painfully anxious or afraid in social situations like having a conversation or meeting new people, or felt uncomfortable eating or drinking in front of strangers?",
-        "parentId": null,
-        "in_header_que" : "In the last month how often have you:"
-    },
-    {
-        "id": 6,
-        "scn_question": "Have you ever witnessed, been threatened with or experienced a physical or sexual assault, or witnessed or experienced a life-threatening event such as a major disaster or fire, combat, or a serious accident?",
-        "parentId": null,
-        "in_header_que" : "In the last three months how often:"
-    },
-    {
-        "id": 7,
-        "scn_question": "Over the past six months have you been excessively anxious or worried about several routine things almost every day?",
-        "parentId": null,
-        "in_header_que" : "In the last three months how often have you:"
-    },
-    {
-        "id": 8,
-        "scn_question": "In the last three months have you had a significant problem with food, namely eating too little, being very concerned about your weight, or having significant difficulty with overeating?",
-        "parentId": null,
-        "in_header_que" : "You mentioned experiencing sustained feelings of excitement or anger that others thought you were not your normal self. During that time, how often did you feel:"
-    },
-    {
-        "id": 9,
-        "scn_question": "For at least a six-month period have you continuously had significant problems with impulsivity, concentration, organization, or fidgeting to the extent that it has negatively affected you at work, at school, or at home?",
-        "parentId": null,
-        "in_header_que" : "An anxiety (or panic) attack is when you suddenly feel very frightened and have sudden physical symptoms that peak within a few minutes. During an attack, did you experience:"
-    },
-    {
-        "id": 10,
-        "scn_question": "In the last month have you frequently lost control of your temper, got into arguments, yelled at, and/or shouted at others?",
-        "parentId": null,
-        "in_header_que" : "You indicated that you have experienced a traumatic event related to a life-threatening situation or physical or sexual assault. We're going to want to know a bit more about your thoughts and behaviour over the past month. If you are experiencing, triggered or distressed when filling out this section, please remember to take a break, relax and seek support if you need it. Have you:"
-    },
-    {
-        "id": 11,
-        "scn_question": "In the last three months have you persistently had significant problems with the quality and/or quantity of your sleep such that it has negatively impacted your life?",
-        "parentId": null,
-        "in_header_que" : "In the last month how often have you been painfully nervous or anxious in the following social situations?"
-    },
-    {
-        "id": 12,
-        "scn_question": "In the past month have you been bothered by recurrent unwanted and distressing thoughts, impulses, or images OR bothered by the need to want to do unwanted repetitive actions like excessive washing or checking?",
-        "parentId": null,
-        "in_header_que" : "In the past month have you been bothered by recurrent unwanted and distressing thought, impulses or images OR bothered by the need to want to do unwanted repetitive actions like excessive washing or checking? For example:"
-    },
-    {
-        "id": 13,
-        "scn_question": "Within the last three months have you had a major stressful life event that is still causing you major emotional distress?",
-        "parentId": null,
-        "in_header_que" : "In the last year, how often have you:"
-    },
-    {
-        "id": 14,
-        "in_depth_question": "Had trouble falling or staying asleep, or sleeping too much?",
-        "parentId": 1
-    },
-    {
-        "id": 15,
-        "in_depth_question": "Felt tired or had little energy for most of the day?",
-        "parentId": 1
-    },
-    {
-        "id": 16,
-        "in_depth_question": "Had poor appetite or overeating?",
-        "parentId": 1
-    },
-    {
-        "id": 17,
-        "in_depth_question": "Felt fidgety or restless, or talking or moving more slowly than normal?",
-        "parentId": 1
-    },
-    {
-        "id": 18,
-        "in_depth_question": "Had trouble thinking or concentrating or making simple decisions?",
-        "parentId": 1
-    },
-    {
-        "id": 19,
-        "in_depth_question": "Felt bad about yourself or felt that you are a failure or that you let yourself or others down?",
-        "parentId": 1
-    },
-    {
-        "id": 20,
-        "in_depth_question": "Did these symptoms cause significant distress or problems at home, at work, at school, socially, in your relationships, or in some other important way, and are they a change from your previous functioning?",
-        "parentId": 1
-    },
-    {
-        "id": 21,
-        "in_depth_question": "Had thoughts that you would be better off dead or thoughts of hurting yourself?",
-        "parentId": 1
-    },
-    {
-        "id": 22,
-        "in_depth_question": "Feel physically restless or like you couldn’t sit still?",
-        "parentId": 2
-    },
-    {
-        "id": 23,
-        "in_depth_question": "Feel keyed up or on edge?",
-        "parentId": 2
-    },
-    {
-        "id": 24,
-        "in_depth_question": "Tire easily?",
-        "parentId": 2
-    },
-    {
-        "id": 25,
-        "in_depth_question": "Have trouble concentrating or have your mind go blank?",
-        "parentId": 2
-    },
-    {
-        "id": 26,
-        "in_depth_question": "Feel irritable?",
-        "parentId": 2
-    },
-    {
-        "id": 27,
-        "in_depth_question": "Have trouble falling asleep?",
-        "parentId": 2
-    },
-    {
-        "id": 28,
-        "in_depth_question": "Have tense muscles?",
-        "parentId": 2
-    },
-    {
-        "id": 29,
-        "in_depth_question": "Been disorganized or easily distracted?",
-        "parentId": 3
-    },
-    {
-        "id": 30,
-        "in_depth_question": "Had a lot of difficulties being patient or sitting still?",
-        "parentId": 3
-    },
-    {
-        "id": 31,
-        "in_depth_question": "Missed important details or made mistakes at work or school or at home, or people complained that you were careless?",
-        "parentId": 3
-    },
-    {
-        "id": 32,
-        "in_depth_question": "Started things and then dropped them without finishing them because you lost your focus or got distracted?",
-        "parentId": 3
-    },
-    {
-        "id": 33,
-        "in_depth_question":"Had trouble organizing or managing your time to stay on top of things at home, school or work?",
-        "parentId":3
-    },
-    {
-        "id":34,
-        "in_depth_question":"Tended to avoid or dislike tasks that require concentrating on details for extended periods such as preparing a report, writing a paper, or doing data entry?",
-        "parentId":3
-    },
-    {
-        "id":35,
-        "in_depth_question":"Become extremely forgetful or easily distracted by things around you or by your thoughts?",
-        "parentId":3
-    },
-    {
-        "id":36,
-        "in_depth_question":"Fidgeted, squirmed, tapped your foot or left your seat when you needed to sit still?",
-        "parentId":3
-    },
-    {
-        "id":37,
-        "in_depth_question":"Been unable to do something quietly in your spare time like reading a book or felt like you always had to be moving or doing something?",
-        "parentId":3
-    },
-    {
-        "id":38,
-        "in_depth_question":"Had trouble waiting for your turn in any circumstance, such as blurting out answers before the question was finished, interrupting others or waiting in line?",
-        "parentId":3
-    },
-    {
-        "id":39,
-        "in_depth_question":"Did you end up drinking or using more substance than you had planned when you started?",
-        "parentId":4
-    },
-    {
-        "id":40,
-        "in_depth_question":"Did you want to stop, cut down or control your alcohol or illegal drug use but had trouble doing so?",
-        "parentId":4
-    },
-    {
-        "id":41,
-        "in_depth_question":"Did you have a strong desire or urge to use alcohol or illegal drugs?",
-        "parentId":4
-    },
-    {
-        "id":42,
-        "in_depth_question":"Did you spend less time meeting your responsibilities at work, school, or at home because of your drinking/substance use?",
-        "parentId":4
-    },
-    {
-        "id":43,
-        "in_depth_question":"Has your alcohol or illegal drug use caused problems with other people?",
-        "parentId":4
-    },
-    {
-        "id":44,
-        "in_depth_question":"Did you continue to use alcohol or illegal drugs even though it caused or worsened physical or psychological problems?",
-        "parentId":4
-    },
-    {
-        "id":45,
-        "in_depth_question":"Did you get drunk or high before doing something that required coordination or concentration (like driving, climbing a ladder or operating heavy machinery)?",
-        "parentId":4
-    },
-    {
-        "id":46,
-        "in_depth_question":"Did you need to increase your consumption in order to experience the same feeling as when you first started regularly consuming alcohol or illegal drugs?",
-        "parentId":4
-    },
-    {
-        "id":47,
-        "in_depth_question":"Did you have withdrawal symptoms (such as nausea, trembling, hallucinations, lethargy, depression, and anxiety) when you cut down or stopped using alcohol or illegal drugs?",
-        "parentId":4
-    },
-    {
-        "id":48,
-        "in_depth_question":"On the days that you drank or used a substance, did you spend substantial time obtaining, using, or recovering from its effects?",
-        "parentId":4
-    },
-    {
-        "id":49,
-        "in_depth_question":"Lost your temper and ended up yelling or got into arguments?",
-        "parentId":5
-    },
-    {
-        "id":50,
-        "in_depth_question":"Lost control so that you shoved, hit, kicked, or threw something at a person, animal or object without physically harming or damaging them?",
-        "parentId":5
-    },
-    {
-        "id":51,
-        "in_depth_question":"Physically hurt a person, animal or object?",
-        "parentId":5
-    },
-    {
-        "id":52,
-        "in_depth_question":"Felt that you had overreacted, or others indicated you overreacted?",
-        "parentId":5
-    },
-    {
-        "id":53,
-        "in_depth_question":"Gotten into trouble with the police or at work or school as a result of an outburst(s)?",
-        "parentId":5
-    },
-    {
-        "id":54,
-        "in_depth_question":"Had outbursts that caused problems with family, friends, or co-workers?",
-        "parentId":5
-    },
-    {
-        "id":55,
-        "in_depth_question":"Have other people noticed or commented that you seemed to have lost significant weight or maintained an abnormally low body weight?",
-        "parentId":6
-    },
-    {
-        "id":56,
-        "in_depth_question":"Were you persistently very afraid that you were becoming fat?",
-        "parentId":6
-    },
-    {
-        "id":57,
-        "in_depth_question":"Did you try to strictly avoid high calorie or high fat foods?",
-        "parentId":6
-    },
-    {
-        "id":58,
-        "in_depth_question":"At your lowest weight did you still feel too fat, or that part of your body was fat, or you needed to be very thin in order to feel better about yourself?",
-        "parentId":6
-    },
-    {
-        "id":59,
-        "in_depth_question":"Have you done things to keep weight off such as: making yourself vomit, using laxatives, enemas/water pills, strict dieting/fasting, or exercising excessively?",
-        "parentId":6
-    },
-    {
-        "id":60,
-        "in_depth_question":"Was your self-esteem strictly or mostly tied to your body appearance and weight?",
-        "parentId":6
-    },
-    {
-        "id":61,
-        "in_depth_question":"Did you feel your eating was out of control or had eating binges in which you ate a huge quantity of food in a short period of time?",
-        "parentId":6
-    },
-    {
-        "id":62,
-        "in_depth_question":"Eat much more rapidly than normal?",
-        "parentId":6
-    },
-    {
-        "id":63,
-        "in_depth_question":"Eat until you felt uncomfortably full?",
-        "parentId":6
-    },
-    {
-        "id":64,
-        "in_depth_question":"Eat large amounts of food when you didn’t feel physically hungry?",
-        "parentId":6
-    },
-    {
-        "id":65,
-        "in_depth_question":"Eat alone because you were embarrassed by how much you were eating?",
-        "parentId":6
-    },
-    {
-        "id":66,
-        "in_depth_question":"Feel disgusted with yourself, depressed or very guilty after overeating?",
-        "parentId":6
-    },
-    {
-        "id":67,
-        "in_depth_question":"Were you very upset that you couldn’t stop eating or control what you were eating?",
-        "parentId":6
-    },
-    {
-        "id":68,
-        "in_depth_question":"Felt sleepy despite having slept for at least seven hours?",
-        "parentId":7
-    },
-    {
-        "id":69,
-        "in_depth_question":"Felt so sleepy that you repeatedly fell asleep or nodded off even when you didn’t want to?",
-        "parentId":7
-    },
-    {
-        "id":70,
-        "in_depth_question":"Noticed that when you are suddenly awakened you have trouble waking up fully?",
-        "parentId":7
-    },
-    {
-        "id":71,
-        "in_depth_question":"Found yourself needing twenty or more minutes to fall asleep?",
-        "parentId":7
-    },
-    {
-        "id":72,
-        "in_depth_question":"Woken up frequently in the night or had difficulty falling back asleep after waking in the night?",
-        "parentId":7
-    },
-    {
-        "id":73,
-        "in_depth_question":"Woken up early in the morning and been unable to return to sleep?",
-        "parentId":7
-    },
-    {
-        "id":74,
-        "in_depth_question":"Missed work or school or had trouble with relationships, at work or school because you were tired?",
-        "parentId":7
-    },
-    {
-        "id":75,
-        "in_depth_question":"Noticeably more “hyper”, restless or unusually active than was typical for you?",
-        "parentId":8
-    },
-    {
-        "id":76,
-        "in_depth_question":"More self-confident, significantly smarter than everyone else, or felt like you had special powers or abilities?",
-        "parentId":8
-    },
-    {
-        "id":77,
-        "in_depth_question":"You needed much less sleep than usual and still felt rested?",
-        "parentId":8
-    },
-    {
-        "id":78,
-        "in_depth_question":"Much more talkative than usual?",
-        "parentId":8
-    },
-    {
-        "id":79,
-        "in_depth_question":"Felt that thoughts were racing through your head?",
-        "parentId":8
-    },
-    {
-        "id":80,
-        "in_depth_question":"You had trouble concentrating because you were easily distracted by things around you?",
-        "parentId":8
-    },
-    {
-        "id":81,
-        "in_depth_question":"More productive, unusually busy, or enthusiastic about work, or were more sociable or sexually active than is typical for you?",
-        "parentId":8
-    },
-    {
-        "id":82,
-        "in_depth_question":"You could have caused trouble for yourself or your family (e.g. by engaging in unrestrained buying sprees, sexual indiscretions, or foolish business investments)?",
-        "parentId":8
-    },
-    {
-        "id":83,
-        "in_depth_question":"Heart racing, pounding or skipping?",
-        "parentId":9
-    },
-    {
-        "id":84,
-        "in_depth_question":"Trembling or shaking?",
-        "parentId":9
-    },
-    {
-        "id":85,
-        "in_depth_question":"Sweating, chills or hot flashes?",
-        "parentId":9
-    },
-    {
-        "id":86,
-        "in_depth_question":"Choking, smothering, shortness of breath or trouble catching your breath?",
-        "parentId":9
-    },
-    {
-        "id":87,
-        "in_depth_question":"Pain or pressure in your chest?",
-        "parentId":9
-    },
-    {
-        "id":88,
-        "in_depth_question":"Nausea, upset stomach or diarrhea?",
-        "parentId":9
-    },
-    {
-        "id":89,
-        "in_depth_question":"Numbness or tingling in parts of your body (such as your hands or feet)?",
-        "parentId":9
-    },
-    {
-        "id":90,
-        "in_depth_question":"Fear of going crazy, or that you might die?",
-        "parentId":9
-    },
-    {
-        "id":91,
-        "in_depth_question":"Feeling you were in a dream, detached from your body or detached from things around you?",
-        "parentId":9
-    },
-    {
-        "id":92,
-        "in_depth_question":"Suffered from intrusive memories, upsetting dreams, actions, and/or feeling as if you were in the situation; or had a strong reaction when reminded of the event(s)?",
-        "parentId":10
-    },
-    {
-        "id":93,
-        "in_depth_question":"Tried to avoid re-experiencing, thinking or being reminded of the event(s)?",
-        "parentId":10
-    },
-    {
-        "id":94,
-        "in_depth_question":"Had difficulty remembering some important parts of what happened?",
-        "parentId":10
-    },
-    {
-        "id":95,
-        "in_depth_question":"Thought differently about yourself, other people, the world, or your future as a result of the event(s)?",
-        "parentId":10
-    },
-    {
-        "id":96,
-        "in_depth_question":"Blamed yourself for the event(s) for not having done something to prevent it or feel as if you should have gotten over it by now?",
-        "parentId":10
-    },
-    {
-        "id":97,
-        "in_depth_question":"Been unable to feel good about or enjoy anything or have been less interested in doing things you used to enjoy?",
-        "parentId":10
-    },
-    {
-        "id":98,
-        "in_depth_question":"Been quick-tempered or lost control of your anger?",
-        "parentId":10
-    },
-    {
-        "id":99,
-        "in_depth_question":"Been more watchful on guard, or easily startled since the event(s)?",
-        "parentId":10
-    },
-    {
-        "id":100,
-        "in_depth_question":"Had trouble concentrating or difficulty sleeping since the event(s)?",
-        "parentId":10
-    },
-    {
-        "id":101,
-        "in_depth_question":"Socializing with people that you don’t know very well such as at parties or speaking with strangers?",
-        "parentId":11
-    },
-    {
-        "id":102,
-        "in_depth_question":"Drinking, eating or writing in public, or using a public restroom?",
-        "parentId":11
-    },
-    {
-        "id":103,
-        "in_depth_question":"Talking in front of a group or participating in meetings or classes?",
-        "parentId":11
-    },
-    {
-        "id":104,
-        "in_depth_question":"Initiating or maintaining a conversation, or maintaining eye contact?",
-        "parentId":11
-    },
-    {
-        "id":105,
-        "in_depth_question":"Being assertive, such as refusing unreasonable requests or asking others to change their behaviours?",
-        "parentId":11
-    },
-    {
-        "id":106,
-        "in_depth_question":"Participating in sports, the performing arts or music?",
-        "parentId":11
-    },
-    {
-        "id":107,
-        "in_depth_question":"Entering a crowded room late?",
-        "parentId":11
-    },
-    {
-        "id":108,
-        "in_depth_question":"In any of these situations, how often have you endured it with considerable distress or avoided it as much as possible?",
-        "parentId":11
-    },
-    {
-        "id":109,
-        "in_depth_question":"Doubting you turned off appliances or closed doors, or that you completed tasks properly or accurately?",
-        "parentId":12
-    },
-    {
-        "id":110,
-        "in_depth_question":"Excessive concern with contamination such as contracting germs from doorknobs, toilets, money etc.?",
-        "parentId":12
-    },
-    {
-        "id":111,
-        "in_depth_question":"Unwanted, aggressive thoughts, horrific images or concerns that you could not control or impulses such as intentionally hurting yourself or others or destroying objects?",
-        "parentId":12
-    },
-    {
-        "id":112,
-        "in_depth_question":"Unwanted thoughts about accidentally harming someone unknowingly or because you weren’t being careful enough?",
-        "parentId":12
-    },
-    {
-        "id":113,
-        "in_depth_question":"Unwanted obscene sexual thoughts or images that you do not want to have?",
-        "parentId":12
-    },
-    {
-        "id":114,
-        "in_depth_question":"Unwanted religious thoughts or excessive concern with right and wrong or morality? ",
-        "parentId":12
-    },
-    {
-        "id":115,
-        "in_depth_question":"Overall how often were you excessively bothered by or engaged with these thoughts, impulses or images?",
-        "parentId":12
-    },
-    {
-        "id":116,
-        "in_depth_question":"Been seriously affected by major stress from situations such as relationship difficulties, homesickness, problems with a boss/teacher/co-worker/roommate, or by changes in responsibilities at home/school/work, or by health difficulties for you or your significant others?",
-        "parentId":13
-    },
-    {
-        "id":117,
-        "in_depth_question":"Struggled to cope with a stressor, such as by losing your temper or drinking more than you usually do?",
-        "parentId":13
-    },
-    {
-        "id":118,
-        "in_depth_question":"How often has your serious emotional reaction or struggle to cope interfered with your family, work, school or social life?",
-        "parentId":13
-    },
-    {
-        "id":119,
-        "health_history_question":"Have you been diagnosed with any mental health problems? (If yes, select all that apply)",
-        "dropdown" : ["Alcohol or Substance Abuse Problems","Adjustment Disorder","Anger Problems","Attention Deficit Hyperactivity Disorder (ADHD)","Bipolar Disorder","Eating Disorders","Generalized Anxiety Disorder","Depression (Major Depressive Disorder)","Obsessive Compulsive Disorder (OCD)" ,"Panic Disorder","Post-Traumatic Stress Disorder (PTSD)" , "Sleep Disorder (Insomnia)" , "Social Anxiety" , "Complex PTSD" ,"Autism Spectrum Disorder (ASD)"]
-    },
-    {
-        "id":120,
-        "health_history_question":"Have you taken any form of mental health medication in the past? (If yes, select all that apply)",
-        "dropdown" : ["Abilify (aripiprazole)" , "Antabuse (disulfram)" , "Alertec (modafinil)" , "Anafranil (clomipramine)" , "Aricept (donepezil)" , "Atarax (hydroxyzine)" , "Ativan (lorazepam)" , "Aventyl (nortriptyline)" , "Buspar (buspirone)" , "Carbolith (lithium carbonate)" , "Celexa (citalopram)" , "Cibalith-S (lithium citrate)" , "Cipralex (escitalopram)" , "Clozaril (clozapine)" , "Cogentin (benztropine)" , "Cymbalta  (duloxetine)" , "Dalmane (flurazepam)" , "Depakene (valproic acid)" , "Desyrel (trazodone)" , "Dexedrine (dextroamphetamine)" , "Dexedrine Spansules (dextroamphetamine)" , "Dextrostat (dextroamphetamine)" , "Dilantin (phenytoin)" , "Duralith (lithium carbonate)" , "Effexor, Effexor XR (venlafaxine)" , "Elavil (amitriptyline)" , "Epival (divalproex sodium)" , "Exelon (rivastigmine)" , "Fluanxol, Fluanxol inj. (flupenthixol)" , "Geodon (ziprasidone)" , "Imovane (zopiclone)" , "Inderal, Inderal LA (propranolol)" , "Kemadrin (procyclidine)" , "Klonopin (clonazepam)" , "Lamictal (lamotrigine)" , "Lectopam (bromazepam)" , "Lithane (lithium carbonate)" , "Lithmax (lithium, long-acting)" , "Luvox (fluvoxamine)" , "Mirapex (pramipexole)" , "Modecate (fluphenazine)" , "Moditen Ethanate (fluphenazine)" , "Nardil (phenelzine )" , "Neurontin (gabapentin)" , "Norpramin (desipramine)" , "Orap (pimozide)" , "Parlodel (bromocriptine)" , "Parnate (tranylcypromine)" , "Paxil (paroxetine)" ,"Prozac (fluoxetine)" , "Remeron (mirtazapine)" , "Restoril (temazepam)" , "Revia (naltrexone)" , "Risperdal (risperidone)" , "Ritalin (methyphenidate)" , "Rivotril (clonazepam)" , "Serax (oxazepam)" , "Seroquel (quetiapine)" , "Sinequan (doxepin)" , "Sonata (zalepon)" , "Starnoc (zalepon)" , "Strattera (atomoxetine)" , "Surmontil (trimipramine)" , "Symmetrel (amantadine)" , "Tegretol (carbamazepine)" , "Topamax (topiramate)" , "Trilafon (perphenazine)" , "Tryptan (tryptophan)" , "Valium (diazepam)" , "Versed (nidazolam)" , "Wellbutrin (bupropion)" , "Xanax, Xanax XR (alprazolam)" , "Zoloft (sertraline)" , "Zyban (buproprion" , "Zyprexa (olanzapine)" , "Adderall XR (Amphetamine)" , "Vyvanse (Amphetamine)" , "Concerta (Biphentin)" , "Latuda (lurasidone)" , "Invega Trinza (paliperidone palmitate)" , "Saphris (asenapine)" , "Vraylar® (cariprazine)" , "Pristiq (desvenlafaxine)" , "Fetzima (levomilnacipran)" , "Viibryd (vilazodone)" , "Trintellix (vortioxetine)"]
-    },
-    {
-        "id":121,
-        "health_history_question":"Have you received any type of therapy and/or counselling in the past? (If yes, select all that apply)",
-        "dropdown" : ["Biofeedback" , "Cognitive Behaviour Therapy (CBT)" , "Internet Based Cognitive Behavioral Therapy (iCBT)" , "Eye Movement Desensitization and Reprocessing (EMDR)" , "Group Therapy" , "Marriage and Family Therapy" , "Mindfulness-Based Cognitive Therapy (MBCT)" , "Problem-Solving Therapy" , "Psychodynamic Therapy" , "Workbook-based or Online Therapy" , "Meditation-Based Therapy" , "EAP (Employee Assistance Program) Counselling" , "Brief Interventions" , "Dialectical Behaviour Therapy (DBT)" , "Interpersonal Therapy" , "Motivational Interviewing" , "Psycho-education" , "Self-Help Groups" , "Twelve-Step Facilitation" , "Acceptance and commitment therapy (ACT) " , "Electroconvulsive Therapy (ECT) " , "rTMS" , "Ketamine Infusion" , "Intranasal Esketamine" , "Vagal Nerve Stimulation (VNS)"]
-    },
-    {
-        "id":122,
-        "health_history_question":"Have you had any physical problems before?(If yes, select all that apply)",
-        "dropdown" : ["Allergies" , "Chronic Pain" , "Head Injury" , "Major Infection" , "Major Injury (e.g. car crash)" , "Major Surgery" , "Obesity" , "Sexual Dysfunction" , "Smoking" , "Diabetes" , "Heart Disease" , "High Blood Pressure" , "Stroke" , "COPD" , "Asthma" , "Cancer" ,"Migraine" , "Sleep Apnea" , "Arthritis"]
-    },
-    {
-        "id":123,
-        "life_functions_question":"Have you ever been on any of the following disability leaves?",
-        "dropdown" : ["None" , "Sick Leave" , "Short Term Disability" , "Long Term Disability"]
-    },
-    {
-        "id":124,
-        "life_functions_question":"In the past 2 months, how many days have your problems caused you to miss work?"
-    },
-    {
-        "id":125,
-        "life_functions_question":"In the past 2 months, what percentage has your productivity decreased at work or school?"
-    },
-    {
-        "id":126,
-        "life_functions_question":"In the past 2 months, what percentage have your problems impaired your physical health?"
-    }
-
+  {
+    "id": 1,
+    "scn_question": "In the last month, for at least 2 weeks, were you depressed or down, or felt sad, empty of hopeless OR much less interested in most things for most of the day, nearly everyday?",
+    "parentId": null,
+    "disorder": "Depression"
+  },
+  {
+    "id": 2,
+    "scn_question": "Have you ever had a period of time when you were feeling “up” or “high” or “hyper” and so active or full of energy or full of yourself that you got into trouble, or that other people thought you were not your usual self for four or more consecutive days? (Do not consider times when you were intoxicated by drugs or alcohol).",
+    "parentId": null,
+    "disorder": "Bipolar Disorder"
+  },
+  {
+    "id": 3,
+    "scn_question": "In the past year have you used one or more of the following substances in order to get high or change your mood? Alcohol, marijuana, oxycodone, cocaine, heroin, and other drugs.",
+    "parentId": null,
+    "disorder": "Alcohol and Substance Abuse"
+  },
+  {
+    "id": 4,
+    "scn_question": "Have you on more than one occasion had sudden occurrences or attacks when you felt anxious or scared, even in situations that wouldn’t bother most people?",
+    "parentId": null,
+    "disorder": "Panic Disorder"
+  },
+  {
+    "id": 5,
+    "scn_question": "In the last month have you felt painfully anxious or afraid in social situations like having a conversation or meeting new people, or felt uncomfortable eating or drinking in front of strangers?",
+    "parentId": null,
+    "disorder": "Social Anxiety"
+  },
+  {
+    "id": 6,
+    "scn_question": "Have you ever witnessed, been threatened with or experienced a physical or sexual assault, or witnessed or experienced a life-threatening event such as a major disaster or fire, combat, or a serious accident?",
+    "parentId": null,
+    "disorder": "PTSD"
+  },
+  {
+    "id": 7,
+    "scn_question": "Over the past six months have you been excessively anxious or worried about several routine things almost every day?",
+    "parentId": null,
+    "disorder": "General Anxiety Disorder"
+  },
+  {
+    "id": 8,
+    "scn_question": "In the last three months have you had a significant problem with food, namely eating too little, being very concerned about your weight, or having significant difficulty with overeating?",
+    "parentId": null,
+    "disorder": "Eating Disorder"
+  },
+  {
+    "id": 9,
+    "scn_question": "For at least a six-month period have you continuously had significant problems with impulsivity, concentration, organization, or fidgeting to the extent that it has negatively affected you at work, at school, or at home?",
+    "parentId": null,
+    "disorder": "ADHD"
+  },
+  {
+    "id": 10,
+    "scn_question": "In the last month have you frequently lost control of your temper, got into arguments, yelled at, and/or shouted at others?",
+    "parentId": null,
+    "disorder": "Anger Problems"
+  },
+  {
+    "id": 11,
+    "scn_question": "In the last three months have you persistently had significant problems with the quality and/or quantity of your sleep such that it has negatively impacted your life?",
+    "parentId": null,
+    "disorder": "Sleep Disorder (Insomnia)"
+  },
+  {
+    "id": 12,
+    "scn_question": "In the past month have you been bothered by recurrent unwanted and distressing thoughts, impulses, or images OR bothered by the need to want to do unwanted repetitive actions like excessive washing or checking?",
+    "parentId": null,
+    "disorder": "OCD"
+  },
+  {
+    "id": 13,
+    "scn_question": "Within the last three months have you had a major stressful life event that is still causing you major emotional distress?",
+    "parentId": null,
+    "disorder": "Adjustment Disorder"
+  },
+  {
+    "id": 14,
+    "in_depth_question": "Had trouble falling or staying asleep, or sleeping too much?",
+    "parentId": 1
+  },
+  {
+    "id": 15,
+    "in_depth_question": "Felt tired or had little energy for most of the day?",
+    "parentId": 1
+  },
+  {
+    "id": 16,
+    "in_depth_question": "Had poor appetite or overeating?",
+    "parentId": 1
+  },
+  {
+    "id": 17,
+    "in_depth_question": "Felt fidgety or restless, or talking or moving more slowly than normal?",
+    "parentId": 1
+  },
+  {
+    "id": 18,
+    "in_depth_question": "Had trouble thinking or concentrating or making simple decisions?",
+    "parentId": 1
+  },
+  {
+    "id": 19,
+    "in_depth_question": "Felt bad about yourself or felt that you are a failure or that you let yourself or others down?",
+    "parentId": 1
+  },
+  {
+    "id": 20,
+    "in_depth_question": "Did these symptoms cause significant distress or problems at home, at work, at school, socially, in your relationships, or in some other important way, and are they a change from your previous functioning?",
+    "parentId": 1
+  },
+  {
+    "id": 21,
+    "in_depth_question": "Had thoughts that you would be better off dead or thoughts of hurting yourself?",
+    "parentId": 1
+  },
+  {
+    "id": 22,
+    "in_depth_question": "Feel physically restless or like you couldn’t sit still?",
+    "parentId": 2
+  },
+  {
+    "id": 23,
+    "in_depth_question": "Feel keyed up or on edge?",
+    "parentId": 2
+  },
+  {
+    "id": 24,
+    "in_depth_question": "Tire easily?",
+    "parentId": 2
+  },
+  {
+    "id": 25,
+    "in_depth_question": "Have trouble concentrating or have your mind go blank?",
+    "parentId": 2
+  },
+  {
+    "id": 26,
+    "in_depth_question": "Feel irritable?",
+    "parentId": 2
+  },
+  {
+    "id": 27,
+    "in_depth_question": "Have trouble falling asleep?",
+    "parentId": 2
+  },
+  {
+    "id": 28,
+    "in_depth_question": "Have tense muscles?",
+    "parentId": 2
+  },
+  {
+    "id": 29,
+    "in_depth_question": "Been disorganized or easily distracted?",
+    "parentId": 3
+  },
+  {
+    "id": 30,
+    "in_depth_question": "Had a lot of difficulties being patient or sitting still?",
+    "parentId": 3
+  },
+  {
+    "id": 31,
+    "in_depth_question": "Missed important details or made mistakes at work or school or at home, or people complained that you were careless?",
+    "parentId": 3
+  },
+  {
+    "id": 32,
+    "in_depth_question": "Started things and then dropped them without finishing them because you lost your focus or got distracted?",
+    "parentId": 3
+  },
+  {
+    "id": 33,
+    "in_depth_question": "Had trouble organizing or managing your time to stay on top of things at home, school or work?",
+    "parentId": 3
+  },
+  {
+    "id": 34,
+    "in_depth_question": "Tended to avoid or dislike tasks that require concentrating on details for extended periods such as preparing a report, writing a paper, or doing data entry?",
+    "parentId": 3
+  },
+  {
+    "id": 35,
+    "in_depth_question": "Become extremely forgetful or easily distracted by things around you or by your thoughts?",
+    "parentId": 3
+  },
+  {
+    "id": 36,
+    "in_depth_question": "Fidgeted, squirmed, tapped your foot or left your seat when you needed to sit still?",
+    "parentId": 3
+  },
+  {
+    "id": 37,
+    "in_depth_question": "Been unable to do something quietly in your spare time like reading a book or felt like you always had to be moving or doing something?",
+    "parentId": 3
+  },
+  {
+    "id": 38,
+    "in_depth_question": "Had trouble waiting for your turn in any circumstance, such as blurting out answers before the question was finished, interrupting others or waiting in line?",
+    "parentId": 3
+  },
+  {
+    "id": 39,
+    "in_depth_question": "Did you end up drinking or using more substance than you had planned when you started?",
+    "parentId": 4
+  },
+  {
+    "id": 40,
+    "in_depth_question": "Did you want to stop, cut down or control your alcohol or illegal drug use but had trouble doing so?",
+    "parentId": 4
+  },
+  {
+    "id": 41,
+    "in_depth_question": "Did you have a strong desire or urge to use alcohol or illegal drugs?",
+    "parentId": 4
+  },
+  {
+    "id": 42,
+    "in_depth_question": "Did you spend less time meeting your responsibilities at work, school, or at home because of your drinking/substance use?",
+    "parentId": 4
+  },
+  {
+    "id": 43,
+    "in_depth_question": "Has your alcohol or illegal drug use caused problems with other people?",
+    "parentId": 4
+  },
+  {
+    "id": 44,
+    "in_depth_question": "Did you continue to use alcohol or illegal drugs even though it caused or worsened physical or psychological problems?",
+    "parentId": 4
+  },
+  {
+    "id": 45,
+    "in_depth_question": "Did you get drunk or high before doing something that required coordination or concentration (like driving, climbing a ladder or operating heavy machinery)?",
+    "parentId": 4
+  },
+  {
+    "id": 46,
+    "in_depth_question": "Did you need to increase your consumption in order to experience the same feeling as when you first started regularly consuming alcohol or illegal drugs?",
+    "parentId": 4
+  },
+  {
+    "id": 47,
+    "in_depth_question": "Did you have withdrawal symptoms (such as nausea, trembling, hallucinations, lethargy, depression, and anxiety) when you cut down or stopped using alcohol or illegal drugs?",
+    "parentId": 4
+  },
+  {
+    "id": 48,
+    "in_depth_question": "On the days that you drank or used a substance, did you spend substantial time obtaining, using, or recovering from its effects?",
+    "parentId": 4
+  },
+  {
+    "id": 49,
+    "in_depth_question": "Lost your temper and ended up yelling or got into arguments?",
+    "parentId": 5
+  },
+  {
+    "id": 50,
+    "in_depth_question": "Lost control so that you shoved, hit, kicked, or threw something at a person, animal or object without physically harming or damaging them?",
+    "parentId": 5
+  },
+  {
+    "id": 51,
+    "in_depth_question": "Physically hurt a person, animal or object?",
+    "parentId": 5
+  },
+  {
+    "id": 52,
+    "in_depth_question": "Felt that you had overreacted, or others indicated you overreacted?",
+    "parentId": 5
+  },
+  {
+    "id": 53,
+    "in_depth_question": "Gotten into trouble with the police or at work or school as a result of an outburst(s)?",
+    "parentId": 5
+  },
+  {
+    "id": 54,
+    "in_depth_question": "Had outbursts that caused problems with family, friends, or co-workers?",
+    "parentId": 5
+  },
+  {
+    "id": 55,
+    "in_depth_question": "Have other people noticed or commented that you seemed to have lost significant weight or maintained an abnormally low body weight?",
+    "parentId": 6
+  },
+  {
+    "id": 56,
+    "in_depth_question": "Were you persistently very afraid that you were becoming fat?",
+    "parentId": 6
+  },
+  {
+    "id": 57,
+    "in_depth_question": "Did you try to strictly avoid high calorie or high fat foods?",
+    "parentId": 6
+  },
+  {
+    "id": 58,
+    "in_depth_question": "At your lowest weight did you still feel too fat, or that part of your body was fat, or you needed to be very thin in order to feel better about yourself?",
+    "parentId": 6
+  },
+  {
+    "id": 59,
+    "in_depth_question": "Have you done things to keep weight off such as: making yourself vomit, using laxatives, enemas/water pills, strict dieting/fasting, or exercising excessively?",
+    "parentId": 6
+  },
+  {
+    "id": 60,
+    "in_depth_question": "Was your self-esteem strictly or mostly tied to your body appearance and weight?",
+    "parentId": 6
+  },
+  {
+    "id": 61,
+    "in_depth_question": "Did you feel your eating was out of control or had eating binges in which you ate a huge quantity of food in a short period of time?",
+    "parentId": 6
+  },
+  {
+    "id": 62,
+    "in_depth_question": "Eat much more rapidly than normal?",
+    "parentId": 6
+  },
+  {
+    "id": 63,
+    "in_depth_question": "Eat until you felt uncomfortably full?",
+    "parentId": 6
+  },
+  {
+    "id": 64,
+    "in_depth_question": "Eat large amounts of food when you didn’t feel physically hungry?",
+    "parentId": 6
+  },
+  {
+    "id": 65,
+    "in_depth_question": "Eat alone because you were embarrassed by how much you were eating?",
+    "parentId": 6
+  },
+  {
+    "id": 66,
+    "in_depth_question": "Feel disgusted with yourself, depressed or very guilty after overeating?",
+    "parentId": 6
+  },
+  {
+    "id": 67,
+    "in_depth_question": "Were you very upset that you couldn’t stop eating or control what you were eating?",
+    "parentId": 6
+  },
+  {
+    "id": 68,
+    "in_depth_question": "Felt sleepy despite having slept for at least seven hours?",
+    "parentId": 7
+  },
+  {
+    "id": 69,
+    "in_depth_question": "Felt so sleepy that you repeatedly fell asleep or nodded off even when you didn’t want to?",
+    "parentId": 7
+  },
+  {
+    "id": 70,
+    "in_depth_question": "Noticed that when you are suddenly awakened you have trouble waking up fully?",
+    "parentId": 7
+  },
+  {
+    "id": 71,
+    "in_depth_question": "Found yourself needing twenty or more minutes to fall asleep?",
+    "parentId": 7
+  },
+  {
+    "id": 72,
+    "in_depth_question": "Woken up frequently in the night or had difficulty falling back asleep after waking in the night?",
+    "parentId": 7
+  },
+  {
+    "id": 73,
+    "in_depth_question": "Woken up early in the morning and been unable to return to sleep?",
+    "parentId": 7
+  },
+  {
+    "id": 74,
+    "in_depth_question": "Missed work or school or had trouble with relationships, at work or school because you were tired?",
+    "parentId": 7
+  },
+  {
+    "id": 75,
+    "in_depth_question": "Noticeably more “hyper”, restless or unusually active than was typical for you?",
+    "parentId": 8
+  },
+  {
+    "id": 76,
+    "in_depth_question": "More self-confident, significantly smarter than everyone else, or felt like you had special powers or abilities?",
+    "parentId": 8
+  },
+  {
+    "id": 77,
+    "in_depth_question": "You needed much less sleep than usual and still felt rested?",
+    "parentId": 8
+  },
+  {
+    "id": 78,
+    "in_depth_question": "Much more talkative than usual?",
+    "parentId": 8
+  },
+  {
+    "id": 79,
+    "in_depth_question": "Felt that thoughts were racing through your head?",
+    "parentId": 8
+  },
+  {
+    "id": 80,
+    "in_depth_question": "You had trouble concentrating because you were easily distracted by things around you?",
+    "parentId": 8
+  },
+  {
+    "id": 81,
+    "in_depth_question": "More productive, unusually busy, or enthusiastic about work, or were more sociable or sexually active than is typical for you?",
+    "parentId": 8
+  },
+  {
+    "id": 82,
+    "in_depth_question": "You could have caused trouble for yourself or your family (e.g. by engaging in unrestrained buying sprees, sexual indiscretions, or foolish business investments)?",
+    "parentId": 8
+  },
+  {
+    "id": 83,
+    "in_depth_question": "Heart racing, pounding or skipping?",
+    "parentId": 9
+  },
+  {
+    "id": 84,
+    "in_depth_question": "Trembling or shaking?",
+    "parentId": 9
+  },
+  {
+    "id": 85,
+    "in_depth_question": "Sweating, chills or hot flashes?",
+    "parentId": 9
+  },
+  {
+    "id": 86,
+    "in_depth_question": "Choking, smothering, shortness of breath or trouble catching your breath?",
+    "parentId": 9
+  },
+  {
+    "id": 87,
+    "in_depth_question": "Pain or pressure in your chest?",
+    "parentId": 9
+  },
+  {
+    "id": 88,
+    "in_depth_question": "Nausea, upset stomach or diarrhea?",
+    "parentId": 9
+  },
+  {
+    "id": 89,
+    "in_depth_question": "Numbness or tingling in parts of your body (such as your hands or feet)?",
+    "parentId": 9
+  },
+  {
+    "id": 90,
+    "in_depth_question": "Fear of going crazy, or that you might die?",
+    "parentId": 9
+  },
+  {
+    "id": 91,
+    "in_depth_question": "Feeling you were in a dream, detached from your body or detached from things around you?",
+    "parentId": 9
+  },
+  {
+    "id": 92,
+    "in_depth_question": "Suffered from intrusive memories, upsetting dreams, actions, and/or feeling as if you were in the situation; or had a strong reaction when reminded of the event(s)?",
+    "parentId": 10
+  },
+  {
+    "id": 93,
+    "in_depth_question": "Tried to avoid re-experiencing, thinking or being reminded of the event(s)?",
+    "parentId": 10
+  },
+  {
+    "id": 94,
+    "in_depth_question": "Had difficulty remembering some important parts of what happened?",
+    "parentId": 10
+  },
+  {
+    "id": 95,
+    "in_depth_question": "Thought differently about yourself, other people, the world, or your future as a result of the event(s)?",
+    "parentId": 10
+  },
+  {
+    "id": 96,
+    "in_depth_question": "Blamed yourself for the event(s) for not having done something to prevent it or feel as if you should have gotten over it by now?",
+    "parentId": 10
+  },
+  {
+    "id": 97,
+    "in_depth_question": "Been unable to feel good about or enjoy anything or have been less interested in doing things you used to enjoy?",
+    "parentId": 10
+  },
+  {
+    "id": 98,
+    "in_depth_question": "Been quick-tempered or lost control of your anger?",
+    "parentId": 10
+  },
+  {
+    "id": 99,
+    "in_depth_question": "Been more watchful on guard, or easily startled since the event(s)?",
+    "parentId": 10
+  },
+  {
+    "id": 100,
+    "in_depth_question": "Had trouble concentrating or difficulty sleeping since the event(s)?",
+    "parentId": 10
+  },
+  {
+    "id": 101,
+    "in_depth_question": "Socializing with people that you don’t know very well such as at parties or speaking with strangers?",
+    "parentId": 11
+  },
+  {
+    "id": 102,
+    "in_depth_question": "Drinking, eating or writing in public, or using a public restroom?",
+    "parentId": 11
+  },
+  {
+    "id": 103,
+    "in_depth_question": "Talking in front of a group or participating in meetings or classes?",
+    "parentId": 11
+  },
+  {
+    "id": 104,
+    "in_depth_question": "Initiating or maintaining a conversation, or maintaining eye contact?",
+    "parentId": 11
+  },
+  {
+    "id": 105,
+    "in_depth_question": "Being assertive, such as refusing unreasonable requests or asking others to change their behaviours?",
+    "parentId": 11
+  },
+  {
+    "id": 106,
+    "in_depth_question": "Participating in sports, the performing arts or music?",
+    "parentId": 11
+  },
+  {
+    "id": 107,
+    "in_depth_question": "Entering a crowded room late?",
+    "parentId": 11
+  },
+  {
+    "id": 108,
+    "in_depth_question": "In any of these situations, how often have you endured it with considerable distress or avoided it as much as possible?",
+    "parentId": 11
+  },
+  {
+    "id": 109,
+    "in_depth_question": "Doubting you turned off appliances or closed doors, or that you completed tasks properly or accurately?",
+    "parentId": 12
+  },
+  {
+    "id": 110,
+    "in_depth_question": "Excessive concern with contamination such as contracting germs from doorknobs, toilets, money etc.?",
+    "parentId": 12
+  },
+  {
+    "id": 111,
+    "in_depth_question": "Unwanted, aggressive thoughts, horrific images or concerns that you could not control or impulses such as intentionally hurting yourself or others or destroying objects?",
+    "parentId": 12
+  },
+  {
+    "id": 112,
+    "in_depth_question": "Unwanted thoughts about accidentally harming someone unknowingly or because you weren’t being careful enough?",
+    "parentId": 12
+  },
+  {
+    "id": 113,
+    "in_depth_question": "Unwanted obscene sexual thoughts or images that you do not want to have?",
+    "parentId": 12
+  },
+  {
+    "id": 114,
+    "in_depth_question": "Unwanted religious thoughts or excessive concern with right and wrong or morality? ",
+    "parentId": 12
+  },
+  {
+    "id": 115,
+    "in_depth_question": "Overall how often were you excessively bothered by or engaged with these thoughts, impulses or images?",
+    "parentId": 12
+  },
+  {
+    "id": 116,
+    "in_depth_question": "Been seriously affected by major stress from situations such as relationship difficulties, homesickness, problems with a boss/teacher/co-worker/roommate, or by changes in responsibilities at home/school/work, or by health difficulties for you or your significant others?",
+    "parentId": 13
+  },
+  {
+    "id": 117,
+    "in_depth_question": "Struggled to cope with a stressor, such as by losing your temper or drinking more than you usually do?",
+    "parentId": 13
+  },
+  {
+    "id": 118,
+    "in_depth_question": "How often has your serious emotional reaction or struggle to cope interfered with your family, work, school or social life?",
+    "parentId": 13
+  },
+  {
+    "id": 119,
+    "health_history_question": "Have you been diagnosed with any mental health problems? (If yes, select all that apply)",
+    "dropdown": [
+      "Alcohol or Substance Abuse Problems",
+      "Adjustment Disorder",
+      "Anger Problems",
+      "Attention Deficit Hyperactivity Disorder (ADHD)",
+      "Bipolar Disorder",
+      "Eating Disorders",
+      "Generalized Anxiety Disorder",
+      "Depression (Major Depressive Disorder)",
+      "Obsessive Compulsive Disorder (OCD)",
+      "Panic Disorder",
+      "Post-Traumatic Stress Disorder (PTSD)",
+      "Sleep Disorder (Insomnia)",
+      "Social Anxiety",
+      "Complex PTSD",
+      "Autism Spectrum Disorder (ASD)"
+    ]
+  },
+  {
+    "id": 120,
+    "health_history_question": "Have you taken any form of mental health medication in the past? (If yes, select all that apply)",
+    "dropdown": [
+      "Abilify (aripiprazole)",
+      "Antabuse (disulfram)",
+      "Alertec (modafinil)",
+      "Anafranil (clomipramine)",
+      "Aricept (donepezil)",
+      "Atarax (hydroxyzine)",
+      "Ativan (lorazepam)",
+      "Aventyl (nortriptyline)",
+      "Buspar (buspirone)",
+      "Carbolith (lithium carbonate)",
+      "Celexa (citalopram)",
+      "Cibalith-S (lithium citrate)",
+      "Cipralex (escitalopram)",
+      "Clozaril (clozapine)",
+      "Cogentin (benztropine)",
+      "Cymbalta  (duloxetine)",
+      "Dalmane (flurazepam)",
+      "Depakene (valproic acid)",
+      "Desyrel (trazodone)",
+      "Dexedrine (dextroamphetamine)",
+      "Dexedrine Spansules (dextroamphetamine)",
+      "Dextrostat (dextroamphetamine)",
+      "Dilantin (phenytoin)",
+      "Duralith (lithium carbonate)",
+      "Effexor, Effexor XR (venlafaxine)",
+      "Elavil (amitriptyline)",
+      "Epival (divalproex sodium)",
+      "Exelon (rivastigmine)",
+      "Fluanxol, Fluanxol inj. (flupenthixol)",
+      "Geodon (ziprasidone)",
+      "Imovane (zopiclone)",
+      "Inderal, Inderal LA (propranolol)",
+      "Kemadrin (procyclidine)",
+      "Klonopin (clonazepam)",
+      "Lamictal (lamotrigine)",
+      "Lectopam (bromazepam)",
+      "Lithane (lithium carbonate)",
+      "Lithmax (lithium, long-acting)",
+      "Luvox (fluvoxamine)",
+      "Mirapex (pramipexole)",
+      "Modecate (fluphenazine)",
+      "Moditen Ethanate (fluphenazine)",
+      "Nardil (phenelzine )",
+      "Neurontin (gabapentin)",
+      "Norpramin (desipramine)",
+      "Orap (pimozide)",
+      "Parlodel (bromocriptine)",
+      "Parnate (tranylcypromine)",
+      "Paxil (paroxetine)",
+      "Prozac (fluoxetine)",
+      "Remeron (mirtazapine)",
+      "Restoril (temazepam)",
+      "Revia (naltrexone)",
+      "Risperdal (risperidone)",
+      "Ritalin (methyphenidate)",
+      "Rivotril (clonazepam)",
+      "Serax (oxazepam)",
+      "Seroquel (quetiapine)",
+      "Sinequan (doxepin)",
+      "Sonata (zalepon)",
+      "Starnoc (zalepon)",
+      "Strattera (atomoxetine)",
+      "Surmontil (trimipramine)",
+      "Symmetrel (amantadine)",
+      "Tegretol (carbamazepine)",
+      "Topamax (topiramate)",
+      "Trilafon (perphenazine)",
+      "Tryptan (tryptophan)",
+      "Valium (diazepam)",
+      "Versed (nidazolam)",
+      "Wellbutrin (bupropion)",
+      "Xanax, Xanax XR (alprazolam)",
+      "Zoloft (sertraline)",
+      "Zyban (buproprion",
+      "Zyprexa (olanzapine)",
+      "Adderall XR (Amphetamine)",
+      "Vyvanse (Amphetamine)",
+      "Concerta (Biphentin)",
+      "Latuda (lurasidone)",
+      "Invega Trinza (paliperidone palmitate)",
+      "Saphris (asenapine)",
+      "Vraylar® (cariprazine)",
+      "Pristiq (desvenlafaxine)",
+      "Fetzima (levomilnacipran)",
+      "Viibryd (vilazodone)",
+      "Trintellix (vortioxetine)"
+    ]
+  },
+  {
+    "id": 121,
+    "health_history_question": "Have you received any type of therapy and/or counselling in the past? (If yes, select all that apply)",
+    "dropdown": [
+      "Biofeedback",
+      "Cognitive Behaviour Therapy (CBT)",
+      "Internet Based Cognitive Behavioral Therapy (iCBT)",
+      "Eye Movement Desensitization and Reprocessing (EMDR)",
+      "Group Therapy",
+      "Marriage and Family Therapy",
+      "Mindfulness-Based Cognitive Therapy (MBCT)",
+      "Problem-Solving Therapy",
+      "Psychodynamic Therapy",
+      "Workbook-based or Online Therapy",
+      "Meditation-Based Therapy",
+      "EAP (Employee Assistance Program) Counselling",
+      "Brief Interventions",
+      "Dialectical Behaviour Therapy (DBT)",
+      "Interpersonal Therapy",
+      "Motivational Interviewing",
+      "Psycho-education",
+      "Self-Help Groups",
+      "Twelve-Step Facilitation",
+      "Acceptance and commitment therapy (ACT) ",
+      "Electroconvulsive Therapy (ECT) ",
+      "rTMS",
+      "Ketamine Infusion",
+      "Intranasal Esketamine",
+      "Vagal Nerve Stimulation (VNS)"
+    ]
+  },
+  {
+    "id": 122,
+    "health_history_question": "Have you had any physical problems before?(If yes, select all that apply)",
+    "dropdown": [
+      "Allergies",
+      "Chronic Pain",
+      "Head Injury",
+      "Major Infection",
+      "Major Injury (e.g. car crash)",
+      "Major Surgery",
+      "Obesity",
+      "Sexual Dysfunction",
+      "Smoking",
+      "Diabetes",
+      "Heart Disease",
+      "High Blood Pressure",
+      "Stroke",
+      "COPD",
+      "Asthma",
+      "Cancer",
+      "Migraine",
+      "Sleep Apnea",
+      "Arthritis"
+    ]
+  },
+  {
+    "id": 123,
+    "life_functions_question": "Have you ever been on any of the following disability leaves?",
+    "dropdown": [
+      "None",
+      "Sick Leave",
+      "Short Term Disability",
+      "Long Term Disability"
+    ]
+  },
+  {
+    "id": 124,
+    "life_functions_question": "In the past 2 months, how many days have your problems caused you to miss work?"
+  },
+  {
+    "id": 125,
+    "life_functions_question": "In the past 2 months, what percentage has your productivity decreased at work or school?"
+  },
+  {
+    "id": 126,
+    "life_functions_question": "In the past 2 months, what percentage have your problems impaired your physical health?"
+  }
 ]
