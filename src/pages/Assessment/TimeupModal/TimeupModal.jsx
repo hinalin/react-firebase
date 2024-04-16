@@ -4,50 +4,57 @@ import "../../../components/SignInUpModal/SignInUpModal.css";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import { fs } from "../../../config/Firebase";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const TimeupModal = ({ modalIsOpen, setModalIsOpen , assessmentIdRef , userId}) => {
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
   const closeModal = () => {
     setModalIsOpen(false);
     document.body.style.overflow = "unset";
   };
 
   const handleYesClick = async () => {
-    closeModal();
-    await storeAssessmentStatusToFirestore(userId, assessmentIdRef);
-  };
-
-  const handleNoClick = async () => {
-    closeModal();
-    navigate('/')
-    await storeAssessmentStatusToFirestore(userId, assessmentIdRef);
-
-  };
-
-  const storeAssessmentStatusToFirestore = async (userId, assessmentIdRef) => {
+    // 1. Update the assessment status to "Incomplete" for the current assessment
     try {
-      if (userId) {
-        const userDocRef = doc(fs, "users", userId);
-        const assessmentDocRef = doc(
-          userDocRef,
-          "assessment",
-          assessmentIdRef.current
-        );
-  
-        await setDoc(
-          assessmentDocRef,
-          {
-            assessmentStatus: true, // Set assessment status to true
-          },
-          { merge: true }
-        );
-        console.log("Assessment status stored in Firestore successfully!");
-      }
+      const userDocRef = doc(fs, "users", userId);
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentIdRef.current
+      );
+      await setDoc(
+        assessmentDocRef,
+        {
+          assessmentStatus: "Incomplete", // Set the status to Incomplete
+        },
+        { merge: true }
+      );
+      console.log("Assessment status updated to Incomplete!");
     } catch (error) {
-      console.error("Error storing assessment status in Firestore: ", error);
+      console.error("Error updating assessment status: ", error);
     }
+  
+    // 2. Generate a new assessment ID
+    const newAssessmentId = uuidv4();
+  
+    // 3. Store the new assessment ID in assessmentIdRef
+    assessmentIdRef.current = newAssessmentId;
+  
+    // 4. Store the new assessment ID in local storage
+    localStorage.setItem("assessmentId", newAssessmentId);
+  
+    // 5. Redirect the user to the assessment page
+    navigate("/");
+  
+    // Close the modal
+    closeModal();
   };
+  
+  
+
   return (
     <Modal
       ariaHideApp={false}
@@ -105,19 +112,6 @@ const TimeupModal = ({ modalIsOpen, setModalIsOpen , assessmentIdRef , userId}) 
               style={{ padding: "10px 15px", border: "none", width: "100px" }}
             >
               Yes
-            </button>
-            <button
-              type="button"
-              className="homeNavBtn"
-              onClick={handleNoClick}
-              style={{
-                cursor: "pointer",
-                padding: "10px 15px",
-                border: "none",
-                width: "100px",
-              }}
-            >
-              No
             </button>
           </div>
         </div>

@@ -1,37 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
 import "../Question.css";
-import jsonData from "../../../data/QuestionsData.json";
 import Select from "react-select";
 import { Slider } from "@mui/material";
 import { useFirebase } from "../../../context/FirebaseContext";
 import { fs } from "../../../config/Firebase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 const LifeFunctionsQuestions = ({
   setActiveQuestion,
   setLifeFunctionProgress,
   nextClicked,
   setNextClicked,
-  assessmentCounter,
-  setAssessmentStatus
-  
+  assessmentIdRef,
+  setAssessmentStatus,
+  answers,
+  setAnswers,
+  lifeFunctionQuestions,
+  focusedQuestion,
+  setFocusedQuestion,
+  setPreviousClicked
 }) => {
-  const [focusedQuestion, setFocusedQuestion] = useState(null);
-  const [answers, setAnswers] = useState({});
-
   const { user } = useFirebase();
   const userId = user ? user.uid : null;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Find the index of the first unanswered question
     const firstUnansweredIndex = lifeFunctionQuestions.findIndex(
       (question) => !answers[question.id]
     );
-
-    // If there's a first unanswered question, focus on it
     if (firstUnansweredIndex !== -1) {
       setFocusedQuestion(firstUnansweredIndex);
     }
@@ -41,22 +40,26 @@ const LifeFunctionsQuestions = ({
     const numQuestions = lifeFunctionQuestions.length;
     const numAnsweredQuestions = Object.keys(answers).length;
     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
-    setLifeFunctionProgress(newProgress);
+    setLifeFunctionProgress(Math.min(newProgress, 100));
   }, [answers]);
 
   useEffect(() => {
     if (userId) {
-      fetchUserAnswersFromFirestore(userId);
+      fetchUserAnswersFromFirestore(userId, assessmentIdRef, setAnswers);
     }
   }, [userId]);
 
-  const fetchUserAnswersFromFirestore = async (userId) => {
+  const fetchUserAnswersFromFirestore = async (
+    userId,
+    assessmentIdRef,
+    setAnswers
+  ) => {
     try {
       const userDocRef = doc(fs, "users", userId);
       const assessmentDocRef = doc(
         userDocRef,
         "assessment",
-        assessmentCounter.toString()
+        assessmentIdRef.current
       );
       const answersRef = collection(assessmentDocRef, "answers-life-functions");
       const userAnswersSnapshot = await getDocs(answersRef);
@@ -64,14 +67,12 @@ const LifeFunctionsQuestions = ({
       userAnswersSnapshot.forEach((doc) => {
         loadedAnswers[doc.id] = doc.data().answer;
       });
-      setAnswers(loadedAnswers);
+      setAnswers(loadedAnswers); // Set the answers state with fetched answers
     } catch (error) {
       console.error("Error loading user answers from Firestore: ", error);
     }
   };
-
   const handleQuestionClick = (index) => {
-    // setFocusedQuestion(index === focusedQuestion ? index : index);
     if (focusedQuestion !== index) {
       setFocusedQuestion(index);
     }
@@ -79,37 +80,58 @@ const LifeFunctionsQuestions = ({
 
   const handlePreviousPage = () => {
     setActiveQuestion("health-history");
+    setNextClicked(false);
+    setPreviousClicked(true);
   };
 
-  const handleFinishButtonClick = () => {
-    // Find the index of the first unanswered question
+  const handleFinishButtonClick = async () => {
     setNextClicked(true);
     const firstUnansweredIndex = lifeFunctionQuestions.findIndex(
       (question) => !answers[question.id]
     );
-
-    // If there's a first unanswered question, focus on it
     if (firstUnansweredIndex !== -1) {
       setFocusedQuestion(firstUnansweredIndex);
     } else {
-      // Handle the case when all questions are answered
-      // Perform any necessary actions here
       console.log("All questions answered. Proceed to finish.");
       setNextClicked(false);
-      setAssessmentStatus('Completed')
+      setAssessmentStatus("Completed");
+      navigate("/Summary");
+
     }
-    navigate('/Summary')
+    try {
+      const userDocRef = doc(fs, "users", userId);
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentIdRef.current
+      );
+      await setDoc(
+        assessmentDocRef,
+        {
+          assessmentStatus: "Completed",
+        },
+        { merge: true }
+      ); // Merge with existing data if any
+      console.log("Start time and assessment status stored in Firestore!");
+    } catch (error) {
+      console.error("Error storing start time and assessment status: ", error);
+    }
+    const newAssessmentId = uuidv4();
+  
+    // Store the new assessment ID in local storage
+    localStorage.setItem("assessmentId", newAssessmentId);
+  
+    // Store the new assessment start time in Firestore
+    try {
+      const userDocRef = doc(fs, "users", userId);
+      const assessmentDocRef = doc(userDocRef, "assessment", newAssessmentId);
+      console.log("New assessment data stored in Firestore!");
+    } catch (error) {
+      console.error("Error storing new assessment data: ", error);
+    }
+  
   };
-
-  // const handleFinishButtonClick = async () => {
-  //   const userDocRef = doc(fs, "users", userId);
-  //   await setDoc(userDocRef, { formCompleted: true }, { merge: true });
-  // };
-
-  const lifeFunctionQuestions = jsonData.filter(
-    (question) => question.life_functions_question
-  );
-
+  
   const handleQuestionSubmit = async (questionId, value) => {
     setAnswers({ ...answers, [questionId]: value });
     await storeAnswerToFirestore(questionId, value);
@@ -117,10 +139,8 @@ const LifeFunctionsQuestions = ({
     const nextUnansweredIndex = lifeFunctionQuestions.findIndex(
       (question, index) => !answers[question.id] && index > focusedQuestion
     );
-    console.log(nextUnansweredIndex, "nextUnansweredIndex");
-    if (nextUnansweredIndex !== 0) {
+    if (nextUnansweredIndex !== -1) {
       setFocusedQuestion(nextUnansweredIndex);
-      console.log(focusedQuestion, "focusedQuestion now");
       setNextClicked(false);
     }
   };
@@ -139,7 +159,7 @@ const LifeFunctionsQuestions = ({
       const assessmentDocRef = doc(
         userDocRef,
         "assessment",
-        assessmentCounter.toString()
+        assessmentIdRef.current
       );
       const answersRef = collection(assessmentDocRef, "answers-life-functions");
       const answerDocRef = doc(answersRef, questionId.toString());
@@ -161,14 +181,6 @@ const LifeFunctionsQuestions = ({
           {lifeFunctionQuestions.map((question, index) => (
             <div
               key={question.id}
-              // className={`unanswered-card ${
-              //   focusedQuestion === index ? "focused-card" : ""
-              // }
-              // ${
-              //   nextClicked === true && focusedQuestion === index
-              //     ? "border-red"
-              //     : ""
-              // }`}
               className={`unanswered-card ${
                 focusedQuestion === index ? "focused-card" : ""
               }  ${
@@ -210,13 +222,13 @@ const LifeFunctionsQuestions = ({
                   ) : (
                     <div>
                       <Slider
-                        defaultValue={answers[question.id] || 0}
-                        aria-label="Default"
-                        valueLabelDisplay="auto"
-                        style={{ height: "10px", color: "#33ca8f" }}
+                        value={answers[question.id] || 0}
                         onChange={(event, value) =>
                           handleSliderChange(value, question.id)
                         }
+                        aria-label="Default"
+                        valueLabelDisplay="auto"
+                        style={{ height: "10px", color: "#33ca8f" }}
                       />
                     </div>
                   )}

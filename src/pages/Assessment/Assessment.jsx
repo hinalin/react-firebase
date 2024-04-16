@@ -9,9 +9,14 @@ import IndepthQuestion from "./Indepth/InDepthQuestions";
 import HealthHistoryQuestion from "./Helthhistory/HelthHistoryQuestions";
 import LifeFunctionQuestion from "./Lifefunction/LifeFunctionsQuestions";
 import { useFirebase } from "../../context/FirebaseContext";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, getDocs } from "firebase/firestore";
 import { fs } from "../../config/Firebase";
 import jsonData from "../../data/QuestionsData.json";
+import Loader from '../../assets/gif/loader.gif'
+import {
+  getHealthHistoryQuestions,
+  getScreeningQuestions,
+} from "../../utils/utils";
 
 function Assessment({
   filteredQuestions,
@@ -25,8 +30,14 @@ function Assessment({
   assessmentIdRef,
   selectedQuestions,
   setSelectedQuestions,
-  setSelectedDisorders,
   selectedDisorders,
+  setSelectedDisorders,
+
+  HealthHistoryQuestions,
+  lifeFunctionQuestions,
+
+  selectedOptions,
+  setSelectedOptions,
 }) {
   const [activeQuestion, setActiveQuestion] = useState("screening");
   const [stepCount, setStepCount] = useState(0);
@@ -35,32 +46,22 @@ function Assessment({
   const [indepthProgress, setIndepthProgress] = useState(0);
   const [healthHistoryProgress, setHealthHistoryProgress] = useState(0);
   const [lifeFunctionProgress, setLifeFunctionProgress] = useState(0);
-  const [screeningQuestions, setScreeningQuestions] = useState([]);
   const [activeStep, setActiveStep] = useState(1);
   const [answeredQuestions, setAnsweredQuestions] = useState({});
   const [nextClicked, setNextClicked] = useState(false);
-  // const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  // const [remainingTime, setRemainingTime] = useState(0);
+  const [focusedQuestion, setFocusedQuestion] = useState(null);
+  const [previousClicked, setPreviousClicked] = useState(false);
 
-  // const [assessmentStatus, setAssessmentStatus] = useState("");
-  // const [answers, setAnswers] = useState({});
+  const [screeningQuestions, setScreeningQuestions] = useState([]);
 
-  const { user } = useFirebase();
+  const { user, loading, setLoading } = useFirebase();
   const userId = user ? user.uid : null;
-  // const assessmentIdRef = useRef(null);
   function filterArrayByParentId(parentId) {
     return jsonData.filter((item) => item.parentId === Number(parentId));
   }
-
-  const getAssessmentCounter = () => {
-    const storedAssessmentCounter = localStorage.getItem("assessmentCounter");
-    return storedAssessmentCounter ? parseInt(storedAssessmentCounter) : 1;
-  };
-
-  const assessmentCounter = getAssessmentCounter();
-
   const loadUserAnswersFromFirestore = async () => {
+    setLoading(true);
     try {
       if (userId) {
         const userDocRef = doc(fs, "users", userId);
@@ -70,13 +71,33 @@ function Assessment({
           assessmentIdRef.current
         );
         const answersRef = collection(assessmentDocRef, "answers_screenings");
+
+        const inDepthAnserRef = collection(assessmentDocRef, "answers_indepth");
+        const hhAnserRef = collection(
+          assessmentDocRef,
+          "answers_health-history"
+        );
+        const lfAnserRef = collection(
+          assessmentDocRef,
+          "answers_life-functions"
+        );
+
         const userAnswersSnapshot = await getDocs(answersRef);
+        const userInDepthAnswersSnapshot = await getDocs(inDepthAnserRef);
+        const userHHAnswersSnapshot = await getDocs(hhAnserRef);
+        const userLFAnswersSnapshot = await getDocs(lfAnserRef);
+
         const loadedAnswers = [];
         const answer = {};
         userAnswersSnapshot.forEach((doc) => {
           loadedAnswers.push(doc.data());
           answer[doc.id] = doc.data().answer;
         });
+        console.log(userAnswersSnapshot.size, "userAnswersSnapshoteee");
+        console.log(
+          userInDepthAnswersSnapshot.size,
+          "userInDepthAnswersSnapshot"
+        );
         const selectedChildQuestion = Object.keys(answer).filter(
           (key) => answer[key] === "YES"
         );
@@ -85,35 +106,73 @@ function Assessment({
         selectedChildQuestion.forEach((parentId) => {
           const filteredArray = filterArrayByParentId(parentId);
           filteredArrays[parentId] = filteredArray;
-          console.log(filteredArray, "fffffffffffffffff");
+          console.log(filteredArray,'filteredArraysssss');
         });
         setStepCount(Object.keys(filteredArrays).length);
         setChildQuestions(filteredArrays);
-        console.log(selectedChildQuestion, "sssssssssssssssssssssssssss");
         setScreeningQuestions(loadedAnswers);
-        console.log(setScreeningQuestions, "scrrrrrrrrrrrrrrrr");
+
+        const totalInDepthQuestionsCount = Object.keys(filteredArrays).flatMap(
+          (key) => filteredArrays[key]
+        ).length;
+
+        console.log(totalInDepthQuestionsCount, "totalInDepthQuestionsCount");
+
+        // LOGIC FOR ACTIVR QUESTION GROUP
+        if (
+          userLFAnswersSnapshot.size > 0 ||
+          getHealthHistoryQuestions().length === userHHAnswersSnapshot.size
+        ) {
+          setActiveQuestion("life-function");
+          setProgress(100);
+          setIndepthProgress(100)
+          setHealthHistoryProgress(100)
+        } else if (
+          userHHAnswersSnapshot.size > 0 ||
+          (userAnswersSnapshot.size > 0 && totalInDepthQuestionsCount === userInDepthAnswersSnapshot.size)
+        ) {
+          setActiveQuestion("health-history");
+          setProgress(100);
+          setIndepthProgress(100);
+        } else if (
+          userInDepthAnswersSnapshot.size > 0 ||
+          userAnswersSnapshot.size > 0 && userAnswersSnapshot.size === getScreeningQuestions().length
+        ) {
+          setActiveQuestion("indepth");
+          setProgress(100)
+        } else {
+          setActiveQuestion("screening");
+        }
+        console.log(totalInDepthQuestionsCount, "totalInDepthQuestionsCount");
+        console.log(
+          userInDepthAnswersSnapshot.size,
+          "userInDepthAnswersSnapshot"
+        );
+        console.log(
+          getScreeningQuestions().length,
+          "getScreeningQuestions().length"
+        );
       }
     } catch (error) {
       console.error("Error loading user answers from Firestore: ", error);
+    } finally {
+      setLoading(false); // Stop loader regardless of success or error
     }
   };
-
-  // AHIYAA filteredArray PARTHI KADACH HEALTHHISTORY LAVI SKASSEEEEE JO INDEPTH MA ANS APAII GYA HSE TOOOOO
 
   useEffect(() => {
     if (userId) {
       loadUserAnswersFromFirestore();
+      if (assessmentIdRef.current) {
+        setActiveQuestion("screening");
+      }
     }
   }, [userId]);
 
-  useEffect(() => {
-    if (screeningQuestions.length === 13) {
-      setActiveQuestion("indepth");
-    }
-  }, [screeningQuestions]);
-  console.log(screeningQuestions.length, "lengthhhhhhhhh");
+  if (loading) {
+    return <img className="d-block mx-auto" src={Loader} alt="" />; // Show loading message
+  }
 
-  
   return (
     <>
       <div className="StartAssessment-template">
@@ -160,7 +219,6 @@ function Assessment({
                     setStepCount={setStepCount}
                     setChildQuestions={setChildQuestions}
                     setProgress={setProgress}
-                    setScreeningQuestions={setScreeningQuestions}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
                     assessmentIdRef={assessmentIdRef}
@@ -172,6 +230,9 @@ function Assessment({
                     setSelectedQuestions={setSelectedQuestions}
                     selectedDisorders={selectedDisorders}
                     setSelectedDisorders={setSelectedDisorders}
+                    focusedQuestion={focusedQuestion}
+                    setFocusedQuestion={setFocusedQuestion}
+                    setScreeningQuestions={setScreeningQuestions}
                   />
                 )}
                 {activeQuestion === "indepth" && (
@@ -187,7 +248,13 @@ function Assessment({
                     setAnsweredQuestions={setAnsweredQuestions}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
-                    assessmentCounter={assessmentCounter}
+                    assessmentIdRef={assessmentIdRef}
+                    focusedQuestion={focusedQuestion}
+                    setFocusedQuestion={setFocusedQuestion}
+                    selectedDisorders={selectedDisorders}
+                    setSelectedDisorders={setSelectedDisorders}
+                    answers={answers}
+                    setAnswers={setAnswers}
                   />
                 )}
                 {activeQuestion === "health-history" && (
@@ -200,7 +267,16 @@ function Assessment({
                     childQuestions={childQuestions}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
-                    assessmentCounter={assessmentCounter}
+                    HealthHistoryQuestions={HealthHistoryQuestions}
+                    answers={answers}
+                    setAnswers={setAnswers}
+                    assessmentIdRef={assessmentIdRef}
+                    selectedOptions={selectedOptions}
+                    setSelectedOptions={setSelectedOptions}
+                    focusedQuestion={focusedQuestion}
+                    setFocusedQuestion={setFocusedQuestion}
+                    previousClicked={previousClicked}
+                    setPreviousClicked={setPreviousClicked}
                   />
                 )}
                 {activeQuestion === "life-function" && (
@@ -209,9 +285,16 @@ function Assessment({
                     setLifeFunctionProgress={setLifeFunctionProgress}
                     nextClicked={nextClicked}
                     setNextClicked={setNextClicked}
-                    assessmentCounter={assessmentCounter}
                     assessmentStatus={assessmentStatus}
                     setAssessmentStatus={setAssessmentStatus}
+                    lifeFunctionQuestions={lifeFunctionQuestions}
+                    assessmentIdRef={assessmentIdRef}
+                    answers={answers}
+                    setAnswers={setAnswers}
+                    focusedQuestion={focusedQuestion}
+                    setFocusedQuestion={setFocusedQuestion}
+                    previousClicked={previousClicked}
+                    setPreviousClicked={setPreviousClicked}
                   />
                 )}
               </div>

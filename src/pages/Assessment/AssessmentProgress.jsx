@@ -41,22 +41,48 @@ const AssessmentProgress = ({
       lifeFunctionProgressValue) /
       4
   );
+  
   let startTime = localStorage.getItem(`startTime_${userId}`);
 
+  // const fetchStartTime = async () => {
+  //   try {
+  //     if (!startTime) {
+  //       startTime = new Date().toISOString();
+  //       localStorage.setItem(`startTime_${userId}`, startTime);
+  //     }
+  //     startTime = new Date(startTime);
+  //     const elapsedTime = (new Date() - startTime) / 1000;
+  //     const newRemainingTime = Math.max(12 * 60 * 60 - elapsedTime, 0);
+  //     setRemainingTime(newRemainingTime);
+  //   } catch (error) {
+  //     console.error("Error fetching start time:", error);
+  //   }
+  // };
+  
   const fetchStartTime = async () => {
     try {
+      // Check if there is a start time in local storage for the current assessment ID
+      const assessmentStartTimeKey = `startTime_${userId}_${assessmentIdRef.current}`;
+      let startTime = localStorage.getItem(assessmentStartTimeKey);
+  
+      // If no start time exists for the current assessment, initialize a new start time
       if (!startTime) {
         startTime = new Date().toISOString();
-        localStorage.setItem(`startTime_${userId}`, startTime);
+        // Store the new start time in local storage for the current assessment
+        localStorage.setItem(assessmentStartTimeKey, startTime);
       }
+  
+      // Update the remaining time based on the elapsed time
       startTime = new Date(startTime);
       const elapsedTime = (new Date() - startTime) / 1000;
-      const newRemainingTime = Math.max(12 * 60 * 60 - elapsedTime, 0);
+      const newRemainingTime = Math.max(12 * 60 *60 - elapsedTime, 0);
       setRemainingTime(newRemainingTime);
     } catch (error) {
       console.error("Error fetching start time:", error);
     }
   };
+  
+  
   useEffect(() => {
     fetchStartTime();
   }, [userId]);
@@ -109,20 +135,49 @@ const AssessmentProgress = ({
 
   // Format date time
 
+  // const storeProgressToFirestore = async () => {
+  //   try {
+  //     if (userId) {
+  //       const userDocRef = doc(fs, "users", userId);
+  //       const assessmentDocRef = doc(
+  //         userDocRef,
+  //         "assessment",
+  //         assessmentIdRef.current
+  //       );
+
+  //       await setDoc(
+  //         assessmentDocRef,
+  //         {
+  //           startTime: formatDateTime(startTime),
+  //         },
+  //         { merge: true }
+  //       );
+  //       console.log("Progress stored in Firestore successfully!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error storing progress in Firestore: ", error);
+  //   }
+  // };
+
   const storeProgressToFirestore = async () => {
     try {
       if (userId) {
+        // Get the start time for the current assessment from local storage
+        const assessmentStartTimeKey = `startTime_${userId}_${assessmentIdRef.current}`;
+        const startTime = localStorage.getItem(assessmentStartTimeKey);
+  
         const userDocRef = doc(fs, "users", userId);
         const assessmentDocRef = doc(
           userDocRef,
           "assessment",
           assessmentIdRef.current
         );
-
+  
         await setDoc(
           assessmentDocRef,
           {
-            startTime: formatDateTime(startTime),
+            // Store the start time in Firestore
+            startTime: formatDateTime(new Date(startTime)),
           },
           { merge: true }
         );
@@ -132,7 +187,7 @@ const AssessmentProgress = ({
       console.error("Error storing progress in Firestore: ", error);
     }
   };
-
+  
   useEffect(() => {
     storeProgressToFirestore();
   }, [userId, startTime]);

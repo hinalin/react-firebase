@@ -3,16 +3,15 @@ import { AiOutlineCheck } from "react-icons/ai";
 import "../Question.css";
 import jsonData from "../../../data/QuestionsData.json";
 import { fs } from "../../../config/Firebase";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc, getDoc } from "firebase/firestore";
 import { useFirebase } from "../../../context/FirebaseContext";
+import { v4 as uuidv4 } from "uuid";
 
 const ScreeningQuestions = ({
   setStepCount,
   setProgress,
   setActiveQuestion,
   setChildQuestions,
-  nextClicked,
-  setNextClicked,
   assessmentIdRef,
   setFilteredQuestions,
   filteredQuestions,
@@ -21,41 +20,34 @@ const ScreeningQuestions = ({
   selectedQuestions,
   setSelectedQuestions,
   selectedDisorders,
-  setSelectedDisorders
+  setSelectedDisorders,
+  nextClicked,
+  setNextClicked,
+  focusedQuestion,
+  setFocusedQuestion,
 }) => {
-  const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [showChildQuestions, setShowChildQuestions] = useState(false);
-  const [assessmentCounter, setAssessmentCounter] = useState(1);
+  // const [childQuestionsByStep, setChildQuestionsByStep] = useState({}); // State to hold child questions
 
   const [loading, setLoading] = useState(true);
   const { user } = useFirebase();
   const containerRef = useRef(null);
   const userId = user ? user.uid : null;
   useEffect(() => {
-        // Retrieve the assessment counter value from local storage
-        const storedAssessmentCounter = localStorage.getItem("assessmentCounter");
-    
-        // If the stored value exists, use it, otherwise use the default value of 1
-        const initialCounter = storedAssessmentCounter
-          ? parseInt(storedAssessmentCounter, 10)
-          : 1;
-    
-        setAssessmentCounter(initialCounter);
-    
-        // Function to generate a new assessment ID
-        const generateAssessmentId = () => {
-          // Set the assessment ID
-          assessmentIdRef.current = initialCounter.toString();
-        };
-    
-        // Initialize assessment ID when component mounts
-        generateAssessmentId();
-      }, []);
-    
-      useEffect(() => {
-        // Store the current assessment counter value in local storage
-        localStorage.setItem("assessmentCounter", assessmentCounter.toString());
-      }, [assessmentCounter]);
+    // Generate a UUID when the component mounts
+    assessmentIdRef.current = uuidv4();
+  }, []);
+
+  useEffect(() => {
+    // Check if an assessmentIdRef exists in local storage
+    const storedAssessmentId = localStorage.getItem("assessmentId");
+
+    // If an assessmentIdRef exists, use it, otherwise generate a new one
+    assessmentIdRef.current = storedAssessmentId || uuidv4();
+
+    // Store the current assessmentIdRef value in local storage
+    localStorage.setItem("assessmentId", assessmentIdRef.current);
+  }, []);
 
   useEffect(() => {
     // Find the index of the first unanswered question
@@ -66,7 +58,8 @@ const ScreeningQuestions = ({
       setFocusedQuestion(nextUnansweredIndex);
     }
     if (nextUnansweredIndex !== -1) {
-      const focusedElement = containerRef.current.children[nextUnansweredIndex];
+      const focusedElement =
+        containerRef.current?.children[nextUnansweredIndex];
       if (focusedElement) {
         focusedElement.scrollIntoView({
           behavior: "smooth",
@@ -75,6 +68,8 @@ const ScreeningQuestions = ({
       }
     }
   }, [answers, filteredQuestions]);
+
+  console.log(answers, "screeninganswers");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,6 +89,10 @@ const ScreeningQuestions = ({
   }, []);
 
   useEffect(() => {
+    setSelectedDisorders([]);
+    setChildQuestions({});
+    setAnswers({});
+    setSelectedQuestions([]);
     loadUserAnswersFromFirestore();
   }, [userId]);
 
@@ -101,16 +100,19 @@ const ScreeningQuestions = ({
     const numQuestions = filteredQuestions.length;
     const numAnsweredQuestions = Object.keys(answers).length;
     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
-    setProgress(newProgress);
+    setProgress(Math.min(newProgress, 100));
+    console.log(numAnsweredQuestions, "numAnsweredQuestions");
   }, [answers]);
 
-  
-  
-  const storeAnswerToFirestore = async (questionId, answer, buttonState) => {
+  const storeAnswerToFirestore = async (questionId, answer, buttonState , disorder) => {
     try {
       const userDocRef = doc(fs, "users", userId);
       // Assuming you have an 'assessment' document under the user document
-      const assessmentDocRef = doc(userDocRef, "assessment", assessmentIdRef.current);
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentIdRef.current
+      );
       const answersRef = collection(assessmentDocRef, "answers_screenings");
       const answerDocRef = doc(answersRef, questionId.toString());
       await setDoc(answerDocRef, {
@@ -120,24 +122,47 @@ const ScreeningQuestions = ({
         type: "screening",
       });
       console.log("Answer stored in Firestore successfully!");
-      console.log(assessmentIdRef.current , 'currentIddddddddddddd');
+
+      if (answer === "YES" && disorder) {
+        await setDoc(
+          assessmentDocRef,
+          { [questionId]: { disorder: disorder} },
+          { merge: true }
+        );
+        console.log("Disorder information stored in Firestore successfully!");
+      }
     } catch (error) {
       console.error("Error storing answer in Firestore: ", error);
     }
   };
-  
 
   const loadUserAnswersFromFirestore = async () => {
     try {
       if (userId) {
         const userDocRef = doc(fs, "users", userId);
-        const assessmentDocRef = doc(userDocRef, "assessment", assessmentIdRef.current);
+        const assessmentDocRef = doc(
+          userDocRef,
+          "assessment",
+          assessmentIdRef.current
+        );
         const answersRef = collection(assessmentDocRef, "answers_screenings");
         const userAnswersSnapshot = await getDocs(answersRef);
         const loadedAnswers = {};
         userAnswersSnapshot.forEach((doc) => {
           loadedAnswers[doc.id] = doc.data().answer;
         });
+        const disordersSnapshot = await getDoc(assessmentDocRef);
+        const disordersData = disordersSnapshot.data();
+        if (disordersData) {
+          const disorders = Object.keys(disordersData)
+            .filter((key) => key !== "screeningFormCompleted")
+            .map((key) => ({
+              questionId: key,
+              disorder: disordersData[key].disorder,
+            }));
+          // Update selectedDisorders state
+          setSelectedDisorders(disorders);
+        }
         setAnswers(loadedAnswers);
       }
     } catch (error) {
@@ -145,19 +170,21 @@ const ScreeningQuestions = ({
     }
   };
 
-
   const handleQuestionClick = (index) => {
     setFocusedQuestion(index === focusedQuestion ? null : index);
   };
-
-
-
-  const handleYesClick = async (questionId, parentId , disorder) => {
+  const handleYesClick = async (questionId, disorder) => {
+    const question = filteredQuestions.find((q) => q.id === questionId);
+    if (question && question.disorder) {
+      const newDisorder = { id: questionId, disorder: disorder }; // Use the parent ID as the ID for the disorder object
+      setSelectedDisorders([...selectedDisorders, newDisorder]); // Add the new disorder to the selected disorders array
+    }
     setAnswers({ ...answers, [questionId]: "YES" });
-    // setSelectedQuestions([...selectedQuestions, questionId]);
-    setSelectedQuestions([...selectedQuestions, { id: questionId, disorder }]);
+    setSelectedQuestions([...selectedQuestions, questionId]);
     setFocusedQuestion(null);
-    await storeAnswerToFirestore(questionId, "YES", true);
+    console.log(selectedDisorders, answers, "selectedDisorderssssssssss");
+    await storeAnswerToFirestore(questionId, "YES", true, disorder);
+
     setNextClicked(false);
   };
 
@@ -165,10 +192,10 @@ const ScreeningQuestions = ({
     setAnswers({ ...answers, [questionId]: "NO" });
     setFocusedQuestion(null);
     await storeAnswerToFirestore(questionId, "NO", false);
-    setNextClicked(false);
   };
 
-  const handleNextButtonClick = () => {
+  const handleNextButtonClick = async () => {
+    setNextClicked(true);
     const unansweredQuestions = filteredQuestions.filter(
       (question) => !answers.hasOwnProperty(question.id)
     );
@@ -177,36 +204,72 @@ const ScreeningQuestions = ({
       (question) => answers[question.id] === "NO"
     );
 
-    if (unansweredQuestions.length > 0) {
-      // Focus on the first unanswered question
-      const firstUnansweredQuestion = unansweredQuestions[0];
-      const index = filteredQuestions.findIndex(
-        (question) => question.id === firstUnansweredQuestion.id
+    const allQuestionsAnswered = unansweredQuestions.length === 0;
+
+    try {
+      const userDocRef = doc(fs, "users", userId);
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentIdRef.current
       );
-      setFocusedQuestion(index);
-      setShowChildQuestions(false);
-      setNextClicked(true);
-      const focusedElement = containerRef.current.children[index];
-      if (focusedElement) {
-        focusedElement.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
-    } else if (allNo) {
-      setActiveQuestion("health-history");
-    } else {
+      await setDoc(
+        assessmentDocRef,
+        { screeningFormCompleted: true },
+        { merge: true }
+      );
+      console.log("screeningFormCompleted status updated in Firestore!");
+    } catch (error) {
+      console.error(
+        "Error updating screeningFormCompleted status in Firestore: ",
+        error
+      );
+    }
+
+    if (allQuestionsAnswered) {
       setShowChildQuestions(true);
       setStepCount(Object.keys(childQuestionsByStep).length);
       setChildQuestions(childQuestionsByStep);
       setActiveQuestion("indepth");
       setNextClicked(false);
+    } else if (allNo) {
+      setActiveQuestion("health-history");
+    } else {
+      if (unansweredQuestions.length > 0) {
+        const firstUnansweredQuestion = unansweredQuestions[0];
+        const index = filteredQuestions.findIndex(
+          (question) => question.id === firstUnansweredQuestion.id
+        );
+        setFocusedQuestion(index);
+        const focusedElement = containerRef.current.children[index];
+        if (focusedElement) {
+          focusedElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }
+      setShowChildQuestions(false);
     }
   };
 
   const isParentQuestionSelected = (parentId) => {
     return selectedQuestions.includes(parentId);
   };
+
+  // const groupChildQuestionsByParentId = () => {
+  //   const groupedQuestions = {};
+
+  //   jsonData.forEach((question) => {
+  //     if (question.parentId && isParentQuestionSelected(question.parentId)) {
+  //       if (!groupedQuestions[question.parentId]) {
+  //         groupedQuestions[question.parentId] = [];
+  //       }
+  //       groupedQuestions[question.parentId].push(question);
+  //     }
+  //   });
+  //   return groupedQuestions;
+  // };
 
   const groupChildQuestionsByParentId = () => {
     const groupedQuestions = {};
@@ -223,8 +286,7 @@ const ScreeningQuestions = ({
   };
 
   const childQuestionsByStep = groupChildQuestionsByParentId();
-
-  console.log(childQuestionsByStep, "childQuestionsByStepppppppppppppppppp");
+  console.log(childQuestionsByStep, "childQuestionsByStepppppp");
 
   return (
     <>
@@ -238,11 +300,14 @@ const ScreeningQuestions = ({
                 key={question.id}
                 className={`unanswered-card ${
                   focusedQuestion === index ? "focused-card" : ""
-                } ${
-                  nextClicked && focusedQuestion === index ? "border-red" : ""
-                }`}
+                }
+                ${nextClicked && focusedQuestion === index ? "border-red" : ""}
+                `}
                 onClick={() => handleQuestionClick(index)}
               >
+                {/* {focusedQuestion === index && !answers[question.id] && (
+                                <div className="unanswered-message">Please answer this question.</div>
+                            )} */}
                 <div className="question">
                   <p>{question.scn_question}</p>
                   {answers[question.id] && (
@@ -257,7 +322,9 @@ const ScreeningQuestions = ({
                       className={`yes_btn ${
                         answers[question.id] === "YES" ? "green" : ""
                       }`}
-                      onClick={() => handleYesClick(question.id)}
+                      onClick={() =>
+                        handleYesClick(question.id, question.disorder)
+                      }
                     >
                       YES
                     </button>
@@ -290,8 +357,5 @@ const ScreeningQuestions = ({
     </>
   );
 };
+
 export default ScreeningQuestions;
-
-
-
-

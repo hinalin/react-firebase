@@ -52,7 +52,6 @@ const UserDropdown = ({ user }) => {
     }
     return "";
   };
-  console.log(user.phoneNumber , 'name')
 
   return (
     <>

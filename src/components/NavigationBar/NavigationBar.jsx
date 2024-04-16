@@ -22,7 +22,7 @@ function NavigationBar({
   setSelectedQuestions,
   fetchStartTime,
   selectedDisorders,
-  setSelectedDisorders
+  setSelectedDisorders,
 }) {
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
   const openSidebarDrawer = () => {

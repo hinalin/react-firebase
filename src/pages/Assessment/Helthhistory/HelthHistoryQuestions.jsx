@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
 import "../Question.css";
-import jsonData from "../../../data/QuestionsData.json";
 import Select from "react-select";
 import { useFirebase } from "../../../context/FirebaseContext";
 import { fs } from "../../../config/Firebase";
@@ -15,17 +14,23 @@ const HealthHistoryQuestions = ({
   childQuestions,
   nextClicked,
   setNextClicked,
-  assessmentCounter
+  assessmentIdRef,
+  HealthHistoryQuestions,
+  answers,
+  setAnswers,
+  selectedOptions,
+  setSelectedOptions,
+  focusedQuestion,
+  setFocusedQuestion,
+  previousClicked,
 }) => {
-  const [focusedQuestion, setFocusedQuestion] = useState(null);
-  const [answers, setAnswers] = useState({});
-  const [selectedOptions, setSelectedOptions] = useState({});
   const [newOption, setNewOption] = useState("");
   const [submitClicked, setSubmitClicked] = useState({});
-  const [loading, setLoading] = useState(true);
 
-  const { user } = useFirebase();
+  const { user, loading, setLoading } = useFirebase();
   const userId = user ? user.uid : null;
+  const containerRef = useRef(null);
+
   useEffect(() => {
     // Find the index of the first unanswered question
     const firstUnansweredIndex = HealthHistoryQuestions.findIndex(
@@ -33,46 +38,57 @@ const HealthHistoryQuestions = ({
     );
 
     // If there's a first unanswered question, focus on it
-    if (firstUnansweredIndex !== -1) {
+    if (firstUnansweredIndex !== -1 && previousClicked === false) {
       setFocusedQuestion(firstUnansweredIndex);
     }
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const userDocRef = doc(fs, "users", userId);
-        // const userAnswersRef = collection(userDocRef, "answers-health-history");
-        const userDocRef = doc(fs, "users", userId);
-        const assessmentDocRef = doc(
-          userDocRef,
-          "assessment",
-          assessmentCounter.toString()
-        );
-        const answersRef = collection(assessmentDocRef, "answers_health-history");
-        const querySnapshot = await getDocs(answersRef);
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          setAnswers((prevAnswers) => ({
-            ...prevAnswers,
-            [data.questionId]: data.answer,
-          }));
-          setSelectedOptions((prevSelectedOptions) => ({
-            ...prevSelectedOptions,
-            [data.questionId]: data.selectedOptions,
-          }));
-        });
-      } catch (error) {
-        console.error("Error fetching documents: ", error);
-      } finally {
-        setLoading(false); // Set loading state to false once data fetching is complete
-      }
-    };
-
     if (userId) {
-      fetchData();
+      fetchHealthHistoryAnswers(
+        userId,
+        assessmentIdRef,
+        setAnswers,
+        setSelectedOptions
+      );
     }
   }, [userId]);
+  const fetchHealthHistoryAnswers = async (
+    userId,
+    assessmentIdRef,
+    setAnswers,
+    setSelectedOptions
+  ) => {
+    if (!assessmentIdRef.current) {
+      console.error("Assessment ID is null or undefined");
+      return;
+    } else {
+      console.log("found");
+    }
+    try {
+      const userDocRef = doc(fs, "users", userId);
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentIdRef.current
+      );
+      const answersRef = collection(assessmentDocRef, "answers_health-history");
+      const querySnapshot = await getDocs(answersRef);
+      const fetchedAnswers = {};
+      const fetchedSelectedOptions = {};
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        fetchedAnswers[data.questionId] = data.answer;
+        fetchedSelectedOptions[data.questionId] = data.selectedOptions;
+      });
+      setAnswers(fetchedAnswers);
+      setSelectedOptions(fetchedSelectedOptions);
+    } catch (error) {
+      console.error("Error fetching documents: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleQuestionClick = (index) => {
     // setFocusedQuestion(index === focusedQuestion ? index : index);
@@ -126,9 +142,11 @@ const HealthHistoryQuestions = ({
     setActiveQuestion("indepth");
     setCurrentPage(Object.keys(childQuestions).length - 1);
     setActiveStep(Object.keys(childQuestions).length);
+    setFocusedQuestion(null);
+    setNextClicked(false);
   };
 
-  const handleNextButtonClick = () => {
+  const handleNextButtonClick = async () => {
     setNextClicked(true); // Set nextClicked to true when next button is clicked
     const firstUnansweredIndex = HealthHistoryQuestions.findIndex(
       (question) => !answers[question.id]
@@ -137,27 +155,41 @@ const HealthHistoryQuestions = ({
       setFocusedQuestion(firstUnansweredIndex);
     } else {
       setActiveQuestion("life-function");
+      setNextClicked(false);
+    }
+    try {
+      const userDocRef = doc(fs, "users", userId);
+      const assessmentDocRef = doc(
+        userDocRef,
+        "assessment",
+        assessmentIdRef.current // Use the same assessmentIdRef
+      );
+      await setDoc(
+        assessmentDocRef,
+        {
+          inDepthFormCompleted: true,
+        },
+        { merge: true }
+      );
+      console.log("InDepth form completed status updated in Firestore!");
+    } catch (error) {
+      console.error(
+        "Error updating inDepthFormCompleted status in Firestore: ",
+        error
+      );
     }
   };
-  // const handleNextButtonClick = async () => {
-  //   if (userId) {
-  //     const userDocRef = doc(fs, "users", userId);
-  //     await setDoc(
-  //       userDocRef,
-  //       { healthHistoryFormCompleted: true },
-  //       { merge: true }
-  //     );
-  //   }
-  //   setActiveQuestion("life-function");
-  // };
-
-  const HealthHistoryQuestions = jsonData.filter(
-    (question) => question.health_history_question
-  );
 
   const handleQuestionSubmit = async (questionId) => {
     setSubmitClicked({ ...submitClicked, [questionId]: true });
-    setFocusedQuestion(null);
+    // Check if the answer is "YES" and no options are selected
+    if (
+      answers[questionId] === "YES" &&
+      (!selectedOptions[questionId] || selectedOptions[questionId].length === 0)
+    ) {
+      alert("Please select at least one option.");
+      return; // Prevent further execution of the function
+    }
     setNextClicked(false);
     await saveToFirestore(questionId, answers[questionId]);
     const nextUnansweredIndex = HealthHistoryQuestions.findIndex(
@@ -171,17 +203,50 @@ const HealthHistoryQuestions = ({
     setNextClicked(false);
   };
 
+  // const saveToFirestore = async (questionId, answer) => {
+  //   try {
+  //     const userDocRef = doc(fs, "users", userId);
+  //     const assessmentDocRef = doc(
+  //       userDocRef,
+  //       "assessment",
+  //       assessmentIdRef.current
+  //     );
+  //     const answersRef = collection(assessmentDocRef, "answers_health-history");
+  //     const answerDocRef = doc(answersRef, questionId.toString());
+
+  //     // Define data object to be written to Firestore
+  //     let data = {
+  //       userId: userId,
+  //       questionId: questionId,
+  //       answer: answer,
+  //       type: "health-history",
+  //     };
+
+  //     // Check if answer is "YES" or "None"
+  //     if (answer === "YES") {
+  //       // If answer is "YES", include selectedOptions in the data object
+  //       data.selectedOptions = selectedOptions[questionId];
+  //     } else {
+  //       // If answer is "None", remove selectedOptions from the data object
+  //       data.selectedOptions = null;
+  //     }
+
+  //     await setDoc(answerDocRef, data);
+  //     console.log("Document successfully written!");
+  //   } catch (error) {
+  //     console.error("Error writing document: ", error);
+  //   }
+  // };
   const saveToFirestore = async (questionId, answer) => {
     try {
       const userDocRef = doc(fs, "users", userId);
       const assessmentDocRef = doc(
         userDocRef,
         "assessment",
-        assessmentCounter.toString()
+        assessmentIdRef.current
       );
       const answersRef = collection(assessmentDocRef, "answers_health-history");
       const answerDocRef = doc(answersRef, questionId.toString());
-
 
       // Define data object to be written to Firestore
       let data = {
@@ -193,17 +258,19 @@ const HealthHistoryQuestions = ({
 
       // Check if answer is "YES" or "None"
       if (answer === "YES") {
-        // If answer is "YES", include selectedOptions in the data object
-        data.selectedOptions = selectedOptions[questionId];
+        // If answer is "YES", include selectedOptions in the data object if it's defined
+        if (selectedOptions[questionId]) {
+          data.selectedOptions = selectedOptions[questionId];
+        }
       } else {
         // If answer is "None", remove selectedOptions from the data object
         data.selectedOptions = null;
       }
 
       await setDoc(answerDocRef, data);
-      console.log("Document successfully written!");
+      console.log("Document successfully writtennnnnnn!");
     } catch (error) {
-      console.error("Error writing document: ", error);
+      console.error("Error writing documenttttt: ", error);
     }
   };
 
@@ -211,8 +278,8 @@ const HealthHistoryQuestions = ({
     const numQuestions = HealthHistoryQuestions.length;
     const numAnsweredQuestions = Object.keys(answers).length;
     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
-    setHealthHistoryProgress(newProgress);
-  } , [answers , selectedOptions])
+    setHealthHistoryProgress(Math.min(newProgress, 100));
+  }, [answers, selectedOptions]);
 
   return (
     <>

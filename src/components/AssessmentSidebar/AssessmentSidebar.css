@@ -55,5 +55,10 @@
 .assessment-sidebar .accordion-collapse{
     padding-right: 5vw;
     background-color:rgb(227, 251, 244);
-    height: 50px;
+}
+.assessment-sidebar .disorder{
+    background-color: #33ca8f;
+    margin-top: 5px;
+    width: 100%;
+    border: 2px solid rgb(223, 239, 239);;
 }

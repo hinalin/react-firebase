@@ -868,3 +868,257 @@ export default ScreeningQuestions;
 //     "parentId": null,
 //     "in_header_que" : "In the last year, how often have you:"
 // },
+
+// {answers[question.id] === "YES"
+//                       ? selectedOptions[question.id]
+//                         ? selectedOptions[question.id]
+//                             .map((option) => option.label)
+//                             .join(", ")
+//                         : "None"
+//                       : "None"}
+
+
+// useEffect(() => {
+  //   const checkScreeningCompleted = async () => {
+  //     try {
+  //       if (userId) {
+  //         const userDocRef = doc(fs, "users", userId);
+  //         const assessmentDocRef = doc(
+  //           userDocRef,
+  //           "assessment",
+  //           assessmentIdRef.current
+  //         );
+
+  //         const assessmentSnapshot = await getDoc(assessmentDocRef);
+  //         const assessmentData = assessmentSnapshot.data();
+
+  //         if (assessmentData && assessmentData.screeningFormCompleted) {
+  //           // If screening form is completed, set activeQuestion to "indepth"
+  //           setActiveQuestion("indepth");
+  //         }
+  //       }
+  //       console.log('fetcheddd');
+  //     } catch (error) {
+  //       console.error("Error checking screening form completion: ", error);
+  //     }
+  //   };
+
+  //   checkScreeningCompleted();
+  // }, [userId]);
+
+  // useEffect(() => {
+  //   const checkScreeningCompleted = async () => {
+  //     try {
+  //       if (userId) {
+  //         const userDocRef = doc(fs, "users", userId);
+  //         const assessmentDocRef = doc(
+  //           userDocRef,
+  //           "assessment",
+  //           assessmentIdRef.current
+  //         );
+
+  //         const assessmentSnapshot = await getDoc(assessmentDocRef);
+  //         console.log("Assessment Snapshot:", assessmentSnapshot.data());
+
+  //         const assessmentData = assessmentSnapshot.data();
+  //         console.log("Assessment Data:", assessmentData);
+
+  //         if (assessmentData && assessmentData.screeningFormCompleted) {
+  //           // If screening form is completed, set activeQuestion to "indepth"
+  //           console.log("Setting active question to 'indepth'");
+  //           setActiveQuestion("indepth");
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error checking screening form completion: ", error);
+  //     }
+  //   };
+
+  //   checkScreeningCompleted();
+  // }, [userId]);
+  // useEffect(() => {
+  //   const checkAssessmentCompleted = async () => {
+  //     try {
+  //       if (userId) {
+  //         const userDocRef = doc(fs, "users", userId);
+  //         const assessmentDocRef = doc(
+  //           userDocRef,
+  //           "assessment",
+  //           assessmentIdRef.current
+  //         );
+
+  //         const assessmentSnapshot = await getDoc(assessmentDocRef);
+  //         const assessmentData = assessmentSnapshot.data();
+  //         console.log(assessmentData , 'assessmentData');
+
+  //         if (assessmentData) {
+  //           if (assessmentData.screeningFormCompleted && !assessmentData.indepthFormCompleted) {
+  //             setActiveQuestion("indepth");
+  //             console.log('indepthhhh');
+  //           } else if (assessmentData.screeningFormCompleted && assessmentData.indepthFormCompleted) {
+  //             setActiveQuestion("health-history");
+  //           }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error checking assessment completion: ", error);
+  //     }
+  //   };
+
+  //   checkAssessmentCompleted();
+  // }, [userId]);
+
+  
+  // const loadUserAnswersFromFirestore = async () => {
+  //   try {
+  //     if (userId) {
+  //       const userDocRef = doc(fs, "users", userId);
+  //       const assessmentDocRef = doc(
+  //         userDocRef,
+  //         "assessment",
+  //         assessmentIdRef.current
+  //       );
+  //       const answersRef = collection(assessmentDocRef, "answers_screenings");
+  //       const userAnswersSnapshot = await getDocs(answersRef);
+  //       const loadedAnswers = [];
+  //       const answer = {};
+  //       userAnswersSnapshot.forEach((doc) => {
+  //         loadedAnswers.push(doc.data());
+  //         answer[doc.id] = doc.data().answer;
+  //       });
+  //       const selectedChildQuestion = Object.keys(answer).filter(
+  //         (key) => answer[key] === "YES"
+  //       );
+  //       const filteredArrays = {};
+  //       console.log(selectedChildQuestion);
+  //       selectedChildQuestion.forEach((parentId) => {
+  //         const filteredArray = filterArrayByParentId(parentId);
+  //         filteredArrays[parentId] = filteredArray;
+  //       });
+  //       setStepCount(Object.keys(filteredArrays).length);
+  //       setChildQuestions(filteredArrays);
+  //       setScreeningQuestions(loadedAnswers);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading user answers from Firestore: ", error);
+  //   }
+  // };
+
+  // // // AHIYAA filteredArray PARTHI KADACH HEALTHHISTORY LAVI SKASSEEEEE JO INDEPTH MA ANS APAII GYA HSE TOOOOO
+
+  // useEffect(() => {
+  //   if (userId) {
+  //     loadUserAnswersFromFirestore();
+  //   }
+  // }, [userId]);
+
+  // useEffect(() => {
+  //   if (screeningQuestions.length === 13) {
+  //     setActiveQuestion("indepth");
+  //   }
+  // }, [screeningQuestions]);
+  // function filterArrayByParentId(parentId) {
+  //   return jsonData.filter((item) => item.parentId === Number(parentId));
+  // }
+
+
+
+  const setActiveQuestionBasedOnLastAnswer = () => {
+    // Check if answers is not undefined or null
+    if (answers && Object.keys(answers).length > 0) {
+      const lastAnswerId = Object.keys(answers).reduce(
+        (maxId, answerId) => Math.max(maxId, parseInt(answerId)),
+        0
+      );
+      console.log(lastAnswerId, "lastanswered Id");
+
+      if (lastAnswerId >= 1 && lastAnswerId <= 13) {
+        setActiveQuestion("screening");
+        // } else if (lastAnswerId >= 14 && lastAnswerId < 118) {
+        //   setActiveQuestion("indepth");
+      } else if (lastAnswerId > 118 && lastAnswerId < 122) {
+        setActiveQuestion("health-history");
+        setProgress(100);
+        setIndepthProgress(100);
+      } else if (lastAnswerId >= 122 && lastAnswerId < 126) {
+        setActiveQuestion("life-function");
+        setProgress(100);
+        setIndepthProgress(100);
+        setHealthHistoryProgress(100);
+      }
+
+      if (userId && assessmentIdRef.current) {
+        const userDocRef = doc(fs, "users", userId);
+        const assessmentDocRef = doc(
+          userDocRef,
+          "assessment",
+          assessmentIdRef.current
+        );
+        setDoc(
+          assessmentDocRef,
+          { lastAnswerId: lastAnswerId },
+          { merge: true }
+        )
+          .then(() => {
+            console.log("lastAnswerId stored in Firestore successfully!");
+          })
+          .catch((error) => {
+            console.error("Error storing lastAnswerId in Firestore: ", error);
+          });
+      }
+    } else {
+      console.log("No answers found.");
+      // Handle the case where answers is undefined or empty
+    }
+  };
+
+  // Call the function when the component mounts
+  useEffect(() => {
+    setActiveQuestionBasedOnLastAnswer();
+  }, [answers, userId, assessmentIdRef.current]);
+
+  useEffect(() => {
+    // Define an async function to fetch lastAnswerId from Firestore
+    const fetchLastAnswerId = async () => {
+      try {
+        // Check if userId and assessmentIdRef.current are available
+        if (userId && assessmentIdRef.current) {
+          // Construct Firestore document reference
+          const userDocRef = doc(fs, "users", userId);
+          const assessmentDocRef = doc(
+            userDocRef,
+            "assessment",
+            assessmentIdRef.current
+          );
+
+          // Fetch document data
+          const docSnap = await getDoc(assessmentDocRef);
+          if (docSnap.exists()) {
+            // Extract lastAnswerId from document data
+            const lastAnswerId = docSnap.data().lastAnswerId;
+
+            // Set active question based on lastAnswerId
+            if (lastAnswerId >= 1 && lastAnswerId < 13) {
+              setActiveQuestion("screening");
+              // } else if (lastAnswerId >= 14 && lastAnswerId < 118) {
+              //   setActiveQuestion("indepth");
+            } else if (lastAnswerId > 119 && lastAnswerId <= 122) {
+              setActiveQuestion("health-history");
+              setProgress(100);
+              setIndepthProgress(100);
+            } else if (lastAnswerId >= 122 && lastAnswerId < 126) {
+              setActiveQuestion("life-function");
+              setProgress(100);
+              setIndepthProgress(100);
+              setHealthHistoryProgress(100);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching lastAnswerId from Firestore: ", error);
+      }
+    };
+
+    // Call the async function
+    fetchLastAnswerId();
+  }, [userId, assessmentIdRef.current, answers]);

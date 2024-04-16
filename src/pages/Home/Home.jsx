@@ -5,7 +5,19 @@ import Footer from "../../components/Footer/Footer";
 import SignInUpModal from "../../components/SignInUpModal/SignInUpModal";
 import { Link } from "react-router-dom";
 import { useFirebase } from "../../context/FirebaseContext";
-function Home({ assessmentIdRef , remainingTime , setRemainingTime , filteredQuestions , setFilteredQuestions , assessmentStatus , setAssessmentStatus , answers , setAnswers }) {
+function Home({
+  assessmentIdRef,
+  remainingTime,
+  setRemainingTime,
+  filteredQuestions,
+  setFilteredQuestions,
+  assessmentStatus,
+  setAssessmentStatus,
+  answers,
+  setAnswers,
+  selectedDisorders,
+  setSelectedDisorders
+}) {
   const [isShowSignInUpModal, setIsShowSignInUpModal] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useFirebase();
@@ -41,6 +53,9 @@ function Home({ assessmentIdRef , remainingTime , setRemainingTime , filteredQue
               setFilteredQuestions={setFilteredQuestions}
               answers={answers}
               setAnswers={setAnswers}
+
+              selectedDisorders={selectedDisorders}
+              setSelectedDisorders={setSelectedDisorders}
             />
             <div
               className={`fbn-intro ${isSidebarOpen ? "position-back" : ""}`}
