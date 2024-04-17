@@ -57,6 +57,9 @@ function Assessment({
 
   const { user, loading, setLoading } = useFirebase();
   const userId = user ? user.uid : null;
+  const allNo = filteredQuestions.every(
+    (question) => answers[question.id] === "NO"
+  );
   function filterArrayByParentId(parentId) {
     return jsonData.filter((item) => item.parentId === Number(parentId));
   }
@@ -93,20 +96,15 @@ function Assessment({
           loadedAnswers.push(doc.data());
           answer[doc.id] = doc.data().answer;
         });
-        console.log(userAnswersSnapshot.size, "userAnswersSnapshoteee");
-        console.log(
-          userInDepthAnswersSnapshot.size,
-          "userInDepthAnswersSnapshot"
-        );
         const selectedChildQuestion = Object.keys(answer).filter(
           (key) => answer[key] === "YES"
         );
         const filteredArrays = {};
-        console.log(selectedChildQuestion);
+  
         selectedChildQuestion.forEach((parentId) => {
           const filteredArray = filterArrayByParentId(parentId);
           filteredArrays[parentId] = filteredArray;
-          console.log(filteredArray,'filteredArraysssss');
+      
         });
         setStepCount(Object.keys(filteredArrays).length);
         setChildQuestions(filteredArrays);
@@ -115,8 +113,6 @@ function Assessment({
         const totalInDepthQuestionsCount = Object.keys(filteredArrays).flatMap(
           (key) => filteredArrays[key]
         ).length;
-
-        console.log(totalInDepthQuestionsCount, "totalInDepthQuestionsCount");
 
         // LOGIC FOR ACTIVR QUESTION GROUP
         if (
@@ -143,15 +139,6 @@ function Assessment({
         } else {
           setActiveQuestion("screening");
         }
-        console.log(totalInDepthQuestionsCount, "totalInDepthQuestionsCount");
-        console.log(
-          userInDepthAnswersSnapshot.size,
-          "userInDepthAnswersSnapshot"
-        );
-        console.log(
-          getScreeningQuestions().length,
-          "getScreeningQuestions().length"
-        );
       }
     } catch (error) {
       console.error("Error loading user answers from Firestore: ", error);
@@ -163,15 +150,27 @@ function Assessment({
   useEffect(() => {
     if (userId) {
       loadUserAnswersFromFirestore();
-      if (assessmentIdRef.current) {
-        setActiveQuestion("screening");
-      }
     }
   }, [userId]);
-
+  
+  useEffect(() => {
+    if (screeningQuestions && Object.keys(screeningQuestions).length > 0) {
+      const allNo = Object.values(screeningQuestions).every(
+        (question) => question.answer === "NO"
+      );
+      if (allNo) {
+        setActiveQuestion("health-history");
+        setProgress(100);
+        setIndepthProgress(100);
+        setNextClicked(false)
+      }
+    }
+  }, [screeningQuestions]);
   if (loading) {
     return <img className="d-block mx-auto" src={Loader} alt="" />; // Show loading message
   }
+
+  
 
   return (
     <>
@@ -209,6 +208,7 @@ function Assessment({
                 remainingTime={remainingTime}
                 setRemainingTime={setRemainingTime}
                 answers={answers}
+                filteredQuestions={filteredQuestions}
               />
             </div>
             <div className="col-lg-8 col-md-12 col-sm-12">
@@ -233,6 +233,7 @@ function Assessment({
                     focusedQuestion={focusedQuestion}
                     setFocusedQuestion={setFocusedQuestion}
                     setScreeningQuestions={setScreeningQuestions}
+                    setIndepthProgress={setIndepthProgress}
                   />
                 )}
                 {activeQuestion === "indepth" && (

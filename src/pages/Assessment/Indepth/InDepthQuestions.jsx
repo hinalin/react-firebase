@@ -30,7 +30,6 @@ const InDepthQuestions = ({
   const userId = user ? user.uid : null;
   const focusedQuestionRef = useRef(null);
 
-  
   useEffect(() => {
     const parentIds = Object.keys(childQuestions);
     for (let i = 0; i < parentIds.length; i++) {
@@ -40,32 +39,53 @@ const InDepthQuestions = ({
       );
       if (unansweredChildIndex !== -1) {
         setFocusedQuestion(childQuestions[parentId][unansweredChildIndex].id);
-        setCurrentPage(i); // Set current page based on the active step
+        // setCurrentPage(i); // Set current page based on the active step
         break;
       }
     }
   }, [childQuestions, answeredQuestions]);
 
   useEffect(() => {
-    // Determine the active step dynamically based on the completion status of previous steps
-    const determineActiveStep = () => {
-      const stepKeys = Object.keys(childQuestions);
-      for (let i = 0; i < stepKeys.length; i++) {
-        const stepKey = stepKeys[i];
-        const stepQuestions = childQuestions[stepKey];
-        const allQuestionsAnswered = stepQuestions.every(
-          (question) => answeredQuestions[question.id]
-        );
-        if (!allQuestionsAnswered) {
-          return i + 1; // Active step is 1-indexed
+    const fetchLastAnsweredQuestion = async () => {
+      if (userId) {
+        try {
+          const userDocRef = doc(fs, "users", userId);
+          const assessmentDocRef = doc(
+            userDocRef,
+            "assessment",
+            assessmentIdRef.current
+          );
+          const answersRef = collection(assessmentDocRef, "answers_indepth");
+          const userAnswersSnapshot = await getDocs(answersRef);
+          let lastAnsweredQuestionId = null;
+          userAnswersSnapshot.forEach((doc) => {
+            lastAnsweredQuestionId = parseInt(doc.id);
+          });
+          if (lastAnsweredQuestionId !== null) {
+            // Find the step of the last answered question
+            let step = null;
+            Object.keys(childQuestions).forEach((parentId, index) => {
+              if (
+                childQuestions[parentId].some(
+                  (child) => child.id === lastAnsweredQuestionId
+                )
+              ) {
+                step = index;
+              }
+            });
+            if (step !== null) {
+              setActiveStep(step + 1); // Set active step based on the step of the last answered question
+              setCurrentPage(step); // Set current page based on the step of the last answered question
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching last answered question: ", error);
         }
       }
-      // return stepKeys.length + 1; // If all steps are completed, set active step to the next step
     };
-    const activeStep = determineActiveStep();
-    setActiveStep(activeStep);
-  }, [childQuestions, answeredQuestions]);
-  
+    fetchLastAnsweredQuestion();
+  }, [userId, assessmentIdRef, childQuestions, setActiveStep, setCurrentPage]);
+
   useEffect(() => {
     if (focusedQuestionRef.current) {
       focusedQuestionRef.current.scrollIntoView({
@@ -73,14 +93,12 @@ const InDepthQuestions = ({
         block: "center",
       });
     }
-  }, [focusedQuestion]);
+  }, [focusedQuestion , currentPage , nextClicked]);
 
-  console.log(childQuestions , 'childQuestions');
   const totalChildQuestionsLength = Object.values(childQuestions).reduce(
     (total, questions) => total + questions.length,
     0
   );
-  console.log(totalChildQuestionsLength, "totalChildQuestionsLength");
 
   const groupAnswersByParentId = (answers, childQuestions) => {
     const groupedAnswers = {};
@@ -113,7 +131,6 @@ const InDepthQuestions = ({
 
   // Call the function to group answers by parent ID
   const groupedAnswers = groupAnswersByParentId(answers, childQuestions);
-  // console.log(groupedAnswers);
 
   const calculateRiskCategory = (answers) => {
     let lowRiskCount = 0;
@@ -142,9 +159,6 @@ const InDepthQuestions = ({
     }
   };
 
-  console.log(answers, "indepthhhhanswerssss");
-  console.log(answeredQuestions, "answeredQuestions t-f");
-
   const calculateRiskCategories = (groupedAnswers) => {
     const riskCategories = {};
 
@@ -160,7 +174,6 @@ const InDepthQuestions = ({
 
   // Call the function to calculate risk categories
   const riskCategories = calculateRiskCategories(groupedAnswers);
-  // console.log(riskCategories, "risk categories");
 
   const addRiskCategoryToDisorders = () => {
     const updatedSelectedDisorders = selectedDisorders.map((disorder) => {
@@ -187,7 +200,6 @@ const InDepthQuestions = ({
     if (unansweredQuestion) {
       hasUnansweredQuestion = true;
       setFocusedQuestion(unansweredQuestion.id);
-
     }
 
     if (!hasUnansweredQuestion) {
@@ -207,13 +219,14 @@ const InDepthQuestions = ({
             assessmentDocRef,
             {
               inDepthFormCompleted: true,
+              selectedDisorders : selectedDisorders
             },
             { merge: true }
           );
           console.log("InDepth form completed status updated in Firestore!");
         } catch (error) {
           console.error(
-            "Error in selected orders is stored in Firestore: ",
+            "Error updating inDepthFormCompleted status in Firestore: ",
             error
           );
         }
@@ -227,7 +240,6 @@ const InDepthQuestions = ({
       setNextClicked(true);
     }
   };
-
 
   const handlePreviousPage = () => {
     if (currentPage === 0) {
@@ -326,7 +338,6 @@ const InDepthQuestions = ({
     <>
       <div className="container-fluid">
         <div className="InDepthQuestions-template">
-          
           {Object.keys(childQuestions).map((parentId, index) =>
             index === currentPage
               ? childQuestions[parentId].map((childQuestion, questionIndex) => (

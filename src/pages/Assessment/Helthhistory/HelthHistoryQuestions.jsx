@@ -38,7 +38,7 @@ const HealthHistoryQuestions = ({
     );
 
     // If there's a first unanswered question, focus on it
-    if (firstUnansweredIndex !== -1 && previousClicked === false) {
+    if (firstUnansweredIndex !== -1 && previousClicked == false) {
       setFocusedQuestion(firstUnansweredIndex);
     }
   }, []);
@@ -116,10 +116,9 @@ const HealthHistoryQuestions = ({
     const nextUnansweredIndex = HealthHistoryQuestions.findIndex(
       (question, index) => !answers[question.id] && index > focusedQuestion
     );
-    console.log(nextUnansweredIndex, "nextUnansweredIndex");
+
     if (nextUnansweredIndex !== 0) {
       setFocusedQuestion(nextUnansweredIndex);
-      console.log(focusedQuestion, "focusedQuestionnow");
     }
   };
 
@@ -195,48 +194,12 @@ const HealthHistoryQuestions = ({
     const nextUnansweredIndex = HealthHistoryQuestions.findIndex(
       (question, index) => !answers[question.id] && index > focusedQuestion
     );
-    console.log(nextUnansweredIndex, "nextUnansweredIndex");
     if (nextUnansweredIndex !== 0) {
       setFocusedQuestion(nextUnansweredIndex);
-      console.log(focusedQuestion, "focusedQuestion now");
     }
     setNextClicked(false);
   };
 
-  // const saveToFirestore = async (questionId, answer) => {
-  //   try {
-  //     const userDocRef = doc(fs, "users", userId);
-  //     const assessmentDocRef = doc(
-  //       userDocRef,
-  //       "assessment",
-  //       assessmentIdRef.current
-  //     );
-  //     const answersRef = collection(assessmentDocRef, "answers_health-history");
-  //     const answerDocRef = doc(answersRef, questionId.toString());
-
-  //     // Define data object to be written to Firestore
-  //     let data = {
-  //       userId: userId,
-  //       questionId: questionId,
-  //       answer: answer,
-  //       type: "health-history",
-  //     };
-
-  //     // Check if answer is "YES" or "None"
-  //     if (answer === "YES") {
-  //       // If answer is "YES", include selectedOptions in the data object
-  //       data.selectedOptions = selectedOptions[questionId];
-  //     } else {
-  //       // If answer is "None", remove selectedOptions from the data object
-  //       data.selectedOptions = null;
-  //     }
-
-  //     await setDoc(answerDocRef, data);
-  //     console.log("Document successfully written!");
-  //   } catch (error) {
-  //     console.error("Error writing document: ", error);
-  //   }
-  // };
   const saveToFirestore = async (questionId, answer) => {
     try {
       const userDocRef = doc(fs, "users", userId);

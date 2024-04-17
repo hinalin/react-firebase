@@ -26,7 +26,6 @@ function NavigationBar({
 }) {
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
   const openSidebarDrawer = () => {
-    console.log("Opening sidebar drawer");
     setIsSideDrawerOpen(true);
   };
 

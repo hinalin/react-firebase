@@ -19,6 +19,7 @@ const AssessmentProgress = ({
   remainingTime,
   setRemainingTime,
   answers,
+  filteredQuestions
 }) => {
   const { user } = useFirebase();
   const userId = user ? user.uid : null;
@@ -33,6 +34,10 @@ const AssessmentProgress = ({
   const [isTimeUp, setIsTimeUp] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false); // Track whether modal should be open
   // let startTime = localStorage.getItem(`startTime_${userId}`);
+  
+  const allNo = filteredQuestions.every(
+    (question) => answers[question.id] === "NO"
+  )
 
   const mainProgressValue = Math.round(
     (progressValue +

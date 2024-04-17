@@ -31,7 +31,7 @@ function Summary({
 
   const { user, setLoading } = useFirebase();
   const userId = user ? user.uid : null;
-  console.log(userId, "useerrriDDDDDD");
+
 
   useEffect(() => {
     setDrawerOpen(true);

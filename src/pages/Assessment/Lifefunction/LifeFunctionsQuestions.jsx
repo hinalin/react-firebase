@@ -133,6 +133,12 @@ const LifeFunctionsQuestions = ({
   };
   
   const handleQuestionSubmit = async (questionId, value) => {
+    if (value === undefined || value === null || value === "") {
+      // Display an alert if the user hasn't provided an answer
+      alert("Please answer the question before submitting.");
+      return;
+    }
+
     setAnswers({ ...answers, [questionId]: value });
     await storeAnswerToFirestore(questionId, value);
     setFocusedQuestion(null);

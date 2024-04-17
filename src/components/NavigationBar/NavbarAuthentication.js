@@ -34,7 +34,6 @@ const NavbarAuthentication = ({
           assessmentIdRef={assessmentIdRef}
           remainingTime={remainingTime}
           setRemainingTime={setRemainingTime}
-          assessmentStatus={assessmentStatus}
           setAssessmentStatus={setAssessmentStatus}
           filteredQuestions={filteredQuestions}
           setFilteredQuestions={setFilteredQuestions}

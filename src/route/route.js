@@ -24,9 +24,9 @@ const Main = () => {
   const [assessmentStatus, setAssessmentStatus] = useState("");
   const [answers, setAnswers] = useState({});
   const [selectedOptions, setSelectedOptions] = useState({});
-console.log(answers , 'mainanswerssss');
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [selectedDisorders, setSelectedDisorders] = useState([]);
+  const [screeningQuestions, setScreeningQuestions] = useState([])
   const assessmentIdRef = useRef(null);
 
   const HealthHistoryQuestions = getHealthHistoryQuestions()
@@ -61,6 +61,8 @@ console.log(answers , 'mainanswerssss');
 
                   selectedDisorders={selectedDisorders}
                   setSelectedDisorders={setSelectedDisorders}
+                  screeningQuestions={screeningQuestions}
+
                 />
               }
             ></Route>
@@ -98,11 +100,11 @@ console.log(answers , 'mainanswerssss');
                   assessmentCounter={assessmentCounter}
                   selectedDisorders={selectedDisorders}
                   setSelectedDisorders={setSelectedDisorders}
-
                   selectedOptions={selectedOptions}
                   setSelectedOptions={setSelectedOptions}
+                  screeningQuestions={screeningQuestions}
+                  setScreeningQuestions={setScreeningQuestions}
                 />
-                // </ProtectedRoute>
               }
             ></Route>
             <Route
@@ -120,12 +122,11 @@ console.log(answers , 'mainanswerssss');
                   assessmentStatus={assessmentStatus}
                   setAssessmentStatus={setAssessmentStatus}
                   assessmentIdRef={assessmentIdRef}
-
                   selectedOptions={selectedOptions}
                   setSelectedOptions={setSelectedOptions}
-
                   selectedDisorders={selectedDisorders}
                   setSelectedDisorders={setSelectedDisorders}
+                  screeningQuestions={screeningQuestions}
                 />
               }
             ></Route>

@@ -25,6 +25,7 @@ const ScreeningQuestions = ({
   setNextClicked,
   focusedQuestion,
   setFocusedQuestion,
+  setIndepthProgress
 }) => {
   const [showChildQuestions, setShowChildQuestions] = useState(false);
   // const [childQuestionsByStep, setChildQuestionsByStep] = useState({}); // State to hold child questions
@@ -67,9 +68,7 @@ const ScreeningQuestions = ({
         });
       }
     }
-  }, [answers, filteredQuestions]);
-
-  console.log(answers, "screeninganswers");
+  }, [answers, filteredQuestions , nextClicked]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,10 +100,9 @@ const ScreeningQuestions = ({
     const numAnsweredQuestions = Object.keys(answers).length;
     const newProgress = (numAnsweredQuestions / numQuestions) * 100;
     setProgress(Math.min(newProgress, 100));
-    console.log(numAnsweredQuestions, "numAnsweredQuestions");
   }, [answers]);
 
-  const storeAnswerToFirestore = async (questionId, answer, buttonState , disorder) => {
+  const storeAnswerToFirestore = async (questionId, answer, buttonState) => {
     try {
       const userDocRef = doc(fs, "users", userId);
       // Assuming you have an 'assessment' document under the user document
@@ -122,15 +120,6 @@ const ScreeningQuestions = ({
         type: "screening",
       });
       console.log("Answer stored in Firestore successfully!");
-
-      if (answer === "YES" && disorder) {
-        await setDoc(
-          assessmentDocRef,
-          { [questionId]: { disorder: disorder} },
-          { merge: true }
-        );
-        console.log("Disorder information stored in Firestore successfully!");
-      }
     } catch (error) {
       console.error("Error storing answer in Firestore: ", error);
     }
@@ -151,18 +140,6 @@ const ScreeningQuestions = ({
         userAnswersSnapshot.forEach((doc) => {
           loadedAnswers[doc.id] = doc.data().answer;
         });
-        const disordersSnapshot = await getDoc(assessmentDocRef);
-        const disordersData = disordersSnapshot.data();
-        if (disordersData) {
-          const disorders = Object.keys(disordersData)
-            .filter((key) => key !== "screeningFormCompleted")
-            .map((key) => ({
-              questionId: key,
-              disorder: disordersData[key].disorder,
-            }));
-          // Update selectedDisorders state
-          setSelectedDisorders(disorders);
-        }
         setAnswers(loadedAnswers);
       }
     } catch (error) {
@@ -182,7 +159,7 @@ const ScreeningQuestions = ({
     setAnswers({ ...answers, [questionId]: "YES" });
     setSelectedQuestions([...selectedQuestions, questionId]);
     setFocusedQuestion(null);
-    console.log(selectedDisorders, answers, "selectedDisorderssssssssss");
+
     await storeAnswerToFirestore(questionId, "YES", true, disorder);
 
     setNextClicked(false);
@@ -226,14 +203,17 @@ const ScreeningQuestions = ({
       );
     }
 
-    if (allQuestionsAnswered) {
+    if (allNo) {
+      setActiveQuestion("health-history");
+      setIndepthProgress(100)
+      setNextClicked(false)
+    } 
+    else if (allQuestionsAnswered) {
       setShowChildQuestions(true);
       setStepCount(Object.keys(childQuestionsByStep).length);
       setChildQuestions(childQuestionsByStep);
       setActiveQuestion("indepth");
       setNextClicked(false);
-    } else if (allNo) {
-      setActiveQuestion("health-history");
     } else {
       if (unansweredQuestions.length > 0) {
         const firstUnansweredQuestion = unansweredQuestions[0];
@@ -241,13 +221,6 @@ const ScreeningQuestions = ({
           (question) => question.id === firstUnansweredQuestion.id
         );
         setFocusedQuestion(index);
-        const focusedElement = containerRef.current.children[index];
-        if (focusedElement) {
-          focusedElement.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-        }
       }
       setShowChildQuestions(false);
     }
@@ -257,19 +230,6 @@ const ScreeningQuestions = ({
     return selectedQuestions.includes(parentId);
   };
 
-  // const groupChildQuestionsByParentId = () => {
-  //   const groupedQuestions = {};
-
-  //   jsonData.forEach((question) => {
-  //     if (question.parentId && isParentQuestionSelected(question.parentId)) {
-  //       if (!groupedQuestions[question.parentId]) {
-  //         groupedQuestions[question.parentId] = [];
-  //       }
-  //       groupedQuestions[question.parentId].push(question);
-  //     }
-  //   });
-  //   return groupedQuestions;
-  // };
 
   const groupChildQuestionsByParentId = () => {
     const groupedQuestions = {};
@@ -286,7 +246,6 @@ const ScreeningQuestions = ({
   };
 
   const childQuestionsByStep = groupChildQuestionsByParentId();
-  console.log(childQuestionsByStep, "childQuestionsByStepppppp");
 
   return (
     <>

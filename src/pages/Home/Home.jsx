@@ -16,7 +16,8 @@ function Home({
   answers,
   setAnswers,
   selectedDisorders,
-  setSelectedDisorders
+  setSelectedDisorders,
+  screeningQuestions
 }) {
   const [isShowSignInUpModal, setIsShowSignInUpModal] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -56,6 +57,8 @@ function Home({
 
               selectedDisorders={selectedDisorders}
               setSelectedDisorders={setSelectedDisorders}
+              screeningQuestions={screeningQuestions}
+
             />
             <div
               className={`fbn-intro ${isSidebarOpen ? "position-back" : ""}`}
