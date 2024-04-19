@@ -1,70 +1,3 @@
-/* @font-face {
-    font-family: Poppins;
-    src: url('../../assets/fonts/Poppins-Regular.ttf');
-  }
-.navbar-template{
-    top: 20px;
-    width: 100%;
-    visibility: visible;
-    animation: fadeInUp 1s ease forwards;
-    padding:15px 60px 30px 60px;
-}
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-.navbar-template .logo{
-    height: 33px;
-}
-.navbar-template .nav-link {
-    color: #151852;
-    cursor: pointer;
-    font-size: 17px;
-    font-weight: 400 !important;
-    text-transform: capitalize;
-}
-
-.navbar-template li {
-    color: var(--dark);
-    color: #151852;
-    cursor: pointer;
-    font-family:Poppins;
-    font-size: 15px;
-    font-size: 17px;
-    font-weight: 400;
-    font-weight: 400 !important;
-    line-height: 16px;
-    padding-left: 0;
-    padding-right: 35px;
-}
-.navbar-template .homeNavBtn {
-    background-color: #ec5f43;
-    border-radius: 5vw;
-    color: white;
-    font-size: .875em;
-    font-weight: 600;
-    line-height: 14px;
-    margin-right: 0;
-    padding: 16px 28px;
-    text-transform: uppercase;
-}
-.navbar-template .nav-link:hover {
-    color: #33ca8f;
-}
-.navbar-template .homeNavBtn:hover {
-    background-color:black ;
-    color: #33ca8f;
-}
-.btn-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-} */
 
 
 @font-face {
@@ -153,20 +86,7 @@
 .homeNav .header-backdrop {
     display: none;
 }
-.homeNav .header-backdrop.body-overlay {
-    -webkit-backdrop-filter: blur(3px) !important;
-    backdrop-filter: blur(3px) !important;
-    background: #00000080 !important;
-    content: "";
-    display: block;
-    height: 100%;
-    position: fixed;
-    right: 0;
-    top: 0;
-    transition: .2s;
-    width: 100%;
-    z-index: 99px;
-}
+
 .homeNav .nav-link {
     color: #151852;
     cursor: pointer;
@@ -253,6 +173,20 @@
     }
     .homeNav .only-show-in-mobile .logo-part{
         margin-top: 0;
+    }
+    .homeNav .body-overlay {
+        -webkit-backdrop-filter: blur(3px) !important;
+        backdrop-filter: blur(3px) !important;
+        background: #00000080 !important;
+        content: "";
+        display: block;
+        height: 100%;
+        position: fixed;
+        right: 0;
+        top: 0;
+        transition: .2s;
+        width: 100%;
+        z-index: 99px;
     }
     .homeNav .navbar-toggler {
         display: block;

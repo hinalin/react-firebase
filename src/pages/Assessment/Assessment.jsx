@@ -9,10 +9,10 @@ import IndepthQuestion from "./Indepth/InDepthQuestions";
 import HealthHistoryQuestion from "./Helthhistory/HelthHistoryQuestions";
 import LifeFunctionQuestion from "./Lifefunction/LifeFunctionsQuestions";
 import { useFirebase } from "../../context/FirebaseContext";
-import { collection, doc, getDoc, setDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs } from "firebase/firestore";
 import { fs } from "../../config/Firebase";
 import jsonData from "../../data/QuestionsData.json";
-import Loader from '../../assets/gif/loader.gif'
+import Loader from "../../assets/gif/loader.gif";
 import {
   getHealthHistoryQuestions,
   getScreeningQuestions,
@@ -32,16 +32,24 @@ function Assessment({
   setSelectedQuestions,
   selectedDisorders,
   setSelectedDisorders,
-
   HealthHistoryQuestions,
   lifeFunctionQuestions,
 
   selectedOptions,
   setSelectedOptions,
+
+  childQuestions,
+  setChildQuestions,
+
+  stepCount,
+  setStepCount,
+
+  screeningQuestions,
+  setScreeningQuestions,
+  allNo
+  
 }) {
   const [activeQuestion, setActiveQuestion] = useState("screening");
-  const [stepCount, setStepCount] = useState(0);
-  const [childQuestions, setChildQuestions] = useState(null);
   const [progress, setProgress] = useState(0);
   const [indepthProgress, setIndepthProgress] = useState(0);
   const [healthHistoryProgress, setHealthHistoryProgress] = useState(0);
@@ -52,14 +60,13 @@ function Assessment({
   const [currentPage, setCurrentPage] = useState(0);
   const [focusedQuestion, setFocusedQuestion] = useState(null);
   const [previousClicked, setPreviousClicked] = useState(false);
+  const [lastAnsweredQuestion, setLastAnsweredQuestion] = useState(null);
 
-  const [screeningQuestions, setScreeningQuestions] = useState([]);
+  const { user, loading, setLoading , userId } = useFirebase();
 
-  const { user, loading, setLoading } = useFirebase();
-  const userId = user ? user.uid : null;
-  const allNo = filteredQuestions.every(
-    (question) => answers[question.id] === "NO"
-  );
+  // const allNo = filteredQuestions.every(
+  //   (question) => answers[question.id] === "NO"
+  // );
   function filterArrayByParentId(parentId) {
     return jsonData.filter((item) => item.parentId === Number(parentId));
   }
@@ -100,11 +107,10 @@ function Assessment({
           (key) => answer[key] === "YES"
         );
         const filteredArrays = {};
-  
+
         selectedChildQuestion.forEach((parentId) => {
           const filteredArray = filterArrayByParentId(parentId);
           filteredArrays[parentId] = filteredArray;
-      
         });
         setStepCount(Object.keys(filteredArrays).length);
         setChildQuestions(filteredArrays);
@@ -121,21 +127,23 @@ function Assessment({
         ) {
           setActiveQuestion("life-function");
           setProgress(100);
-          setIndepthProgress(100)
-          setHealthHistoryProgress(100)
+          setIndepthProgress(100);
+          setHealthHistoryProgress(100);
         } else if (
           userHHAnswersSnapshot.size > 0 ||
-          (userAnswersSnapshot.size > 0 && totalInDepthQuestionsCount === userInDepthAnswersSnapshot.size)
+          (userAnswersSnapshot.size > 0 &&
+            totalInDepthQuestionsCount === userInDepthAnswersSnapshot.size)
         ) {
           setActiveQuestion("health-history");
           setProgress(100);
           setIndepthProgress(100);
         } else if (
           userInDepthAnswersSnapshot.size > 0 ||
-          userAnswersSnapshot.size > 0 && userAnswersSnapshot.size === getScreeningQuestions().length
+          (userAnswersSnapshot.size > 0 &&
+            userAnswersSnapshot.size === getScreeningQuestions().length)
         ) {
           setActiveQuestion("indepth");
-          setProgress(100)
+          setProgress(100);
         } else {
           setActiveQuestion("screening");
         }
@@ -152,7 +160,7 @@ function Assessment({
       loadUserAnswersFromFirestore();
     }
   }, [userId]);
-  
+
   useEffect(() => {
     if (screeningQuestions && Object.keys(screeningQuestions).length > 0) {
       const allNo = Object.values(screeningQuestions).every(
@@ -162,7 +170,7 @@ function Assessment({
         setActiveQuestion("health-history");
         setProgress(100);
         setIndepthProgress(100);
-        setNextClicked(false)
+        setNextClicked(false);
       }
     }
   }, [screeningQuestions]);
@@ -171,7 +179,6 @@ function Assessment({
   }
 
   
-
   return (
     <>
       <div className="StartAssessment-template">
@@ -191,6 +198,8 @@ function Assessment({
             setSelectedQuestions={setSelectedQuestions}
             selectedDisorders={selectedDisorders}
             setSelectedDisorders={setSelectedDisorders}
+            screeningQuestions={screeningQuestions}
+            allNo={allNo}
           />
         </div>
         <div className="StartAssessmentCard">
@@ -234,12 +243,16 @@ function Assessment({
                     setFocusedQuestion={setFocusedQuestion}
                     setScreeningQuestions={setScreeningQuestions}
                     setIndepthProgress={setIndepthProgress}
+                    lastAnsweredQuestion={lastAnsweredQuestion}
+                    setLastAnsweredQuestion={setLastAnsweredQuestion}
+                    allNo={allNo}
                   />
                 )}
                 {activeQuestion === "indepth" && (
                   <IndepthQuestion
                     setActiveQuestion={setActiveQuestion}
                     childQuestions={childQuestions}
+                    setChildQuestions={setChildQuestions}
                     setIndepthProgress={setIndepthProgress}
                     setActiveStep={setActiveStep}
                     activeStep={activeStep}
@@ -256,6 +269,10 @@ function Assessment({
                     setSelectedDisorders={setSelectedDisorders}
                     answers={answers}
                     setAnswers={setAnswers}
+                    setStepCount={setStepCount}
+                    setScreeningQuestions={setScreeningQuestions}
+                    lastAnsweredQuestion={lastAnsweredQuestion}
+                    setLastAnsweredQuestion={setLastAnsweredQuestion}
                   />
                 )}
                 {activeQuestion === "health-history" && (
@@ -278,6 +295,9 @@ function Assessment({
                     setFocusedQuestion={setFocusedQuestion}
                     previousClicked={previousClicked}
                     setPreviousClicked={setPreviousClicked}
+                    lastAnsweredQuestion={lastAnsweredQuestion}
+                    setLastAnsweredQuestion={setLastAnsweredQuestion}
+                    screeningQuestions={screeningQuestions}
                   />
                 )}
                 {activeQuestion === "life-function" && (
@@ -294,8 +314,9 @@ function Assessment({
                     setAnswers={setAnswers}
                     focusedQuestion={focusedQuestion}
                     setFocusedQuestion={setFocusedQuestion}
-                    previousClicked={previousClicked}
                     setPreviousClicked={setPreviousClicked}
+                    lastAnsweredQuestion={lastAnsweredQuestion}
+                    setLastAnsweredQuestion={setLastAnsweredQuestion}
                   />
                 )}
               </div>

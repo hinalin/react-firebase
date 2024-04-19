@@ -13,7 +13,7 @@ const SignUp = () => {
   const [ error , setError ] = useState('');
 
 
-  const { signUpUser } = useFirebase();
+  const { signUpUser  , loading , setLoading } = useFirebase();
   const navigate = useNavigate();
 
   const handleSignUpUser = async (e) => {
@@ -43,6 +43,7 @@ const SignUp = () => {
       return;
     }
     try {
+      setLoading(true);
       const res = await signUpUser( email, password , confirmPassword );
       navigate('/')
     } catch (err) {
@@ -55,6 +56,9 @@ const SignUp = () => {
       setTimeout(() => {
         setError("");
       }, 2000);
+    }
+    finally{
+      setLoading(false);
     }
   };
   return (
@@ -113,7 +117,7 @@ const SignUp = () => {
                   />
                 </div>
                 <div className="mt-3 Signup-create-password-btn">
-                  <button type="submit" onClick={handleSignUpUser}> create user </button>
+                  <button type="submit" onClick={handleSignUpUser} disabled={loading}> create user </button>
                 </div>
               </form>
 

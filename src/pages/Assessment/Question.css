@@ -78,7 +78,7 @@
   }
 
   .InDepthQuestions-template .buttons button{
-    width:160px
+    width:135px
 }
 .InDepthQuestions-template .focused-card .answer{
     display: none;
@@ -113,4 +113,8 @@ input {
 }
 .border-red{
     border: 1px solid red;
+}
+
+.answer-loader {
+    height: 60px;
 }

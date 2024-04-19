@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import Footer from "../../components/Footer/Footer";
@@ -17,34 +17,33 @@ function Home({
   setAnswers,
   selectedDisorders,
   setSelectedDisorders,
-  screeningQuestions
+  screeningQuestions,
 }) {
   const [isShowSignInUpModal, setIsShowSignInUpModal] = useState(false);
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const { user } = useFirebase();
-
+  const { user , fetchPreviousAssessments , userId , isSidebarOpen} = useFirebase();
+  useEffect(()=>{
+    fetchPreviousAssessments()
+  },[userId])
   const handleOpenSignInUpModal = () => {
     setIsShowSignInUpModal(true);
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
+  // const toggleSidebar = () => {
+  //   setSidebarOpen(!isSidebarOpen);
+  // };
 
-  const closeSidebar = () => {
-    setSidebarOpen(false);
-  };
+  // const closeSidebar = () => {
+  //   setSidebarOpen(false);
+  // };
   return (
     <>
+
       <div className="home">
         <div className="home-banner-section">
           <div className="container">
             <NavigationBar
               user={user}
               handleOpenSignInUpModal={handleOpenSignInUpModal}
-              toggleSidebar={toggleSidebar}
-              closeSidebar={closeSidebar}
-              isSidebarOpen={isSidebarOpen}
               assessmentIdRef={assessmentIdRef}
               remainingTime={remainingTime}
               setRemainingTime={setRemainingTime}

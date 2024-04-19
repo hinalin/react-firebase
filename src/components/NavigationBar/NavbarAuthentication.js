@@ -14,7 +14,6 @@ const NavbarAuthentication = ({
   assessmentIdRef,
   remainingTime,
   setRemainingTime,
-  assessmentStatus,
   setAssessmentStatus,
   filteredQuestions,
   setFilteredQuestions,
@@ -23,7 +22,9 @@ const NavbarAuthentication = ({
   setSelectedQuestions,
   fetchStartTime,
   selectedDisorders,
-  setSelectedDisorders
+  setSelectedDisorders,
+  screeningQuestions,
+  allNo
 }) => {
   return (
     <>
@@ -44,6 +45,8 @@ const NavbarAuthentication = ({
 
           selectedDisorders={selectedDisorders}
           setSelectedDisorders={setSelectedDisorders}
+          screeningQuestions={screeningQuestions}
+          allNo={allNo}
         />
       )}
       {user ? (

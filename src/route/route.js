@@ -15,8 +15,8 @@ import Summary from "../pages/summary/Summary";
 import {
   getHealthHistoryQuestions,
   getScreeningQuestions,
-  getLifeFunctionQuestions
-} from '../utils/utils';
+  getLifeFunctionQuestions,
+} from "../utils/utils";
 
 const Main = () => {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -26,11 +26,14 @@ const Main = () => {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [selectedDisorders, setSelectedDisorders] = useState([]);
-  const [screeningQuestions, setScreeningQuestions] = useState([])
+  const [screeningQuestions, setScreeningQuestions] = useState([]);
+
+  const [childQuestions, setChildQuestions] = useState(null);
+  const [stepCount, setStepCount] = useState(0);
   const assessmentIdRef = useRef(null);
 
-  const HealthHistoryQuestions = getHealthHistoryQuestions()
-  const lifeFunctionQuestions = getLifeFunctionQuestions()
+  const HealthHistoryQuestions = getHealthHistoryQuestions();
+  const lifeFunctionQuestions = getLifeFunctionQuestions();
 
   const getAssessmentCounter = () => {
     const storedAssessmentCounter = localStorage.getItem("assessmentCounter");
@@ -38,6 +41,10 @@ const Main = () => {
   };
 
   const assessmentCounter = getAssessmentCounter();
+
+  const allNo = filteredQuestions.every(
+    (question) => answers[question.id] === "NO"
+  );
 
 
   return (
@@ -58,11 +65,9 @@ const Main = () => {
                   answers={answers}
                   setAnswers={setAnswers}
                   assessmentIdRef={assessmentIdRef}
-
                   selectedDisorders={selectedDisorders}
                   setSelectedDisorders={setSelectedDisorders}
                   screeningQuestions={screeningQuestions}
-
                 />
               }
             ></Route>
@@ -104,11 +109,16 @@ const Main = () => {
                   setSelectedOptions={setSelectedOptions}
                   screeningQuestions={screeningQuestions}
                   setScreeningQuestions={setScreeningQuestions}
+                  childQuestions={childQuestions}
+                  setChildQuestions={setChildQuestions}
+                  setStepCount={setStepCount}
+                  stepCount={stepCount}
+                  allNo={allNo}
                 />
               }
             ></Route>
             <Route
-              path="/Summary"
+              path={`Summary/:id`}
               element={
                 <Summary
                   HealthHistoryQuestions={HealthHistoryQuestions}
@@ -127,6 +137,11 @@ const Main = () => {
                   selectedDisorders={selectedDisorders}
                   setSelectedDisorders={setSelectedDisorders}
                   screeningQuestions={screeningQuestions}
+                  setScreeningQuestions={setScreeningQuestions}
+                  childQuestions={childQuestions}
+                  setChildQuestions={setChildQuestions}
+                  setStepCount={setStepCount}
+                  stepCount={stepCount}
                 />
               }
             ></Route>

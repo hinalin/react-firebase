@@ -4,46 +4,53 @@ import { Link, useNavigate } from "react-router-dom";
 import FacebookIcon from "../../../assets/icons/facebook-1.png";
 import GoogleIcon from "../../../assets/icons/google.png";
 import { useFirebase } from "../../../context/FirebaseContext";
-import PhoneIcon from '../../../assets/icons/phone.png';
-
+import PhoneIcon from "../../../assets/icons/phone.png";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { signInUser , googleSignInUser } = useFirebase();
+  const { signInUser, googleSignInUser, loading, setLoading } = useFirebase();
   const navigate = useNavigate();
 
   const handleSignInUser = async (e) => {
     e.preventDefault();
     setError("");
     try {
+      setLoading(true);
       await signInUser(email, password);
       navigate("/");
     } catch (err) {
-        if (err.code === "auth/invalid-credential") {
-            setError("User not found. Please check your email and password or sign up if you don't have an account.");
-          } else {
-            setError(err.message);
-          }
+      if (err.code === "auth/invalid-credential") {
+        setError(
+          "User not found. Please check your email and password or sign up if you don't have an account."
+        );
+      } else {
+        setError(err.message);
+      }
     }
-    setTimeout(() => { 
+    finally{
+      setLoading(false);
+    }
+    setTimeout(() => {
       setError("");
     }, 3000);
   };
 
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
-    try{
-        await googleSignInUser();
-        navigate('/')
+    try {
+      setLoading(true);
+      await googleSignInUser();
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    catch(err){
-        setError(err.message)
-    }
-  }
+
+  };
 
   return (
     <>
@@ -70,7 +77,7 @@ const SignIn = () => {
                       name="Email Address"
                       placeholder="Email Address"
                       value={email}
-                      onChange={(e)=>setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div>
@@ -81,7 +88,7 @@ const SignIn = () => {
                       name="password"
                       placeholder="Password"
                       value={password}
-                      onChange={(e)=>setPassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <div className="Forgot-Password-link">
@@ -92,6 +99,7 @@ const SignIn = () => {
                   <button
                     className="btn Sign-in-btn"
                     onClick={handleSignInUser}
+                    disabled={loading}
                   >
                     Sign in
                   </button>
@@ -117,32 +125,23 @@ const SignIn = () => {
                     <h5 className="mt-3">Sign in with your social account</h5>
                   </div>
                   <div className="col-12 Signup-form-icon mt-2">
-                    <button className="w-100" onClick={handleGoogleSignIn}>
+                    <button className="w-100" onClick={handleGoogleSignIn} disabled={loading}>
                       <div className="d-flex justify-content-start">
                         <img src={GoogleIcon} alt="" />
                         <p className="m-auto">Google</p>
                       </div>
                     </button>
                   </div>
-                  <div className="col-12 Signup-form-icon mt-2">
-                    <button className="w-100">
-                      <div className="d-flex justify-content-start">
-                        <img src={FacebookIcon} alt="" className="" />
-                        <p className="m-auto">Facebook</p>
-                      </div>
-                    </button>
-                  </div>
                   <div className="signUpwithNumber">
-                    <Link to='/SignUpwithNumber'>
-                    <button className="p-2 mt-3 w-100">
+                    <Link to="/SignUpwithNumber">
+                      <button className="p-2 mt-3 w-100" disabled={loading}>
                         <div className="d-flex justify-content-start">
-                        <img src={PhoneIcon} alt="" className="" />
-                        <p className="m-auto">Sign In with Number</p>
+                          <img src={PhoneIcon} alt="" className="" />
+                          <p className="m-auto" >Sign In with Number</p>
                         </div>
-                    </button>
+                      </button>
                     </Link>
                   </div>
-
                 </div>
               </div>
             </div>

@@ -5,6 +5,7 @@ import Select from "react-select";
 import { useFirebase } from "../../../context/FirebaseContext";
 import { fs } from "../../../config/Firebase";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import AnswerLoadr from "../../../assets/gif/answerLoder.gif";
 
 const HealthHistoryQuestions = ({
   setActiveQuestion,
@@ -23,13 +24,13 @@ const HealthHistoryQuestions = ({
   focusedQuestion,
   setFocusedQuestion,
   previousClicked,
+  screeningQuestions
 }) => {
   const [newOption, setNewOption] = useState("");
   const [submitClicked, setSubmitClicked] = useState({});
 
-  const { user, loading, setLoading } = useFirebase();
-  const userId = user ? user.uid : null;
-  const containerRef = useRef(null);
+  const { userId, loading, setLoading, loadSavingAnswer, setLoadSavingAnswer } =
+    useFirebase();
 
   useEffect(() => {
     // Find the index of the first unanswered question
@@ -38,10 +39,14 @@ const HealthHistoryQuestions = ({
     );
 
     // If there's a first unanswered question, focus on it
-    if (firstUnansweredIndex !== -1 && previousClicked == false) {
+    if (
+      firstUnansweredIndex !== -1 &&
+      previousClicked == false &&
+      !loadSavingAnswer
+    ) {
       setFocusedQuestion(firstUnansweredIndex);
     }
-  }, []);
+  }, [loadSavingAnswer]);
 
   useEffect(() => {
     if (userId) {
@@ -53,6 +58,7 @@ const HealthHistoryQuestions = ({
       );
     }
   }, [userId]);
+
   const fetchHealthHistoryAnswers = async (
     userId,
     assessmentIdRef,
@@ -101,7 +107,7 @@ const HealthHistoryQuestions = ({
     setAnswers({ ...answers, [questionId]: "YES" });
     setSelectedOptions({ ...selectedOptions, [questionId]: null }); // Reset selected options for the question
     setSubmitClicked({ ...submitClicked, [questionId]: true });
-    await saveToFirestore(questionId, "YES");
+    // await saveToFirestore(questionId, "YES");
   };
 
   const handleNoClick = async (questionId) => {
@@ -138,11 +144,18 @@ const HealthHistoryQuestions = ({
   };
 
   const handlePreviousPage = () => {
-    setActiveQuestion("indepth");
-    setCurrentPage(Object.keys(childQuestions).length - 1);
-    setActiveStep(Object.keys(childQuestions).length);
-    setFocusedQuestion(null);
-    setNextClicked(false);
+    const allNo = screeningQuestions.every(
+      (question) => answers[question.id] === "NO"
+    );
+    if (allNo) {
+      setActiveQuestion("screening");
+    } else {
+      setActiveQuestion("indepth");
+      setCurrentPage(Object.keys(childQuestions).length - 1);
+      setActiveStep(Object.keys(childQuestions).length);
+      setFocusedQuestion(null);
+      setNextClicked(false);
+    }
   };
 
   const handleNextButtonClick = async () => {
@@ -202,6 +215,7 @@ const HealthHistoryQuestions = ({
 
   const saveToFirestore = async (questionId, answer) => {
     try {
+      setLoadSavingAnswer(true);
       const userDocRef = doc(fs, "users", userId);
       const assessmentDocRef = doc(
         userDocRef,
@@ -234,6 +248,8 @@ const HealthHistoryQuestions = ({
       console.log("Document successfully writtennnnnnn!");
     } catch (error) {
       console.error("Error writing documenttttt: ", error);
+    } finally {
+      setLoadSavingAnswer(false);
     }
   };
 
@@ -255,7 +271,9 @@ const HealthHistoryQuestions = ({
               <div
                 key={question.id}
                 className={`unanswered-card ${
-                  focusedQuestion === index ? "focused-card" : ""
+                  focusedQuestion === index || loadSavingAnswer
+                    ? "focused-card"
+                    : ""
                 } ${
                   nextClicked === true && focusedQuestion === index
                     ? "border-red"
@@ -276,7 +294,10 @@ const HealthHistoryQuestions = ({
                       </div>
                     )}
                 </div>
-                {focusedQuestion === index && (
+                {focusedQuestion === index && loadSavingAnswer && (
+                  <img src={AnswerLoadr} alt="" className="answer-loader" />
+                )}
+                {focusedQuestion === index && !loadSavingAnswer && (
                   <div className="buttons">
                     <button
                       className={`yes_btn ${
@@ -298,7 +319,7 @@ const HealthHistoryQuestions = ({
                   </div>
                 )}
 
-                {focusedQuestion !== index && (
+                {focusedQuestion !== index && !loadSavingAnswer && (
                   <div className="answer">
                     {selectedOptions[question.id] &&
                       selectedOptions[question.id].length > 0 && ( // Check if selectedOptions exist and it's not an empty array
@@ -315,7 +336,8 @@ const HealthHistoryQuestions = ({
                   </div>
                 )}
                 {focusedQuestion === index &&
-                  answers[question.id] === "YES" && (
+                  answers[question.id] === "YES" &&
+                  !loadSavingAnswer && (
                     <div>
                       <Select
                         options={[

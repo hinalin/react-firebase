@@ -11,13 +11,14 @@ const ForgotPassword = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
 
-  const { resetUserPassword } = useFirebase();
+  const { resetUserPassword , loading , setLoading } = useFirebase();
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setError("");
     setSuccessMessage('');
     try {
+      setLoading(true);
       await resetUserPassword(email);
       setEmail('');
       setSuccessMessage("Password reset email sent successfully.");
@@ -28,6 +29,9 @@ const ForgotPassword = () => {
       } else {
         setError(err.message);
       }
+    }
+    finally{
+      setLoading(false);
     }
     setTimeout(() => { 
       setError("");
@@ -69,7 +73,7 @@ const ForgotPassword = () => {
                   onChange={(e)=>setEmail(e.target.value)}
                 />
               </div>
-              <button className="btn reset-password-btn mt-3" onClick={handleResetPassword}>Reset Password</button>
+              <button className="btn reset-password-btn mt-3" onClick={handleResetPassword} disabled={loading}>Reset Password</button>
             </form>
           </div>
         </div>

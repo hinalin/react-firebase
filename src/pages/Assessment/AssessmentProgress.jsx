@@ -21,8 +21,7 @@ const AssessmentProgress = ({
   answers,
   filteredQuestions
 }) => {
-  const { user } = useFirebase();
-  const userId = user ? user.uid : null;
+  const { loading , setLoading , userId } = useFirebase();
 
   const [progressValue, setProgressValue] = useState(0);
   const [healthHistoryProgressValue, setHealthHistoryProgressValue] =
@@ -34,6 +33,9 @@ const AssessmentProgress = ({
   const [isTimeUp, setIsTimeUp] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false); // Track whether modal should be open
   // let startTime = localStorage.getItem(`startTime_${userId}`);
+  useEffect(() => {
+    setLoading(false); // Set loading to false once component mounts
+  }, []);
   
   const allNo = filteredQuestions.every(
     (question) => answers[question.id] === "NO"
@@ -49,21 +51,6 @@ const AssessmentProgress = ({
   
   let startTime = localStorage.getItem(`startTime_${userId}`);
 
-  // const fetchStartTime = async () => {
-  //   try {
-  //     if (!startTime) {
-  //       startTime = new Date().toISOString();
-  //       localStorage.setItem(`startTime_${userId}`, startTime);
-  //     }
-  //     startTime = new Date(startTime);
-  //     const elapsedTime = (new Date() - startTime) / 1000;
-  //     const newRemainingTime = Math.max(12 * 60 * 60 - elapsedTime, 0);
-  //     setRemainingTime(newRemainingTime);
-  //   } catch (error) {
-  //     console.error("Error fetching start time:", error);
-  //   }
-  // };
-  
   const fetchStartTime = async () => {
     try {
       // Check if there is a start time in local storage for the current assessment ID
@@ -138,32 +125,6 @@ const AssessmentProgress = ({
     );
   }, [progress, healthHistoryProgress, indepthProgress, lifeFunctionProgress]);
 
-  // Format date time
-
-  // const storeProgressToFirestore = async () => {
-  //   try {
-  //     if (userId) {
-  //       const userDocRef = doc(fs, "users", userId);
-  //       const assessmentDocRef = doc(
-  //         userDocRef,
-  //         "assessment",
-  //         assessmentIdRef.current
-  //       );
-
-  //       await setDoc(
-  //         assessmentDocRef,
-  //         {
-  //           startTime: formatDateTime(startTime),
-  //         },
-  //         { merge: true }
-  //       );
-  //       console.log("Progress stored in Firestore successfully!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error storing progress in Firestore: ", error);
-  //   }
-  // };
-
   const storeProgressToFirestore = async () => {
     try {
       if (userId) {
@@ -219,26 +180,6 @@ const AssessmentProgress = ({
             <h2 className="StartAssessmentTitle mb-4 mt-5">
               Mental Health Assessment
             </h2>
-            {/* <div className="main-progress">
-              <div className="progress-text d-flex justify-content-between">
-                <p>Assessment Progress</p>
-                <p>0%</p>
-              </div>
-              <div className="progress">
-                <div
-                  className="progress-bar"
-                  role="progressbar"
-                  aria-valuenow="50"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  style={{
-                    width: "50%",
-                    backgroundColor: "#33ca8f",
-                    borderRadius: "20px",
-                  }}
-                ></div>
-              </div>
-            </div> */}
             <div className="main-progress">
               <div className="progress-text d-flex justify-content-between">
                 <p>Assessment Progress</p>
@@ -322,26 +263,33 @@ const AssessmentProgress = ({
               </div>
             </div>
 
-            {activeQuestion === "indepth" && (
-              <div>
-                {[...Array(stepCount).keys()].map((stepIndex) => (
-                  <div
-                    key={stepIndex}
-                    className="d-flex justify-content-between align-items-center mt-3 flex-wrap"
-                  >
-                    <div className="StartAssessment-title ms-3">
-                      <span
-                        className={`${
-                          activeStep === stepIndex + 1 ? "text-black" : ""
-                        }`}
-                      >
-                        Step {stepIndex + 1}
-                      </span>
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <>
+              {activeQuestion === "indepth" && (
+                <div>
+                  {[...Array(stepCount).keys()].map((stepIndex) => (
+                    <div
+                      key={stepIndex}
+                      className="d-flex justify-content-between align-items-center mt-3 flex-wrap"
+                    >
+                      <div className="StartAssessment-title ms-3">
+                        <span
+                          className={`${
+                            activeStep === stepIndex + 1 ? "text-black" : ""
+                          }`}
+                        >
+                          Step {stepIndex + 1}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
+              </>
             )}
+           
 
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
               <div className="StartAssessment-title">

@@ -6,6 +6,7 @@ import { fs } from "../../../config/Firebase";
 import { collection, doc, getDocs, setDoc, getDoc } from "firebase/firestore";
 import { useFirebase } from "../../../context/FirebaseContext";
 import { v4 as uuidv4 } from "uuid";
+import AnswerLoadr from "../../../assets/gif/answerLoder.gif";
 
 const ScreeningQuestions = ({
   setStepCount,
@@ -25,15 +26,17 @@ const ScreeningQuestions = ({
   setNextClicked,
   focusedQuestion,
   setFocusedQuestion,
-  setIndepthProgress
+  setIndepthProgress,
+  lastAnsweredQuestion,
+  setLastAnsweredQuestion,
+  allNo
 }) => {
   const [showChildQuestions, setShowChildQuestions] = useState(false);
-  // const [childQuestionsByStep, setChildQuestionsByStep] = useState({}); // State to hold child questions
-
-  const [loading, setLoading] = useState(true);
-  const { user } = useFirebase();
+  
+  const { loading, setLoading, loadSavingAnswer, setLoadSavingAnswer , userId } =
+    useFirebase();
   const containerRef = useRef(null);
-  const userId = user ? user.uid : null;
+
   useEffect(() => {
     // Generate a UUID when the component mounts
     assessmentIdRef.current = uuidv4();
@@ -55,10 +58,8 @@ const ScreeningQuestions = ({
     const nextUnansweredIndex = filteredQuestions.findIndex(
       (question) => !answers.hasOwnProperty(question.id)
     );
-    if (nextUnansweredIndex !== -1) {
+    if (nextUnansweredIndex !== -1 && !loadSavingAnswer) {
       setFocusedQuestion(nextUnansweredIndex);
-    }
-    if (nextUnansweredIndex !== -1) {
       const focusedElement =
         containerRef.current?.children[nextUnansweredIndex];
       if (focusedElement) {
@@ -68,7 +69,7 @@ const ScreeningQuestions = ({
         });
       }
     }
-  }, [answers, filteredQuestions , nextClicked]);
+  }, [answers, filteredQuestions, loadSavingAnswer]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,8 +103,9 @@ const ScreeningQuestions = ({
     setProgress(Math.min(newProgress, 100));
   }, [answers]);
 
-  const storeAnswerToFirestore = async (questionId, answer, buttonState) => {
+  const storeAnswerToFirestore = async (questionId, answer, disorder) => {
     try {
+      setLoadSavingAnswer(true);
       const userDocRef = doc(fs, "users", userId);
       // Assuming you have an 'assessment' document under the user document
       const assessmentDocRef = doc(
@@ -113,13 +115,20 @@ const ScreeningQuestions = ({
       );
       const answersRef = collection(assessmentDocRef, "answers_screenings");
       const answerDocRef = doc(answersRef, questionId.toString());
+      let storedDisorder = null;
+      if (answer === "YES" && disorder) {
+        storedDisorder = disorder;
+      }
       await setDoc(answerDocRef, {
         questionId: questionId,
         answer: answer,
-        buttonState: buttonState,
         type: "screening",
+        ...(storedDisorder !== null && { disorder }),
       });
       console.log("Answer stored in Firestore successfully!");
+      setTimeout(() => {
+        setLoadSavingAnswer(false);
+      }, 1000); // 1000 milliseconds = 1 second
     } catch (error) {
       console.error("Error storing answer in Firestore: ", error);
     }
@@ -150,7 +159,9 @@ const ScreeningQuestions = ({
   const handleQuestionClick = (index) => {
     setFocusedQuestion(index === focusedQuestion ? null : index);
   };
+
   const handleYesClick = async (questionId, disorder) => {
+    setLastAnsweredQuestion(questionId);
     const question = filteredQuestions.find((q) => q.id === questionId);
     if (question && question.disorder) {
       const newDisorder = { id: questionId, disorder: disorder }; // Use the parent ID as the ID for the disorder object
@@ -160,15 +171,17 @@ const ScreeningQuestions = ({
     setSelectedQuestions([...selectedQuestions, questionId]);
     setFocusedQuestion(null);
 
-    await storeAnswerToFirestore(questionId, "YES", true, disorder);
+    await storeAnswerToFirestore(questionId, "YES", disorder);
 
     setNextClicked(false);
   };
 
   const handleNoClick = async (questionId) => {
+    setLastAnsweredQuestion(questionId);
+
     setAnswers({ ...answers, [questionId]: "NO" });
     setFocusedQuestion(null);
-    await storeAnswerToFirestore(questionId, "NO", false);
+    await storeAnswerToFirestore(questionId, "NO", null);
   };
 
   const handleNextButtonClick = async () => {
@@ -177,38 +190,17 @@ const ScreeningQuestions = ({
       (question) => !answers.hasOwnProperty(question.id)
     );
 
-    const allNo = filteredQuestions.every(
-      (question) => answers[question.id] === "NO"
-    );
+    // const allNo = filteredQuestions.every(
+    //   (question) => answers[question.id] === "NO"
+    // );
 
     const allQuestionsAnswered = unansweredQuestions.length === 0;
 
-    try {
-      const userDocRef = doc(fs, "users", userId);
-      const assessmentDocRef = doc(
-        userDocRef,
-        "assessment",
-        assessmentIdRef.current
-      );
-      await setDoc(
-        assessmentDocRef,
-        { screeningFormCompleted: true },
-        { merge: true }
-      );
-      console.log("screeningFormCompleted status updated in Firestore!");
-    } catch (error) {
-      console.error(
-        "Error updating screeningFormCompleted status in Firestore: ",
-        error
-      );
-    }
-
     if (allNo) {
       setActiveQuestion("health-history");
-      setIndepthProgress(100)
-      setNextClicked(false)
-    } 
-    else if (allQuestionsAnswered) {
+      setIndepthProgress(100);
+      setNextClicked(false);
+    } else if (allQuestionsAnswered) {
       setShowChildQuestions(true);
       setStepCount(Object.keys(childQuestionsByStep).length);
       setChildQuestions(childQuestionsByStep);
@@ -229,7 +221,6 @@ const ScreeningQuestions = ({
   const isParentQuestionSelected = (parentId) => {
     return selectedQuestions.includes(parentId);
   };
-
 
   const groupChildQuestionsByParentId = () => {
     const groupedQuestions = {};
@@ -258,23 +249,28 @@ const ScreeningQuestions = ({
               <div
                 key={question.id}
                 className={`unanswered-card ${
-                  focusedQuestion === index ? "focused-card" : ""
+                  focusedQuestion === index ||
+                  (loadSavingAnswer && answers[question.id])
+                    ? "focused-card"
+                    : ""
                 }
                 ${nextClicked && focusedQuestion === index ? "border-red" : ""}
                 `}
                 onClick={() => handleQuestionClick(index)}
               >
-                {/* {focusedQuestion === index && !answers[question.id] && (
-                                <div className="unanswered-message">Please answer this question.</div>
-                            )} */}
                 <div className="question">
                   <p>{question.scn_question}</p>
-                  {answers[question.id] && (
+                  {answers[question.id] && !loadSavingAnswer && (
                     <div className="ticked-img-div">
                       <AiOutlineCheck className="ticked-img" />
                     </div>
                   )}
                 </div>
+
+                {lastAnsweredQuestion === question.id && loadSavingAnswer && (
+                  <img src={AnswerLoadr} alt="" className="answer-loader"/>
+                )}
+
                 {focusedQuestion === index && (
                   <div className="buttons">
                     <button
@@ -298,11 +294,13 @@ const ScreeningQuestions = ({
                   </div>
                 )}
 
-                {focusedQuestion !== index && answers[question.id] && (
-                  <div className="answer">
-                    <span>{answers[question.id]}</span>
-                  </div>
-                )}
+                {focusedQuestion !== index &&
+                  answers[question.id] &&
+                  !loadSavingAnswer && (
+                    <div className="answer">
+                      <span>{answers[question.id]}</span>
+                    </div>
+                  )}
               </div>
             ))}
           </div>

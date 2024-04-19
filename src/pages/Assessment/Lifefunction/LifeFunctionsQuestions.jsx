@@ -7,7 +7,8 @@ import { useFirebase } from "../../../context/FirebaseContext";
 import { fs } from "../../../config/Firebase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import AnswerLoadr from "../../../assets/gif/answerLoder.gif";
 
 const LifeFunctionsQuestions = ({
   setActiveQuestion,
@@ -21,20 +22,19 @@ const LifeFunctionsQuestions = ({
   lifeFunctionQuestions,
   focusedQuestion,
   setFocusedQuestion,
-  setPreviousClicked
+  setPreviousClicked,
 }) => {
-  const { user } = useFirebase();
-  const userId = user ? user.uid : null;
+  const {loadSavingAnswer, setLoadSavingAnswer , userId } = useFirebase();
   const navigate = useNavigate();
 
   useEffect(() => {
     const firstUnansweredIndex = lifeFunctionQuestions.findIndex(
       (question) => !answers[question.id]
     );
-    if (firstUnansweredIndex !== -1) {
+    if (firstUnansweredIndex !== -1 && !loadSavingAnswer) {
       setFocusedQuestion(firstUnansweredIndex);
     }
-  }, []);
+  }, [loadSavingAnswer]);
 
   useEffect(() => {
     const numQuestions = lifeFunctionQuestions.length;
@@ -84,7 +84,7 @@ const LifeFunctionsQuestions = ({
     setPreviousClicked(true);
   };
 
-  const handleFinishButtonClick = async () => {
+  const handleFinishButtonClick = async (assessment) => {
     setNextClicked(true);
     const firstUnansweredIndex = lifeFunctionQuestions.findIndex(
       (question) => !answers[question.id]
@@ -95,8 +95,8 @@ const LifeFunctionsQuestions = ({
       console.log("All questions answered. Proceed to finish.");
       setNextClicked(false);
       setAssessmentStatus("Completed");
-      navigate("/Summary");
-
+      // navigate("/Summary");
+      navigate(`/Summary/${assessmentIdRef.current}`);
     }
     try {
       const userDocRef = doc(fs, "users", userId);
@@ -117,10 +117,10 @@ const LifeFunctionsQuestions = ({
       console.error("Error storing start time and assessment status: ", error);
     }
     const newAssessmentId = uuidv4();
-  
+
     // Store the new assessment ID in local storage
     localStorage.setItem("assessmentId", newAssessmentId);
-  
+
     // Store the new assessment start time in Firestore
     try {
       const userDocRef = doc(fs, "users", userId);
@@ -129,9 +129,8 @@ const LifeFunctionsQuestions = ({
     } catch (error) {
       console.error("Error storing new assessment data: ", error);
     }
-  
   };
-  
+
   const handleQuestionSubmit = async (questionId, value) => {
     if (value === undefined || value === null || value === "") {
       // Display an alert if the user hasn't provided an answer
@@ -161,6 +160,7 @@ const LifeFunctionsQuestions = ({
 
   const storeAnswerToFirestore = async (questionId, value) => {
     try {
+      setLoadSavingAnswer(true);
       const userDocRef = doc(fs, "users", userId);
       const assessmentDocRef = doc(
         userDocRef,
@@ -177,6 +177,8 @@ const LifeFunctionsQuestions = ({
       console.log("Answer stored in Firestore successfully!");
     } catch (error) {
       console.error("Error storing answer in Firestore: ", error);
+    } finally {
+      setLoadSavingAnswer(false);
     }
   };
 
@@ -188,7 +190,9 @@ const LifeFunctionsQuestions = ({
             <div
               key={question.id}
               className={`unanswered-card ${
-                focusedQuestion === index ? "focused-card" : ""
+                focusedQuestion === index
+                  ? "focused-card"
+                  : ""
               }  ${
                 nextClicked && focusedQuestion === index ? "border-red" : ""
               }`}
@@ -203,7 +207,7 @@ const LifeFunctionsQuestions = ({
                 )}
               </div>
 
-              {focusedQuestion !== index && answers[question.id] && (
+              {focusedQuestion !== index && answers[question.id] && !loadSavingAnswer && (
                 <div className="answer">
                   <span>
                     {question.dropdown
@@ -212,10 +216,14 @@ const LifeFunctionsQuestions = ({
                   </span>
                 </div>
               )}
+              
+              {focusedQuestion === index  && loadSavingAnswer && (
+                <img src={AnswerLoadr} alt="" className="answer-loader" />
+              )}
 
-              {focusedQuestion === index && (
+              {focusedQuestion === index && !loadSavingAnswer && (
                 <div>
-                  {question.dropdown ? (
+                  {question.dropdown ?(
                     <Select
                       options={question.dropdown.map((item) => ({
                         value: item,
@@ -276,3 +284,6 @@ const LifeFunctionsQuestions = ({
 };
 
 export default LifeFunctionsQuestions;
+
+
+

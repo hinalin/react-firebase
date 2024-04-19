@@ -17,7 +17,7 @@ const SignUpwithNumber = () => {
   const [flag, setFlag] = useState(false);
   const [confirmObj, setConfirmObj] = useState("");
 
-  const { setUpRecaptcha } = useFirebase();
+  const { setUpRecaptcha , loading , setLoading } = useFirebase();
   const navigate = useNavigate();
 
   const getSignUpOtp = async (e) => {
@@ -31,12 +31,16 @@ const SignUpwithNumber = () => {
       return;
     }
     try {
+      setLoading(true);
       const response = await setUpRecaptcha(phoneNumber);
       console.log(response, "response...");
       setConfirmObj(response);
       setFlag(true);
     } catch (err) {
       setError(err.message);
+    }
+    finally{
+      setLoading(false);
     }
     setTimeout(() => {
       setError("");
@@ -47,6 +51,7 @@ const SignUpwithNumber = () => {
     e.preventDefault();
     if (otp === "") return;
     try {
+      setLoading(true);
       setError("");
       const result = await confirmObj.confirm(otp);
       if (result.user) {
@@ -71,6 +76,9 @@ const SignUpwithNumber = () => {
       navigate("/");
     } catch (err) {
       setError(err.message);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -119,7 +127,7 @@ const SignUpwithNumber = () => {
                 <div id="recaptcha-container" className="mt-3 ms-5" />
 
                 <div className="Signup-sent-verificationcode-btn">
-                  <button onClick={getSignUpOtp}>Send verification code</button>
+                  <button onClick={getSignUpOtp} disabled={loading}>Send verification code</button>
                 </div>
               </form>
 
@@ -138,17 +146,13 @@ const SignUpwithNumber = () => {
                     />
                   </div>
                   <div className="mt-3 Signup-verifictioncode-btns">
-                    <button className="me-1" onClick={verifySignUpOtp}>
+                    <button className="me-1" onClick={verifySignUpOtp} disabled={loading}>
                       Verify code
                     </button>
-                    <button onClick={getSignUpOtp}>Send new code</button>
+                    <button onClick={getSignUpOtp} disabled={loading}>Send new code</button>
                   </div>
                 </div>
               </form>
-
-              <div className="mt-3 Signup-create-password-btn">
-                <button type="submit">create user</button>
-              </div>
             </div>
           </div>
         </div>

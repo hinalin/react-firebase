@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 import "./NavigationBar.css";
 import NavbarAuthentication from "./NavbarAuthentication";
 import AssessmentSidebar from "../AssessmentSidebar/AssessmentSidebar";
+import { useFirebase } from "../../context/FirebaseContext";
 
 function NavigationBar({
   user,
   handleOpenSignInUpModal,
-  closeSidebar,
-  toggleSidebar,
-  isSidebarOpen,
   assessmentIdRef,
   remainingTime,
   setRemainingTime,
@@ -23,7 +21,10 @@ function NavigationBar({
   fetchStartTime,
   selectedDisorders,
   setSelectedDisorders,
+  screeningQuestions,
+  allNo
 }) {
+  const {isSidebarOpen , setSidebarOpen } = useFirebase()
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
   const openSidebarDrawer = () => {
     setIsSideDrawerOpen(true);
@@ -31,6 +32,13 @@ function NavigationBar({
 
   const closeSidebarDrawer = () => {
     setIsSideDrawerOpen(false);
+  };
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
   };
   return (
     <>
@@ -51,6 +59,8 @@ function NavigationBar({
           fetchStartTime={fetchStartTime}
           selectedDisorders={selectedDisorders}
           setSelectedDisorders={setSelectedDisorders}
+          screeningQuestions={screeningQuestions}
+          allNo={allNo}
         />
       )}
       <div className="nav navbar homeNav">
@@ -91,6 +101,8 @@ function NavigationBar({
             fetchStartTime={fetchStartTime}
             selectedDisorders={selectedDisorders}
             setSelectedDisorders={setSelectedDisorders}
+            screeningQuestions={screeningQuestions}
+            allNo={allNo}
           />
         </ul>
         {!isSidebarOpen && (

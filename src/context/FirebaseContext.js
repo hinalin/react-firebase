@@ -19,7 +19,13 @@ export const useFirebase = () => useContext(firebaseContext);
 export const FirebaseContextProvider = ({ children }) => {
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
-  // const [selectedOptions, setSelectedOptions] = useState({});
+  const [ loadSavingAnswer , setLoadSavingAnswer ] = useState(false);
+  const [previousAssessments, setPreviousAssessments] = useState([]);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+
+  const userId = user ? user.uid : null;
+
 
   useEffect(() => {
     authChange();
@@ -107,6 +113,22 @@ export const FirebaseContextProvider = ({ children }) => {
     return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
   };
 
+    const fetchPreviousAssessments = async () => {
+      if (userId) {
+        const userDocRef = doc(fs, "users", userId);
+        const assessmentsRef = collection(userDocRef, "assessment");
+        const snapshot = await getDocs(assessmentsRef);
+        const assessmentsData = [];
+        snapshot.forEach((doc) => {
+          const assessmentData = doc.data();
+          assessmentData.id = doc.id;
+          assessmentsData.push(assessmentData);
+        });
+        setPreviousAssessments(assessmentsData);
+        console.log(assessmentsData , 'assessmentdataaaa');
+      }
+    };
+
   const authChange = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -120,6 +142,8 @@ export const FirebaseContextProvider = ({ children }) => {
       unsubscribe();
     };
   };
+
+
 
   // const fetchHealthHistoryAnswers = async (
   //   userId,
@@ -195,10 +219,14 @@ export const FirebaseContextProvider = ({ children }) => {
         authChange,
         loading,
         setLoading,
-        // fetchHealthHistoryAnswers,
-        // setSelectedOptions,
-        // selectedOptions,
-        // fetchUserAnswersFromFirestore,
+        loadSavingAnswer, 
+        setLoadSavingAnswer,
+        userId,
+        previousAssessments,
+        setPreviousAssessments,
+        fetchPreviousAssessments,
+        isSidebarOpen,
+        setSidebarOpen
       }}
     >
       {children}

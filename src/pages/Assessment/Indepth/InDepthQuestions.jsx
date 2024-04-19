@@ -4,10 +4,14 @@ import { useFirebase } from "../../../context/FirebaseContext";
 import { fs } from "../../../config/Firebase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { AiOutlineCheck } from "react-icons/ai";
+import jsonData from "../../../data/QuestionsData.json";
+import Loader from "../../../assets/gif/loader.gif";
+import AnswerLoadr from "../../../assets/gif/answerLoder.gif";
 
 const InDepthQuestions = ({
   setActiveQuestion,
   childQuestions,
+  setChildQuestions,
   setActiveStep,
   currentPage,
   setCurrentPage,
@@ -22,13 +26,76 @@ const InDepthQuestions = ({
   setFocusedQuestion,
   selectedDisorders,
   setSelectedDisorders,
-
+  setStepCount,
+  setScreeningQuestions,
+  lastAnsweredQuestion,
+  setLastAnsweredQuestion,
   answers,
   setAnswers,
 }) => {
-  const { user } = useFirebase();
-  const userId = user ? user.uid : null;
+  const { userId, setLoading, loading, loadSavingAnswer, setLoadSavingAnswer } =
+    useFirebase();
   const focusedQuestionRef = useRef(null);
+
+  function filterArrayByParentId(parentId) {
+    return jsonData.filter((item) => item.parentId === Number(parentId));
+  }
+  const loadscreeningAnswersFromFirestore = async () => {
+    // setLoading(true);
+    try {
+      if (userId) {
+        const userDocRef = doc(fs, "users", userId);
+        const assessmentDocRef = doc(
+          userDocRef,
+          "assessment",
+          assessmentIdRef.current
+        );
+        const answersRef = collection(assessmentDocRef, "answers_screenings");
+
+        const userAnswersSnapshot = await getDocs(answersRef);
+
+        const loadedAnswers = [];
+        const loadedDisorders = [];
+        const answer = {};
+        userAnswersSnapshot.forEach((doc) => {
+          loadedAnswers.push(doc.data());
+          answer[doc.id] = doc.data().answer;
+          if (doc.data().answer === "YES") {
+            loadedDisorders.push({
+              id: doc.id,
+              disorder: doc.data().disorder,
+            });
+          }
+        });
+        const selectedChildQuestion = Object.keys(answer).filter(
+          (key) => answer[key] === "YES"
+        );
+        const filteredArrays = {};
+
+        selectedChildQuestion.forEach((parentId) => {
+          const filteredArray = filterArrayByParentId(parentId);
+          filteredArrays[parentId] = filteredArray;
+        });
+        setStepCount(Object.keys(filteredArrays).length);
+        setChildQuestions(filteredArrays);
+        setScreeningQuestions(loadedAnswers);
+        setSelectedDisorders(loadedDisorders);
+      }
+    } catch (error) {
+      console.error(
+        "Error loading user indepth - screeninggggg answers from Firestore: ",
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      loadscreeningAnswersFromFirestore();
+    }
+  }, [userId]);
 
   useEffect(() => {
     const parentIds = Object.keys(childQuestions);
@@ -37,13 +104,12 @@ const InDepthQuestions = ({
       const unansweredChildIndex = childQuestions[parentId].findIndex(
         (childQuestion) => !answeredQuestions[childQuestion.id]
       );
-      if (unansweredChildIndex !== -1) {
+      if (unansweredChildIndex !== -1 && !loadSavingAnswer) {
         setFocusedQuestion(childQuestions[parentId][unansweredChildIndex].id);
-        // setCurrentPage(i); // Set current page based on the active step
         break;
       }
     }
-  }, [childQuestions, answeredQuestions]);
+  }, [childQuestions, answeredQuestions, loadSavingAnswer]);
 
   useEffect(() => {
     const fetchLastAnsweredQuestion = async () => {
@@ -93,12 +159,7 @@ const InDepthQuestions = ({
         block: "center",
       });
     }
-  }, [focusedQuestion , currentPage , nextClicked]);
-
-  const totalChildQuestionsLength = Object.values(childQuestions).reduce(
-    (total, questions) => total + questions.length,
-    0
-  );
+  }, [focusedQuestion, currentPage, nextClicked]);
 
   const groupAnswersByParentId = (answers, childQuestions) => {
     const groupedAnswers = {};
@@ -185,6 +246,7 @@ const InDepthQuestions = ({
     // Update selected disorders state with risk categories
     setSelectedDisorders(updatedSelectedDisorders);
     console.log(selectedDisorders, "disorders");
+    console.log(updatedSelectedDisorders, "updatedSelectedDisorderssssss");
   };
 
   const handleNextPage = async () => {
@@ -218,8 +280,7 @@ const InDepthQuestions = ({
           await setDoc(
             assessmentDocRef,
             {
-              inDepthFormCompleted: true,
-              selectedDisorders : selectedDisorders
+              selectedDisorders: selectedDisorders,
             },
             { merge: true }
           );
@@ -264,6 +325,7 @@ const InDepthQuestions = ({
   };
 
   const handleAnswerClick = (questionId, answer) => {
+    setLastAnsweredQuestion(questionId);
     setAnswers({ ...answers, [questionId]: answer });
     setAnsweredQuestions({ ...answeredQuestions, [questionId]: true });
     setNextClicked(false);
@@ -284,6 +346,7 @@ const InDepthQuestions = ({
 
   const storeAnswerToFirestore = async (questionId, answer) => {
     try {
+      setLoadSavingAnswer(true);
       const userDocRef = doc(fs, "users", userId);
       const assessmentDocRef = doc(
         userDocRef,
@@ -300,6 +363,8 @@ const InDepthQuestions = ({
       console.log("Answer stored in Firestore successfully!");
     } catch (error) {
       console.error("Error storing answer in Firestore: ", error);
+    } finally {
+      setLoadSavingAnswer(false);
     }
   };
 
@@ -337,17 +402,24 @@ const InDepthQuestions = ({
   return (
     <>
       <div className="container-fluid">
-        <div className="InDepthQuestions-template">
-          {Object.keys(childQuestions).map((parentId, index) =>
-            index === currentPage
-              ? childQuestions[parentId].map((childQuestion, questionIndex) => (
-                  <div
-                    key={childQuestion.id}
-                    className={`unanswered-card ${
-                      focusedQuestion === childQuestion.id ? "focused-card" : ""
-                    } ${
-                      answeredQuestions[childQuestion.id] ? "answered-card" : ""
-                    }
+        {loading ? (
+          <div>
+            <img src={Loader} alt="" />
+          </div> // Render loader when loading is true
+        ) : (
+          <>
+            <div className="InDepthQuestions-template">
+              {Object.keys(childQuestions).map((parentId, index) =>
+                index === currentPage
+                  ? childQuestions[parentId].map((childQuestion) => (
+                      <div
+                        key={childQuestion.id}
+                        className={`unanswered-card ${
+                          focusedQuestion === childQuestion.id ||
+                          (loadSavingAnswer && answers[childQuestion.id])
+                            ? "focused-card"
+                            : ""
+                        } 
                     ${
                       nextClicked === true &&
                       focusedQuestion === childQuestion.id
@@ -355,119 +427,138 @@ const InDepthQuestions = ({
                         : ""
                     }
                     `}
-                    onClick={() => handleQuestionClick(childQuestion.id)}
-                    ref={
-                      focusedQuestion === childQuestion.id
-                        ? focusedQuestionRef
-                        : null
-                    }
-                  >
-                    <div className="question">
-                      <p>{childQuestion.in_depth_question}</p>
-                    </div>
-                    {(answeredQuestions[childQuestion.id] ||
-                      answers[childQuestion.id]) && (
-                      <div className="answer">
-                        <p>{answers[childQuestion.id]}</p>
-                        {answers[childQuestion.id] && (
-                          <div className="ticked-img-div">
-                            <AiOutlineCheck className="ticked-img" />
+                        onClick={() => handleQuestionClick(childQuestion.id)}
+                        ref={
+                          focusedQuestion === childQuestion.id
+                            ? focusedQuestionRef
+                            : null
+                        }
+                      >
+                        <div className="question">
+                          <p>{childQuestion.in_depth_question}</p>
+                        </div>
+                        {(answeredQuestions[childQuestion.id] ||
+                          answers[childQuestion.id]) && (
+                          <div className="answer">
+                            <p>{answers[childQuestion.id]}</p>
+                            {answers[childQuestion.id] && (
+                              <div className="ticked-img-div">
+                                <AiOutlineCheck className="ticked-img" />
+                              </div>
+                            )}
                           </div>
                         )}
-                      </div>
-                    )}
-                    <div className="buttons">
-                      {focusedQuestion === childQuestion.id && (
-                        <div>
-                          <button
-                            className={`${
-                              answers[childQuestion.id] === "Never" &&
-                              answers[childQuestion.id]
-                                ? "green"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleAnswerClick(childQuestion.id, "Never")
-                            }
-                          >
-                            Never
-                          </button>
 
-                          <button
-                            className={`${
-                              answers[childQuestion.id] === "Rarely" &&
-                              answers[childQuestion.id]
-                                ? "green"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleAnswerClick(childQuestion.id, "Rarely")
-                            }
-                          >
-                            Rarely
-                          </button>
+                        {lastAnsweredQuestion === childQuestion.id &&
+                          loadSavingAnswer && (
+                            <div>
+                              <img
+                                src={AnswerLoadr}
+                                alt=""
+                                className="answer-loader"
+                              />
+                            </div>
+                          )}
+                        <div className="buttons">
+                          {focusedQuestion === childQuestion.id && (
+                            <div>
+                              <button
+                                className={`${
+                                  answers[childQuestion.id] === "Never" &&
+                                  answers[childQuestion.id]
+                                    ? "green"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleAnswerClick(childQuestion.id, "Never")
+                                }
+                              >
+                                Never
+                              </button>
 
-                          <button
-                            className={`${
-                              answers[childQuestion.id] === "Sometimes" &&
-                              answers[childQuestion.id]
-                                ? "green"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleAnswerClick(childQuestion.id, "Sometimes")
-                            }
-                          >
-                            Sometimes
-                          </button>
+                              <button
+                                className={`${
+                                  answers[childQuestion.id] === "Rarely" &&
+                                  answers[childQuestion.id]
+                                    ? "green"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleAnswerClick(childQuestion.id, "Rarely")
+                                }
+                              >
+                                Rarely
+                              </button>
 
-                          <button
-                            className={`${
-                              answers[childQuestion.id] === "Frequently" &&
-                              answers[childQuestion.id]
-                                ? "green"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleAnswerClick(childQuestion.id, "Frequently")
-                            }
-                          >
-                            Frequently
-                          </button>
+                              <button
+                                className={`${
+                                  answers[childQuestion.id] === "Sometimes" &&
+                                  answers[childQuestion.id]
+                                    ? "green"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleAnswerClick(
+                                    childQuestion.id,
+                                    "Sometimes"
+                                  )
+                                }
+                              >
+                                Sometimes
+                              </button>
 
-                          <button
-                            className={`${
-                              answers[childQuestion.id] === "All the time" &&
-                              answers[childQuestion.id]
-                                ? "green"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleAnswerClick(
-                                childQuestion.id,
-                                "All the time"
-                              )
-                            }
-                          >
-                            All the time
-                          </button>
+                              <button
+                                className={`${
+                                  answers[childQuestion.id] === "Frequently" &&
+                                  answers[childQuestion.id]
+                                    ? "green"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleAnswerClick(
+                                    childQuestion.id,
+                                    "Frequently"
+                                  )
+                                }
+                              >
+                                Frequently
+                              </button>
+
+                              <button
+                                className={`${
+                                  answers[childQuestion.id] ===
+                                    "All the time" && answers[childQuestion.id]
+                                    ? "green"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleAnswerClick(
+                                    childQuestion.id,
+                                    "All the time"
+                                  )
+                                }
+                              >
+                                All the time
+                              </button>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                ))
-              : null
-          )}
-        </div>
+                      </div>
+                    ))
+                  : null
+              )}
+            </div>
 
-        <div className="buttons">
-          <button className="btn" onClick={handlePreviousPage}>
-            Previous
-          </button>
-          <button className="btn" onClick={handleNextPage}>
-            Next
-          </button>
-        </div>
+            <div className="buttons">
+              <button className="btn" onClick={handlePreviousPage}>
+                Previous
+              </button>
+              <button className="btn" onClick={handleNextPage}>
+                Next
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
