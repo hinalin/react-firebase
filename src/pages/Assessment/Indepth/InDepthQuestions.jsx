@@ -245,8 +245,6 @@ const InDepthQuestions = ({
     });
     // Update selected disorders state with risk categories
     setSelectedDisorders(updatedSelectedDisorders);
-    console.log(selectedDisorders, "disorders");
-    console.log(updatedSelectedDisorders, "updatedSelectedDisorderssssss");
   };
 
   const handleNextPage = async () => {

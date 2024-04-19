@@ -91,7 +91,6 @@ function Summary({
         const data = docSnapshot.data();
         const selectedDisorders = data.selectedDisorders || []; // Default to empty array if selectedDisorders is not present
         setFetchedSelectedDisorders(selectedDisorders);
-        console.log(selectedDisorders, "selectedDisorders");
       } else {
         console.log("No assessment document found with the provided ID");
       }
@@ -113,7 +112,7 @@ function Summary({
   const data = previousAssessments.filter((assessment) => {
     return assessment.id === param.id;
   });
-  console.log(previousAssessments, "previousAssessments");
+  // console.log(previousAssessments, "previousAssessments");
 
   console.log(data.length, "dataaaaaa");
   

@@ -30,7 +30,6 @@ const SignInUpModal = ({ setForModal, forModal }) => {
       closeModal();
     }
   }, [forModal]);
-  console.log(isChecked);
   return (
     <Modal
       ariaHideApp={false}

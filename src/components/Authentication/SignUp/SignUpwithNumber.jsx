@@ -33,7 +33,6 @@ const SignUpwithNumber = () => {
     try {
       setLoading(true);
       const response = await setUpRecaptcha(phoneNumber);
-      console.log(response, "response...");
       setConfirmObj(response);
       setFlag(true);
     } catch (err) {
@@ -45,7 +44,6 @@ const SignUpwithNumber = () => {
     setTimeout(() => {
       setError("");
     }, 2000);
-    console.log(phoneNumber);
   };
   const verifySignUpOtp = async (e) => {
     e.preventDefault();
@@ -82,7 +80,6 @@ const SignUpwithNumber = () => {
     }
   };
 
-  console.log("Name:", name);
   return (
     <>
       <div className="Signup-template">
